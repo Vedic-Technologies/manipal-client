@@ -6,7 +6,7 @@ import ventilator_icon from "../../assets/images/vantilator_icon.png";
 import doctor_icon from "../../assets/images/doctor_icon.png";
 import Card from "./cards/Card";
 import DailyIncomeCard from "./cards/DailyIncomeCard";
-import DoctorReferenceCard from "./cards/DoctorReferenceCard";
+import {DoctorReferenceCard }from "./cards/DoctorReferenceCard";
 import MaleFemaleRatio from "./cards/MaleFemaleRatio";
 import { Link } from "react-router-dom";
 const LandingPage = () => {
