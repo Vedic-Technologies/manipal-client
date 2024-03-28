@@ -2,19 +2,18 @@
 import React, { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./leftbar.css";
-import { FcServices } from "react-icons/fc";
-import { FaHome } from "react-icons/fa";
-import { FcPortraitMode } from "react-icons/fc";
-import { FcInspection,FcAddressBook } from "react-icons/fc";
-import { FcMultipleInputs } from "react-icons/fc";
-import { FcUnlock } from "react-icons/fc";
-import { FaUserPen } from "react-icons/fa6";
+import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import { RxDoubleArrowLeft } from "react-icons/rx";
 import { RxDoubleArrowRight } from "react-icons/rx";
-import { IoIosPaper } from "react-icons/io";
-// import { useCookies } from "react-cookie";
-// import { useLoginContext } from "../Contexts/LoginContext/LoginContext";
-
+import { FcSelfServiceKiosk } from "react-icons/fc";
+import { FaCcAmazonPay } from "react-icons/fa";
+import { FaBed } from "react-icons/fa";
+import { FcCollaboration } from "react-icons/fc";
+import { FcBullish } from "react-icons/fc";
+import { FaBookMedical } from "react-icons/fa";
+import { VscPersonAdd } from "react-icons/vsc";
+import { FcEditImage } from "react-icons/fc";
+import { ImExit } from "react-icons/im";
 
 const Leftbar = ({ children }) => {
   const navigate = useNavigate();
@@ -78,7 +77,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "." ? "active-link" : ""}  ${ (activeLink === "default" ) && "active-link"  }` }
               onClick={() => handleLinkClick(".")}
             >  <li>
-                <FcServices />
+              <FcSelfServiceKiosk />
                 <div className={hidden} >Dashboard</div>
               </li>
             </NavLink>
@@ -87,7 +86,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "createquestions" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createquestions")}
             >  <li>
-                <IoIosPaper className="text-cyan-700" />
+               <FaPrescriptionBottleMedical className="text-cyan-400" />
                 <div className={hidden} >Prescription</div>
               </li>
             </NavLink>
@@ -97,7 +96,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("editquestions")}
             >  <li>
-                <FcPortraitMode />
+            <FaCcAmazonPay  className="text-blue-400" />
                 <div className={hidden} >Payment Entry</div>
               </li>
             </NavLink>
@@ -106,7 +105,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("editquestions")}
             >  <li>
-                <FcPortraitMode />
+                  <FaBed    className="text-red-500"  />
                 <div className={hidden} >Patients</div>
               </li>
             </NavLink>
@@ -118,7 +117,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "doctor_reference" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createquestions")}
             >  <li>
-                <IoIosPaper className="text-cyan-700" />
+           <FcCollaboration />
                 <div className={hidden} >Dr Reference</div>
               </li>
             </NavLink>
@@ -128,7 +127,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "createtest" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createtest")}
             >  <li>
-                <FcAddressBook className="text-green-700" />
+                    <FcBullish /> 
                 <div className={hidden} >Monthly Income</div>
               </li>
             </NavLink>
@@ -138,8 +137,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "createtest" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createtest")}
             >  <li>
-                <FcAddressBook className="text-green-700" />
-                <div className={hidden} >Patient Reacord</div>
+              <FaBookMedical   className="text-cyan-600" />
+                <div className={hidden} >Patient Reacord</div>        
               </li>
             </NavLink>
 
@@ -150,7 +149,7 @@ const Leftbar = ({ children }) => {
                   className={`link ${activeLink === "createstaff" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("createstaff")}>
                   <li>
-                    <FcInspection />
+                  <VscPersonAdd className="text-blue-500"  />
                     <div className={hidden} >Create Staff</div>
                   </li>
                 </NavLink>
@@ -161,7 +160,7 @@ const Leftbar = ({ children }) => {
                   className={`link ${activeLink === "editstaffs" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("editstaffs")}>
                   <li>
-                    <FaUserPen style={{ color: 'red' }} />
+                  <FcEditImage  />
                     <div className={hidden} >Edit Staff</div>
                   </li>
                 </NavLink>
@@ -174,7 +173,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "logout" ? "active-link" : ""}`}
               onClick={() => logout()}
             > <li>
-                <FcUnlock />
+              <ImExit  className="text-red-700" />
                 <div className={hidden} >Logout</div>
               </li>
             </div>
