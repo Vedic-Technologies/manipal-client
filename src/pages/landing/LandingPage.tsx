@@ -11,7 +11,7 @@ import MaleFemaleRatio from "./cards/MaleFemaleRatio";
 import { Link } from "react-router-dom";
 const LandingPage = () => {
   return (
-    <div className="h-screen w-full flex flex-col bg-gradient-to-r from-purple-50 to-purple-100 p-10 font-roboto">
+    <div className="h-auto w-full flex flex-col bg-gradient-to-r from-purple-50 to-purple-100 p-10 font-roboto">
       <nav className=" flex pr-10 justify-between gap-3  text-xl ">
         <div className="text-4xl">Dashboard</div>
         {/* <div className="text-4xl tracking-wide"><span className="bg-blue-500 px-2 rounded-md text-white m-[0.8px] ">M</span>anipal <span className="bg-blue-500 px-2 rounded-md text-white m-[0.8px]">P</span>hysiotherapy <span className="bg-blue-500 px-2 rounded-md text-white m-[0.8px]">C</span>enter</div> */}
@@ -74,10 +74,10 @@ const LandingPage = () => {
 <DoctorReferenceCard />
         </div>
 
-        <div id="middle" className="w-full pt-5 flex    h-fit">
+        <div id="middle" className="w-full pt-5 flex gap-10   h-fit">
         <DoctorReferenceCard />
         <MaleFemaleRatio />
-          <MaleFemaleRatio />
+    
 
         </div>
       </div>
