@@ -73,7 +73,7 @@ const LandingPage = () => {
         <div id="top" className=" w-full pt-5 flex gap-5   ">
           {/* <DoctorReferenceCard /> */}
           <DailyIncomeCard />
-          <div>
+          <div className="ml-12">
             <TotalRevenue />
             <TotalPatient />
 
