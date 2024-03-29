@@ -1,16 +1,21 @@
-import LoginBlock from "./LoginBlock"
-import manipal_logo from '../../assets/images/LOGO-1.png'
+import LoginBlock from "./LoginBlock";
+import manipal_logo from "../../assets/images/LOGO-1.png";
 
 const Login = () => {
   return (
-    <div className="bg-gradient-to-r from-cyan-100 to-teal-50 h-screen flex items-center justify-center">
-    <div className="w-[60%] h-5/6 bg-white justify-center items-center rounded-2xl flex bg-login-image bg-cover relative ">
-      <div className="w-1/2  h-full  rounded-tl-2xl rounded-bl-2xl ">    
+    <div className="bg-gradient-to-r from-blue-700 to-blue-500 h-screen flex  items-center justify-center">
+      <div className="w-[60%] h-5/6 justify-start items-center rounded-2xl flex flex-col bg-login-image bg-cover relative shadow-basic">
+        <img className="  w-60 ml-6 mt-4" src={manipal_logo} alt="" />{" "}
+        <LoginBlock />
+        <div className=" w-full p-20">
+          <div className="text-[#C34167] text-5xl font-semibold tracking-[30px]">MANIPAL</div>
+          <div className="text-[#1F7480] text-2xl tracking-wider mt-2">Physiotherapy Center Application</div>
+        </div>
+        </div>
+       
       </div>
-      <div className="w-full justify-center flex mr-80 h-full"><LoginBlock/></div>
-    </div>
-    </div>
-  )
-}
+ 
+  );
+};
 
-export default Login
+export default Login;
