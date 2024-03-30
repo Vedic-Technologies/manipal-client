@@ -39,7 +39,9 @@ const TotalPatient = () => {
             <div className=' '>
                 <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient</div>
                 <div className='text-3xl font-bold p-2'>{totalPatients}</div>
-                <div className='text-sm '><span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'green' : 'red' }} >{percentageChange} %</span> from last year</div>
+                <div className='text-sm pt-3 '>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up fa-beat-fade text-green-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down fa-beat-fade text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'green' : 'red' }} >{percentageChange} %</span> from last year</div>
             </div>
             <div>
                 <AreaChart width={300} height={150} data={data} >
