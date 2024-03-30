@@ -1,37 +1,63 @@
 import { Link } from "react-router-dom";
 import physio from "../../../assets/images/image.png";
+import Profile from "../../../assets/images/Profile.png";
 
 
 export const recentDoctorReferences = [
   {
-    doctorName: "Dr. Hem Shanksr Sharma",
+    doctorName: "Dr. Hem Shankar Sharma",
     patientName: "Suresh Yadav",
     date: "2024-03-23",
-    indexNumber: "12345",
+    docId: "12345",
+    patientNum: "5",
+    currentStatus: "Active",
+    docSpeciality: "Cardiopulmonary",
+    contactNum: "1234567890",
+    profileImg: <img className="h-20 w-20" src={Profile} alt="" />
   },
   {
     doctorName: "Dr.Somen Chatarji",
     patientName: "Manjit Pande",
     date: "2024-03-24",
-    indexNumber: "54321",
+    docId: "54321",
+    patientNum: "5",
+    currentStatus: "Active",
+    docSpeciality: "Neurological",
+    contactNum: "1234567890",
+    profileImg: <img className="h-20 w-20" src={Profile} alt="" />
   },
   {
     doctorName: "Dr. Amitabh Singh",
     patientName: "Bikas Kumar Singh",
     date: "2024-03-25",
-    indexNumber: "67890",
+    docId: "67890",
+    patientNum: "72",
+    currentStatus: "Active",
+    docSpeciality: "Orthopedic",
+    contactNum: "1234567890",
+    profileImg: <img className="h-20 w-20" src={Profile} alt="" />
   },
   {
     doctorName: "Dr. Amitabh Singh",
     patientName: "Bikas Kumar Singh",
     date: "2024-03-25",
-    indexNumber: "67890",
+    docId: "67890",
+    patientNum: "54",
+    currentStatus: "Active",
+    docSpeciality: "Pediatric",
+    contactNum: "1234567890",
+    profileImg: <img className="h-20 w-20" src={Profile} alt="" />
   },
   {
     doctorName: "Dr. Amitabh Singh",
     patientName: "Bikas Kumar Singh",
     date: "2024-03-25",
-    indexNumber: "67890",
+    docId: "67890",
+    patientNum: "50",
+    currentStatus: "Active",
+    docSpeciality: "Geriatric",
+    contactNum: "1234567890",
+    profileImg: <img className="h-20 w-20" src={Profile} alt="" />
   },
 ];
 export const DoctorReferenceCard = () => {
