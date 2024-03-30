@@ -9,9 +9,9 @@ const DoctorReference = () => {
   const sortByIndexNumber = () => {
     const sorted = [...sortedData].sort((a, b) => {
       if (isAscending) {
-        return a.indexNumber - b.indexNumber;
+        return +a.indexNumber - +b.indexNumber;
       } else {
-        return b.indexNumber - a.indexNumber;
+        return +b.indexNumber - +a.indexNumber;
       }
     });
     setSortedData(sorted);
