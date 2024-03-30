@@ -82,9 +82,9 @@ const Leftbar = ({ children }) => {
               </li>
             </NavLink>
             <NavLink
-              to="createquestions"
-              className={`link ${activeLink === "createquestions" ? "active-link" : ""}`}
-              onClick={() => handleLinkClick("createquestions")}
+              to="prescription"
+              className={`link ${activeLink === "prescription" ? "active-link" : ""}`}
+              onClick={() => handleLinkClick("prescription")}
             >  <li>
                <FaPrescriptionBottleMedical className="text-cyan-400" />
                 <div className={hidden} >Prescription</div>
