@@ -51,7 +51,7 @@ const DoctorReference = () => {
   return (
     <div className='m-6'>
       <h1 className='text-4xl'>Doctor List</h1>
-      <div className='bg-white h-14 m-2'>
+      <div className='bg-white h-14 m-2 flex justify-between '>
         <div className='h-full flex gap-6 items-center pl-8'>
           <div className='flex gap-1'>
             <button className='flex gap-1 font-roboto' onClick={() => sortByIndexNumber()}>
@@ -68,7 +68,8 @@ const DoctorReference = () => {
               <i className=" mt-1 fa-solid fa-caret-down"></i>Lowest
             </button>
           </div>
-          <div>
+          </div>
+          <div className=" flex items-center ">
             <input
               type="text"
               placeholder="Search Doctor Name"
@@ -79,7 +80,6 @@ const DoctorReference = () => {
             <button onClick={handleSearch} className="px-4 py-1 bg-blue-500 text-white rounded-md ml-2">
               <div><i className="fa-solid fa-magnifying-glass"></i></div>
             </button>
-          </div>
         </div>
       </div>
       <div className='h-screen bg-white'>
@@ -102,7 +102,7 @@ const DoctorReference = () => {
                 </thead>
                 <tbody>
                   {sortedData.map((item, index) => (
-                    <tr className="p-4 rounded-full shadow hover:scale-110 hover:shadow-md hover:bg-gray-200 hover:border hover:rounded-md transition duration-300 mt-5" key={index}>
+                    <tr className="p-4 rounded-full shadow  hover:shadow-md hover:bg-gray-200 hover:border hover:rounded-md transition duration-300 mt-5" key={index}>
                       <td className="text-center h-16 px-4 py-2  font-bold text-blue-500 hover:underline">{item.docId}</td>
                       <td className="h-20 px-4 py-2 flex justify-center items-center ">{item.profileImg}</td>
                       <td className="text-center h-16 px-4 py-2 font-semibold ">{item.doctorName}</td>
@@ -118,6 +118,8 @@ const DoctorReference = () => {
           </div>
         </div>
       </div>
+
+
     </div>
 
   );
