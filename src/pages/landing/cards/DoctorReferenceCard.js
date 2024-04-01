@@ -63,7 +63,7 @@ export const recentDoctorReferences = [
 export const DoctorReferenceCard = () => {
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden w-[100%] ">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden w-[60%] ">
       <div className="px-6 py-5">
         <div className="font-bold text-xl mb-2">Recent Doctor Reference</div>
         <div className="overflow-x-auto">
