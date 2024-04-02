@@ -2,18 +2,20 @@
 import React, { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./leftbar.css";
-import { FaPrescriptionBottleMedical } from "react-icons/fa6";
 import { RxDoubleArrowLeft } from "react-icons/rx";
-import { RxDoubleArrowRight } from "react-icons/rx";
-import { FcSelfServiceKiosk } from "react-icons/fc";
-import { FaCcAmazonPay } from "react-icons/fa";
 import { FaBed } from "react-icons/fa";
-import { FcCollaboration } from "react-icons/fc";
-import { FcBullish } from "react-icons/fc";
 import { FaBookMedical } from "react-icons/fa";
 import { VscPersonAdd } from "react-icons/vsc";
-import { FcEditImage } from "react-icons/fc";
 import { ImExit } from "react-icons/im";
+import { VscThreeBars } from "react-icons/vsc";
+import { RxDashboard } from "react-icons/rx";
+import { BsPrescription2 } from "react-icons/bs";
+import { MdOutlinePayment } from "react-icons/md";
+import { GoCrossReference } from "react-icons/go";
+import { BiBarChart } from "react-icons/bi";
+import { LiaUserEditSolid } from "react-icons/lia";
+
+
 
 const Leftbar = ({ children }) => {
   const navigate = useNavigate();
@@ -61,13 +63,13 @@ const Leftbar = ({ children }) => {
 
             {isSidebarCollapsed ?
               (
-                <RxDoubleArrowRight />
+                // <RxDoubleArrowRight />
+                <VscThreeBars />
               ) : (
                 <RxDoubleArrowLeft />
               )}
 
           </div>
-
 
           <ul>
          
@@ -76,9 +78,10 @@ const Leftbar = ({ children }) => {
               to="."
               className={`link ${activeLink === "." ? "active-link" : ""}  ${ (activeLink === "default" ) && "active-link"  }` }
               onClick={() => handleLinkClick(".")}
-            >  <li>
-              <FcSelfServiceKiosk />
-                <div className={hidden} >Dashboard</div>
+             
+            >  <li className="">
+           <RxDashboard className="" />
+                <div className={hidden} > <span className=" font-roboto font-semibold text-lg  ml-3" >Dashboard</span></div>
               </li>
             </NavLink>
             <NavLink
@@ -86,8 +89,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "prescription" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("prescription")}
             >  <li>
-               <FaPrescriptionBottleMedical className="text-cyan-400" />
-                <div className={hidden} >Prescription</div>
+           <BsPrescription2  className="" />
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3" >Prescription</span> </div>
               </li>
             </NavLink>
 
@@ -96,8 +99,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("editquestions")}
             >  <li>
-            <FaCcAmazonPay  className="text-blue-400" />
-                <div className={hidden} >Payment Entry</div>
+            <MdOutlinePayment  className="" />
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Payment Entry</span></div>
               </li>
             </NavLink>
             <NavLink
@@ -105,8 +108,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("editquestions")}
             >  <li>
-                  <FaBed    className="text-red-500"  />
-                <div className={hidden} >Patients</div>
+                  <FaBed    className=""  />
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Patients</span></div>
               </li>
             </NavLink>
 
@@ -117,8 +120,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "doctor_reference" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createquestions")}
             >  <li>
-           <FcCollaboration />
-                <div className={hidden} >Dr Reference</div>
+           <GoCrossReference />
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Dr Reference</span></div>
               </li>
             </NavLink>
 
@@ -127,8 +130,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "createtest" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createtest")}
             >  <li>
-                    <FcBullish /> 
-                <div className={hidden} >Monthly Income</div>
+                   <BiBarChart /> 
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Monthly Income</span></div>
               </li>
             </NavLink>
 
@@ -137,8 +140,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "createtest" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createtest")}
             >  <li>
-              <FaBookMedical   className="text-cyan-600" />
-                <div className={hidden} >Patient Reacord</div>        
+              <FaBookMedical   className="" />
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Patient Reacord</span></div>        
               </li>
             </NavLink>
 
@@ -149,8 +152,8 @@ const Leftbar = ({ children }) => {
                   className={`link ${activeLink === "createstaff" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("createstaff")}>
                   <li>
-                  <VscPersonAdd className="text-blue-500"  />
-                    <div className={hidden} >Create Staff</div>
+                  <VscPersonAdd className=""  />
+                    <div className={hidden} ><span className=" font-roboto font-medium text-lg  ml-3" >Create Staff</span></div>
                   </li>
                 </NavLink>
 
@@ -160,8 +163,8 @@ const Leftbar = ({ children }) => {
                   className={`link ${activeLink === "editstaffs" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("editstaffs")}>
                   <li>
-                  <FcEditImage  />
-                    <div className={hidden} >Edit Staff</div>
+                  <LiaUserEditSolid />
+                    <div className={hidden} ><span className=" font-roboto font-medium text-lg  ml-3" >Edit Staff</span></div>
                   </li>
                 </NavLink>
               </>
@@ -174,7 +177,7 @@ const Leftbar = ({ children }) => {
               onClick={() => logout()}
             > <li>
               <ImExit  className="text-red-700" />
-                <div className={hidden} >Logout</div>
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg  ml-3" >Logout</span></div>
               </li>
             </div>
 
