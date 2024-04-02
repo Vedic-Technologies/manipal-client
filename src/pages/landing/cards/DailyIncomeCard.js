@@ -1,4 +1,4 @@
-import physio from '../../../assets/images/image.png'
+import physio from "../../../assets/images/image.png";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,9 +7,9 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import faker from 'faker';
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import faker from "faker";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,15 +20,14 @@ ChartJS.register(
 );
 
 export const options = {
- 
   responsive: true,
   plugins: {
     legend: {
-      position: 'top' ,
+      position: "top",
     },
     title: {
       display: true,
-      text: 'Monthly Income',
+      text: "Monthly Income",
     },
   },
 };
@@ -37,7 +36,9 @@ const getDaysInMonth = () => {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth(); // Month is zero-based (0 = January, 1 = February, etc.)
   const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get the number of days in the current month
-  const labels = Array.from({ length: daysInMonth }, (_, index) => (index + 1).toString()); // Generate an array of labels
+  const labels = Array.from({ length: daysInMonth }, (_, index) =>
+    (index + 1).toString()
+  ); // Generate an array of labels
 
   return labels;
 };
@@ -45,25 +46,23 @@ const getDaysInMonth = () => {
 const labels = getDaysInMonth();
 console.log(labels);
 
-
 export const data = {
   labels,
   datasets: [
     {
-      label: 'Day wise Income',
+      label: "Day wise Income",
       data: labels.map(() => faker.datatype.number({ min: 100, max: 10000 })),
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
-   
   ],
 };
 
 const DailyIncomeCard = () => {
   return (
     <div className=" rounded-3xl bg-white shadow-lg  p-5 h-[400px] w-1/2 ">
-    <Bar options={options} data={data} />
-  </div>
-  )
-}
+      <Bar options={options} data={data} />
+    </div>
+  );
+};
 
-export default DailyIncomeCard
+export default DailyIncomeCard;

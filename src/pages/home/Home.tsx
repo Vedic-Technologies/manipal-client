@@ -4,6 +4,7 @@ import Patient from "../patient/Patient";
 import LandingPage from "../landing/LandingPage";
 import DoctorReference from "../doctor_reference/DoctorReference";
 import PresCription from "../prescription/PresCription";
+import MonthlyIncExp from "../monthly_income/MonthlyIncExp";
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
         <Route path="/patients" element={<Patient />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCription />} />
+        <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
          
         </Routes>
        
