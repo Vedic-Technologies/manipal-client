@@ -12,6 +12,10 @@ import { Link } from "react-router-dom";
 import TotalRevenue from "./cards/TotalRevenue";
 import TotalPatient from "./cards/TotalPatient";
 import { MdWavingHand } from "react-icons/md";
+import { FaBed } from "react-icons/fa";
+import { IoIosMan } from "react-icons/io";
+import { GiMoneyStack } from "react-icons/gi";
+
 const LandingPage = () => {
   return (
     <div className="h-auto w-full flex flex-col bg-gradient-to-r from-purple-50 to-purple-100 p-10 font-roboto">
@@ -32,13 +36,17 @@ const LandingPage = () => {
 
 
       <div className=" flex flex-wrap  gap-5 mt-10  ml-10 ">
-        <div className="flex w-52 h-20  rounded-full  justify-center items-center bg-white shadow-lg cursor-pointer hover:bg-blue-100">
-          <div>
-            <img src={hospital_icon} alt="" className="h-10" />
-          </div>
-          <div className="ml-4 text-sm">
-            <div>25</div>
-            <div className="font-bold">Patient Today</div>
+       
+          <div className=" w-72 h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+          <div className="text-sm font-bold"> Patients Today</div>
+          <div className="flex mt-2 items-center">
+            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white "> <FaBed    className=""  /></div>
+            <div className="text-3xl ml-3">34</div>
+            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
+            <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
+            <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
+            <div className="absolute -right-1 -top-2 w-8 h-8 bg-blue-300 rounded-full"></div>
           </div>
         </div>
 
@@ -46,7 +54,7 @@ const LandingPage = () => {
         <div className=" w-72 h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold">New Patients Today</div>
           <div className="flex mt-2 items-center">
-            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white "><MdWavingHand /></div>
+            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white "><FaBed    className=""  /></div>
             <div className="text-3xl ml-3">34</div>
             <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
             <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
@@ -66,22 +74,30 @@ const LandingPage = () => {
             <div className="font-bold">New Appointments</div>
           </div>
         </div> */}
-        <div className="flex w-52 h-20  rounded-full justify-center items-center shadow-lg cursor-pointer  bg-white">
-          <div>
-            <img src={ventilator_icon} alt="" className="h-10" />
-          </div>
-          <div className="ml-4 text-sm">
-            <div>3</div>
-            <div className="font-bold">Staff Available</div>
+      
+      <div className=" w-72 h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+          <div className="text-sm font-bold">Staff Avaliable </div>
+          <div className="flex mt-2 items-center">
+            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white "><IoIosMan /></div>
+            <div className="text-3xl ml-3">6</div>
+            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
+            <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
+            <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
+            <div className="absolute -right-1 -top-2 w-8 h-8 bg-blue-300 rounded-full"></div>
           </div>
         </div>
-        <div className="flex w-52 h-20  rounded-full justify-center items-center shadow-lg  bg-white">
-          <div>
-            <img src={ventilator_icon} alt="" className="h-10" />
-          </div>
-          <div className="ml-4 text-sm">
-            <div>15,200 Rs</div>
-            <div className="font-bold">Income Today</div>
+     
+        <div className=" w-72 h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+          <div className="text-sm font-bold">Income Today</div>
+          <div className="flex mt-2 items-center">
+            <div className="bg-red-500 center h-10 w-10 rounded-full text-xl  text-white "><GiMoneyStack /></div>
+            <div className="text-3xl ml-3">34</div>
+            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
+            <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
+            <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
+            <div className="absolute -right-1 -top-2 w-8 h-8 bg-blue-300 rounded-full"></div>
           </div>
         </div>
       </div>
