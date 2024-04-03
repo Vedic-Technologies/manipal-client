@@ -60,18 +60,8 @@ export const data = {
         {
             label: "Monthly Income",
             data: labels.map(() => faker.datatype.number({ min: 50000, max: 1000000 })),
-            backgroundColor: ["rgba(255, 99, 132, 0.5)",
-                "rgba(255, 99, 13, 0.5)",
-                "rgba(255, 133, 13, 0.5)",
-                "rgba(255, 166, 13, 0.5)",
-                "rgba(255, 199, 13, 0.5)",
-                "rgba(255, 232, 13, 0.5)",
-                "rgba(239, 255, 13, 0.5)",
-                "rgba(206, 255, 13, 0.5)",
-                "rgba(173, 255, 13, 0.5)",
-                "rgba(140, 255, 13, 0.5)",
-                "rgba(107, 255, 13, 0.5)",
-                "rgba(74, 255, 13, 0.5)"]
+            backgroundColor: "#4CCD99",
+
         },
     ],
 };
@@ -116,15 +106,15 @@ const income = () => {
         <div className=" rounded-xl bg-white shadow-lg mt-10 p-5 h-auto w-1/2 min-w-[450px] shadow-[0px_0px_10px_0px_#9f7aea]">
             <div className=" flex justify-between">
                 <div>
-                    <div className="text-gray-500 text-sm">This Year :     <span className="lg:text-3xl text-black font-bold p-2">₹ {totalIncome}</span> </div>
+                    <div className="text-gray-500 text-sm">This Year :     <span className="lg:text-3xl text-black font-bold p-2">₹ {totalIncome.toLocaleString('en-IN')}</span> </div>
                     <div className="lg:pl-12 text-sm"> {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up fa-beat-fade text-green-600 lg:text-xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down fa-beat-fade text-red-600 lg:text-xl px-1"></i>}  <span className='lg:text-xl p-1' style={{ color: +percentageChange > 0 ? 'green' : 'red' }}>{percentageChange} %</span>  {+percentageChange > 0 ? 'Increment' : 'Decrement'}</div>
                 </div>
                 <div>
-                    <div className="text-gray-500 text-sm">This Month : <span className="lg:text-3xl text-black font-bold p-2">₹ {lastMonthIncome}</span> </div>
+                    <div className="text-gray-500 text-sm">This Month : <span className="lg:text-3xl text-black font-bold p-2">₹ {lastMonthIncome.toLocaleString('en-IN')}</span> </div>
                     <div className="lg:pl-12 text-sm"> {+monthlyPercentChange > 0 ? <i className="fa-solid fa-arrow-trend-up fa-beat-fade text-green-600 lg:text-xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down fa-beat-fade text-red-600 lg:text-xl px-1"></i>}  <span className='lg:text-xl p-1' style={{ color: +monthlyPercentChange > 0 ? 'green' : 'red' }}>{monthlyPercentChange} %</span> {+monthlyPercentChange > 0 ? 'Increment' : 'Decrement'}</div>
                 </div>
             </div>
-            <div className="w-full bg-gray-200/20">
+            <div className="w-full text-center center">
                 <Bar options={options} data={data} />
             </div>
         </div>
