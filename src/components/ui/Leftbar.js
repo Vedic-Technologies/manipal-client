@@ -190,7 +190,7 @@ const Leftbar = ({ children }) => {
         {/* Outlet for rendering nested routes */}
         {children || (
           <Outlet>
-            {/* Default content when no nested route is matched */}
+           hello
           </Outlet>
         )}
       </div>
