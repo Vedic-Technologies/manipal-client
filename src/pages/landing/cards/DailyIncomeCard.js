@@ -60,7 +60,7 @@ export const data = {
 
 const DailyIncomeCard = () => {
   return (
-    <div className=" rounded-3xl bg-white shadow-lg  p-5 h-[400px] w-1/2 ">
+    <div className=" rounded-3xl bg-white shadow-lg min-h-full  w-1/2 ">
     <Bar options={options} data={data} />
   </div>
   )
