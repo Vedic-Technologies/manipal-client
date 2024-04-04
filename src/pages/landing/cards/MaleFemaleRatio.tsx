@@ -32,7 +32,7 @@ export const data = {
 
 const MaleFemaleRatio = () => {
   return (
-    <div className='min-w-2/5 h-[360px] center rounded-3xl bg-white p-10 flex gap-10'>
+    <div className='max-h-[360px] grow center rounded-3xl bg-white p-10 flex gap-10'>
       <div>
         <i className="fa-solid fa-person-dress text-6xl text-blue-300"></i>
         <span className='block text-center pt-2 text-gray-600'>{data.datasets[0].data[1]}</span>

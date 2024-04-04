@@ -18,10 +18,9 @@ import { GiMoneyStack } from "react-icons/gi";
 
 const LandingPage = () => {
   return (
-    <div className="h-auto w-full flex flex-col bg-gradient-to-r from-purple-50 to-purple-100 p-10 font-roboto">
-      <nav className=" flex pr-10 justify-between gap-3  text-xl ">
+    <div className="h-auto w-[100%] m-auto flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
+      <nav className=" flex pr-10 justify-between gap-3 mt-5 text-xl ">
         <div className="text-4xl">Dashboard</div>
-        {/* <div className="text-4xl tracking-wide"><span className="bg-blue-500 px-2 rounded-md text-white m-[0.8px] ">M</span>anipal <span className="bg-blue-500 px-2 rounded-md text-white m-[0.8px]">P</span>hysiotherapy <span className="bg-blue-500 px-2 rounded-md text-white m-[0.8px]">C</span>enter</div> */}
         <div className="flex gap-3">
           <div className=" bg-white w-10 h-10 rounded-full center">
             <i className="fa-regular fa-user "></i>
@@ -31,33 +30,37 @@ const LandingPage = () => {
             <div className="absolute bg-red-500 w-3 h-3 rounded-full top-0 right-0"></div>
           </div>
         </div>
-
       </nav>
 
-
       <div className=" flex justify-between mt-10 w-full ">
-       
-     
-          <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+        <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold"> Patients Today</div>
           <div className="flex mt-2 items-center">
-            <div className="bg-red-400 center min-h-10 min-w-10 rounded-full text-xl  text-white "> <FaBed    className=""  /></div>
+            <div className="bg-red-400 center min-h-10 min-w-10 rounded-full text-xl  text-white ">
+              {" "}
+              <FaBed className="" />
+            </div>
             <div className="text-3xl ml-3">34</div>
-            <div className="ml-28 min-w-32 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="ml-28 min-w-32 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">
+              See All
+            </div>
             <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
             <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
             <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
             <div className="absolute -right-1 -top-2 w-8 h-8 bg-blue-300 rounded-full"></div>
           </div>
         </div>
-
 
         <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold">New Patients Today</div>
           <div className="flex mt-2 items-center">
-            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white "><FaBed    className=""  /></div>
+            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white ">
+              <FaBed className="" />
+            </div>
             <div className="text-3xl ml-3">34</div>
-            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">
+              See All
+            </div>
             <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
             <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
             <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
@@ -65,26 +68,33 @@ const LandingPage = () => {
           </div>
         </div>
 
-
-      <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+        <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold">Staff Avaliable </div>
           <div className="flex mt-2 items-center">
-            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white "><IoIosMan /></div>
+            <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white ">
+              <IoIosMan />
+            </div>
             <div className="text-3xl ml-3">6</div>
-            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">
+              See All
+            </div>
             <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
             <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
             <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
             <div className="absolute -right-1 -top-2 w-8 h-8 bg-blue-300 rounded-full"></div>
           </div>
         </div>
-     
+
         <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold">Income Today</div>
           <div className="flex mt-2 items-center">
-            <div className="bg-red-500 center h-10 w-10 rounded-full text-xl  text-white "><GiMoneyStack /></div>
+            <div className="bg-red-500 center h-10 w-10 rounded-full text-xl  text-white ">
+              <GiMoneyStack />
+            </div>
             <div className="text-3xl ml-3">34</div>
-            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">See All</div>
+            <div className="ml-28 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">
+              See All
+            </div>
             <div className="absolute right-9 top-1 w-2 h-2 bg-red-400 rounded-full"></div>
             <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
             <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
@@ -94,23 +104,17 @@ const LandingPage = () => {
       </div>
 
       <div className=" w-[100%] flex flex-col  justify-center items-center  m-auto">
-        
         <div id="top" className="w-full pt-5 flex gap-5 h-full ">
-          {/* <DoctorReferenceCard /> */}
           <DailyIncomeCard />
-          <div className=" w-1/2 h-[100%]  bg-green-400 flex flex-col justify-between gap-y-3  m-auto">
+          <div className=" w-1/2 h-[100%] flex flex-col justify-around gap-y-2  m-auto">
             <TotalRevenue />
             <TotalPatient />
-
           </div>
-
         </div>
 
-        <div id="middle" className="w-full pt-5 flex gap-10   h-fit">
+        <div id="middle" className="w-full pt-5 flex gap-5 ">
           <DoctorReferenceCard />
           <MaleFemaleRatio />
-
-
         </div>
       </div>
     </div>
