@@ -63,25 +63,25 @@ export const recentDoctorReferences = [
 export const DoctorReferenceCard = () => {
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-auto grow">
-      <div className="px-6 py-5">
+    <div className="bg-white shadow-md rounded-lg overflow-auto grow w-full ">
+      <div className="px-6 py-5 ">
         <div className="font-bold text-xl mb-2">Recent Doctor Reference</div>
         <div className="overflow-x-auto">
           <div className="w-full">
+           
             <div className="flex w-full">
-              <div className="  py-2 font-bold min-w-14 grow">S.N.</div>
-              <div className="  py-2 font-bold min-w-52 grow">Doctor Name</div>
-              <div className="  py-2 font-bold min-w-52 grow">Patient Name</div>
-              <div className="  py-2 font-bold min-w-36 grow">Date</div>
-              {/* Add more div elements for additional fields */}
+              <div className="  py-2 font-bold max-w-[10%] grow">S.N.</div>
+              <div className="  py-2 font-bold max-w-[30%] grow">Doctor Name</div>
+              <div className="  py-2 font-bold max-w-[30%] grow">Patient Name</div>
+              <div className="  py-2 font-bold max-w-[30%] grow">Date</div>             
             </div>
+
             {recentDoctorReferences.map((reference, index) => (
-              <div key={index} className="flex divide-y w-full">
-                <div className=" py-2 min-w-14 grow">{index + 1}</div>
-                <div className=" py-2 min-w-52 grow">{reference.doctorName}</div>
-                <div className=" py-2 min-w-52 grow">{reference.patientName}</div>
-                <div className=" py-2 min-w-36 grow">{reference.date}</div>
-                {/* Add more div elements for additional data */}
+              <div key={index} className="flex divide-y w-full justify-start">
+                <div className=" py-2 max-w-[10%] grow  ">{index + 1}</div>
+                <div className=" py-2 max-w-[30%] grow text-left">{reference.doctorName}</div>
+                <div className=" py-2 max-w-[30%] grow text-left">{reference.patientName}</div>
+                <div className=" py-2  grow">{reference.date}</div>               
               </div>
             ))}
             <div className="w-full flex justify-end">
