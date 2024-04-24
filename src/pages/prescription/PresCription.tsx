@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import physotherapist_img from "../../assets/images/physiotherapist.png"
+
 
 const patientData = {
   name: "Ramesh Pashwan",
@@ -11,52 +11,69 @@ const patientData = {
 };
 
 const PresCription = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  
 
   return (
-    <div className="flex justify-center">PresCription
-      <div className="bg-blue-100 h-[850px] w-[700px] mt-12">
-        <nav className="flex justify-between gap-10 border-b-8 rounded-b-3xl border-black bg-green-200 ">
-          <div className="m-2 pl-10">
-            <div className="text-2xl font-semibold">Dr. Name</div>
-            <div className="text-red-600">Physotherapist</div>
-            <div>Qualifications</div>
-            <div className="text-lg">Manipal Physiotherapy</div>
+    
+    <div className="  bg-blue-50 font-semibold ">
+      <h1 className="flex  justify-center h-10 border mt-10 rounded-lg text-2xl bg-slate-200 ">PresCription</h1>
+      <div className="mt-5 ml-5 flex justify-center items-center ">
+        
+        <form className="border w-[700px] rounded-lg ">
+          <div className="ml-5 mt-5 ">
+          <div className="flex gap-5">
+          <div><label htmlFor="">Patient Name :</label> <input placeholder="Full Name" className="rounded-lg" type="text" /></div>
+          <div className="flex"><label className="gap-2" htmlFor="Gender">Gender : 
+            
+          </label>
+          <div className="flex gap-2">
+          <label htmlFor="male">Male</label>
+            <input  type="radio" name="gender" id="male" value="male" checked />
+            <label htmlFor="female">Female</label>
+            <input type="radio" name="gender" id="female" value="female"  /></div></div>
           </div>
-          <img src={physotherapist_img} alt="" className="h-32 mr-20 bg-red-200 " />
-        </nav>
-        <div>
-        <div className=" flex justify-between" >
-          
-        <div className="relative">
-          <div className="pt-2 font-semibold">Date: {currentDate.toDateString()}, Time: {currentDate.toLocaleTimeString()}</div>
-          <div className="bg-red-400 h-11 w-16 text-center mt-2"><i className="fa-solid fa-prescription text-3xl text-white p-1"></i></div>
-<div className=" absolute bottom-0">Signature : </div>
-            </div>
-            <div className=" h-[710px] w-1/3 border-l-4 border-black p-2 flex flex-col gap-20">
-            <div>Name:  {patientData.name}</div>
-            <div>Gender: {patientData.gender}</div>
-            <div>Weight: {patientData.weight}</div>
-            <div>Blood Group: {patientData.bloodGroup}</div>
-            <div>Age: {patientData.age}</div>
-            <div>Refer To: {patientData.referTo}</div>
-            </div>
-         
+          <div className="flex mt-5 gap-5 ml-5">
+          <div><label htmlFor="Age">Age : </label><input className="rounded-lg" placeholder="Enter Age" type="text" /></div>
+          <label htmlFor="start">Date Of Birth :</label>
+          <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
+          </div>
+          </div>
 
-          </div>
+        <div className="flex gap-20 mt-5 ml-5">
+        <div><label htmlFor="contact">Contact : </label><input className="rounded-lg" placeholder="Mobile Number" type="text" /></div>
+          <div><label htmlFor="email">Email : </label><input className="rounded-lg" placeholder="Enter Email" type="text" /></div>
         </div>
-        <footer className="bg-green-100 ">(footer)Hospital Name and all..</footer>
+          
+          <div className="flex gap-20 mt-5 ml-5">
+          <div><label htmlFor="weight">Weight : </label><input className="rounded-lg" placeholder="Weight in (kg)" type="text" /></div>
+          <div><label htmlFor="height">Height : </label><input className="rounded-lg" placeholder="in cm" type="text" /></div>
+          </div>
+
+          <div className="flex mt-5 gap-5 ml-5">
+          <div><label htmlFor="complaint">Complaint : </label><input className="rounded-lg" placeholder="Describe Your Complaint" type="text" /></div>
+          <div><label htmlFor="BloodGroup">Blood Group : </label> <input className="rounded-lg" placeholder="Enter Blood Group" type="text" /></div>
+          </div>
+          <div className="mt-5 ml-5">
+            <div><label htmlFor="referredTo">Referred To : </label><input className="rounded-lg w-[400px]" placeholder="Doctor's Name" type="text" /></div>
+            </div>
+          
+
+          <div className="mt-10 ml-5"><label htmlFor="address">Address : </label><input className="rounded-lg w-[450px]" placeholder="Enter Address" type="text" /></div>
+          <div className="flex gap-3 ml-5 mt-2">
+
+          <div><label htmlFor="state"> </label><input className="rounded-lg w-[200px]" placeholder="State" type="text" /></div>
+          <div><label htmlFor="Village"> </label><input className="rounded-lg [200px]" placeholder="Village" type="text" /></div>
+          <div><label htmlFor="pin_code"> </label><input className="rounded-lg [200px]" placeholder="Pincode" type="text" /></div>
+          </div>
+          <div className="flex justify-center items-center mt-10 ">
+        <button className="h-10 w-16 rounded-lg bg-blue-500">Submit</button>
+        </div>
+        </form>
+       
       </div>
     </div>
   )
 }
+
 
 export default PresCription

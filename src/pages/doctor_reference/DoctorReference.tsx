@@ -107,7 +107,7 @@ const DoctorReference = () => {
                       <td className="h-20 px-4 py-2 flex justify-center items-center ">{item.profileImg}</td>
                       <td className="text-center h-16 px-4 py-2 font-semibold ">{item.doctorName}</td>
                       <td className="text-center h-16 px-4 py-2 font-semibold ">{item.docSpeciality}</td>
-                      <td className="text-center h-16 px-4 py-2  "><div className='w-20 p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-green-400 rounded-lg bg=opacity-50' >{item.currentStatus}</div></td>
+                      <td className="text-center h-16 px-4 py-2  "><div className='w-20 p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-green-300t rounded-lg bg=opacity-50' >{item.currentStatus}</div></td>
                       <td className="text-center h-16 px-4 py-2 ">{item.patientNum}</td>
                       <td className="text-center h-16 px-4 py-2  "><button>{item.contactNum}</button></td>
                     </tr>
