@@ -43,7 +43,7 @@ const TotalRevenue = () => {
 
     const percentageChange = calculatePercentageChange();
     return (
-        <div className='bg-white min-h-[50%]  flex-grow p-2  flex justify-around rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
+        <div className='bg-white min-h-[50%]  flex-grow p-2  flex justify-around  gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
             <div className=' '>
                 <div className='text-sm text-gray-400 tracking-wider p-1'>Total Revenue</div>
                 <div className='text-3xl font-bold p-2'>₹ {totalRevenue.toLocaleString('en-IN')}</div>
