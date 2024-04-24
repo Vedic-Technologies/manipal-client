@@ -35,7 +35,7 @@ const TotalPatient = () => {
     const percentageChange = calculatePatientPercentageChange();
 
     return (
-        <div className='mt-4 bg-white h-44  w-auto p-2  flex gap-5 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
+        <div className=' bg-white h-44  w-auto p-2 min-h-[50%] flex gap-5 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
             <div className=' '>
                 <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient</div>
                 <div className='text-3xl font-bold p-2'>{totalPatients}</div>

@@ -3,7 +3,7 @@ import { IoIosMan } from "react-icons/io";
 const StaffAvailable = () => {
   return (
     <div>
-           <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+           <div className=" min-w-[24%]  h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold">Staff Avaliable </div>
           <div className="flex mt-2 items-center">
             <div className="bg-red-400 center h-10 w-10 rounded-full text-xl  text-white ">

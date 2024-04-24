@@ -3,7 +3,7 @@ import { GiMoneyStack } from "react-icons/gi";
 const IncomeToday = () => {
   return (
     <div>
-         <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+         <div className=" min-w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold">Income Today</div>
           <div className="flex mt-2 items-center">
             <div className="bg-red-500 center h-10 w-10 rounded-full text-xl  text-white ">

@@ -5,20 +5,19 @@ import manipal from "../../assets/images/manipal.png";
 import center from "../../assets/images/center.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { AxiosError } from 'axios';
+import ErrorPrompt from "../../components/ErrorPrompt";
 const LoginBlock = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [emailerror, setEmailerror] = useState<String | null>(null);
   const navigate = useNavigate();
-
   const [apiData, setApiData] = useState([]);
-  const [passVisibility, setPassVisibility] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [passVisibility, setPassVisibility] = useState(false); 
 
-  const [serverError, setServerError] = useState("");
-  const [loder, setLoder] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [loader, setLoader] = useState(false);
 
   const passRef = useRef<HTMLInputElement>(null);
   const visiblePassword = () => {
@@ -42,66 +41,60 @@ const LoginBlock = () => {
   };
 
   const verifyLogin = async () => {
-    const data = await axios.get("http://localhost:8000/api/users");
-    console.log(data.data);
-
+    // to see users
+    // const data = await axios.get("http://localhost:8000/api/users");
+    // console.log(data.data);
+    // validation of user input
     if (password.length < 8) {
       setError("password too short must be greater than 7 characters");
     } else if (password.length > 30) {
       setError("password too long must be less than 31 characters");
-    } else if (!email.endsWith("@gmail.com")) {
-      setEmailerror("invalid email");
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailerror("Invalid email format. Please enter a valid email address.");
     } else {
       try {
-        // setLoder(true);
-
         const response = await axios.post(
           "http://localhost:8000/api/users/login",
           user_body
         );
+
         if (response.data) {
           navigate("/home");
         }
-        // console.log(response.data.userType)
-        // if(response.data.userType!=="admin" && response.data.userType!=="staff")
-        // {
-        //   console.log("first layer")
-        //     if(response.data.isvalid===false)
-        // {
-        //   console.log("second layer")
-        //   setError("Invalid username or passwordd");
-        //   return;
-        // }
-        // }
-
         console.log(response.data);
         setApiData(response.data);
-        // setLoginUserInfo(response.data)
         localStorage.setItem("currentUser", JSON.stringify(response.data));
         setError(null);
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 15); // 15 days from now
         if (response.data.userType === "student") {
-          // setCookie('userType', "student", { expires: expiryDate });
-          // setLoginStatus("student")
-          // navigate("/testlandingpage");
+          // Handle student login
         } else if (response.data.userType === "staff") {
-          // setCookie('userType', "staff", { expires: expiryDate })
-          // setLoginStatus("staff")
-          // navigate("/cpanellanding")
+          // Handle staff login
         } else if (response.data.userType === "admin") {
-          // setCookie('userType', "admin", { expires: expiryDate })
-          // setLoginStatus("admin")
-          // navigate("/cpanellanding")
+          // Handle admin login
         }
-      } catch (error) {
-        setLoder(false);
-        setError("Invalid username or password please check");
+      } catch (error:any) {
+        setError("username password error . Please check again")
+        setLoader(false);
         console.log(error);
-        setServerError("Server is not online. Please try latter");
-      }
+        if (error.isAxiosError && error.response === undefined) {
+          // Network error
+          setServerError("Network Error: Please check your internet connection and try again. Start the local server");
+          return;
+        } else if (error.response) {
+          // Server responded with a non-2xx status code
+          // setServerError("Server Error: " + error.response.status + " " + error.response.statusText);
+          return;
+        } else {
+          // Something else happened
+          setServerError("An unexpected error occurred. Please try again later.");
+          return;
+        }
+      
     }
   };
+}
 
   return (
     <>
@@ -126,6 +119,7 @@ const LoginBlock = () => {
               onChange={(e) => {
                 setEmail(e.target.value);
                 setEmailerror(null);
+                setError(null);
               }}
             />
             <div className="error flex justify-between">
@@ -149,6 +143,7 @@ const LoginBlock = () => {
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setError(null);
+                  setError(null)
                 }}
                 className="border-2 border-black text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[225px] ml-5 p-2.5 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
                 placeholder="Enter your password"
@@ -180,7 +175,7 @@ const LoginBlock = () => {
         </div>
 
         <div className="flex flex-col items-center w-full">
-          {!loder ? (
+          {!loader ? (
             <button
               onClick={() => verifyLogin()}
               className="bg-gray-700 pt-1 pb-2 px-20 text-white font-sans tracking-tight mb-3 rounded text-lg"
@@ -215,6 +210,8 @@ const LoginBlock = () => {
           )}
         </div>
       </div>
+      {serverError && ( <ErrorPrompt message={serverError} setServerError={setServerError} />)}
+     
     </>
   );
 };

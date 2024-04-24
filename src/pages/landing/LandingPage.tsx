@@ -16,6 +16,8 @@ import PatientToday from "./infocard/PatientToday";
 import NewPatient from "./infocard/NewPatient";
 import StaffAvailable from "./infocard/StaffAvailable";
 import IncomeToday from "./infocard/IncomeToday";
+import { data, InfoData } from "../landing/infocard/infoData";
+import InfoCard from "./infocard/InfoCard";
 
 const LandingPage = () => {
   return (
@@ -33,23 +35,25 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      <div className=" flex justify-between mt-10 w-full  xl:flex-col 2xl:flex-row">
-        <PatientToday />
-        <NewPatient />
-        <StaffAvailable />
-        <IncomeToday />
+      <div className=" flex  mt-10 w-full gap-5 lg- ">
+        {data.map((item: InfoData) => {
+          return <InfoCard item={item} />;
+        })}
       </div>
 
       <div className=" w-[100%] flex flex-col  justify-center items-center  m-auto">
         <div id="top" className="w-full pt-5 flex gap-5 h-full ">
           <DailyIncomeCard />
-          <div className=" w-1/2 h-[100%] flex flex-col justify-around gap-y-2  m-auto">
+          <div className=" w-1/2 h-[100%] flex flex-col justify-around gap-y-5  m-auto">
             <TotalRevenue />
             <TotalPatient />
           </div>
         </div>
 
-        <div id="middle" className="w-full pt-5 flex gap-5 xl:flex-col 2xl:flex-row ">
+        <div
+          id="middle"
+          className="w-full pt-5 flex gap-5 xl:flex-col 2xl:flex-row "
+        >
           <DoctorReferenceCard />
           <MaleFemaleRatio />
         </div>

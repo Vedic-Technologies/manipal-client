@@ -3,14 +3,14 @@ import { FaBed } from "react-icons/fa";
 const NewPatient = () => {
   return (
     <div>
-         <div className=" w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
-          <div className="text-sm font-bold"> Patients Today</div>
+         <div className=" min-w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
+          <div className="text-sm font-bold"> New Patients</div>
           <div className="flex mt-2 items-center">
             <div className="bg-red-400 center min-h-10 min-w-10 rounded-full text-xl  text-white ">
               {" "}
               <FaBed className="" />
             </div>
-            <div className="text-3xl ml-3">34</div>
+            <div className="text-3xl ml-3">6</div>
             <div className="ml-28 min-w-32 cursor-pointer text-blue-500 text-md hover:scale-110 mt-3">
               See All
             </div>
