@@ -136,7 +136,7 @@ const LoginBlock = () => {
             </label>
             <div className="relative">
               <input
-                type="password"
+                type="text"
                 id="password"
                 ref={passRef}
                 value={password}
@@ -145,7 +145,7 @@ const LoginBlock = () => {
                   setError(null);
                   setError(null)
                 }}
-                className="border-2 border-black text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[225px] ml-5 p-2.5 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
+                className="border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[225px] ml-5 p-2.5 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
                 placeholder="Enter your password"
                 required
               />
