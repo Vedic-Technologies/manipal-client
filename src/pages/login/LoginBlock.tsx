@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from 'axios';
 import ErrorPrompt from "../../components/ErrorPrompt";
+import { BiSolidHide } from "react-icons/bi";
+import { IoMdEye } from "react-icons/io";
 const LoginBlock = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -154,14 +156,14 @@ const LoginBlock = () => {
                   className="absolute top-[50%] translate-y-[-50%] right-3 cursor-pointer scale-[1.5]"
                   onClick={nonVisiblePassword}
                 >
-                  {/* <IoEye /> */}
+                < IoMdEye className=" mr-2 " />
                 </div>
               ) : (
                 <div
                   className="absolute top-[50%] translate-y-[-50%] right-3 cursor-pointer scale-[1.5]"
                   onClick={visiblePassword}
                 >
-                  {/* <IoEyeOff /> */}
+                 <BiSolidHide className=" mr-2 " />
                 </div>
               )}
             </div>
