@@ -104,9 +104,9 @@ const Leftbar = ({ children }) => {
               </li>
             </NavLink>
             <NavLink
-              to="editquestions"
-              className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
-              onClick={() => handleLinkClick("editquestions")}
+              to="patients"
+              className={`link ${activeLink === "patients" ? "active-link" : ""}`}
+              onClick={() => handleLinkClick("patients")}
             >  <li>
                   <FaBed    className=""  />
                 <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Patients</span></div>
@@ -118,7 +118,7 @@ const Leftbar = ({ children }) => {
             <NavLink
               to="doctor_reference"
               className={`link ${activeLink === "doctor_reference" ? "active-link" : ""}`}
-              onClick={() => handleLinkClick("createquestions")}
+              onClick={() => handleLinkClick("doctor_reference")}
             >  <li>
            <GoCrossReference />
                 <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Dr Reference</span></div>

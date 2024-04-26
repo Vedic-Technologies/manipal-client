@@ -48,18 +48,34 @@ const PresCription = () => {
     }
   });
 
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setFormData(prevState => ({
+  //     ...prevState,
+  //     [name]: value
+  //   }));
+  // };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
+      setFormData(prevState => ({
+        ...prevState,
+        [parent]: {...prevState[parent], [child]: value }
+      }));
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
   };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    console.log(formData)
+    // console.log(formData)
     e.preventDefault();
     try {
+      console.log("................................")
       const response = await axios.post('http://localhost:8000/api/admin/patient_registration', formData);
       console.log(response.data);
       alert("patient registration successful !") // handle success response
@@ -79,7 +95,7 @@ const PresCription = () => {
             <div className="flex items-center gap-5">
               
               <div><label htmlFor="">Patient Name :</label> 
-
+gg
               <input 
                 placeholder="Full Name" 
                 className="rounded-lg" 
@@ -221,7 +237,7 @@ const PresCription = () => {
               placeholder="State"
               type="text"
               id="state"
-              name="state"
+              name="address.state"
               value={formData.address.state}
               onChange={handleChange}
             /></div>
@@ -230,7 +246,7 @@ const PresCription = () => {
               placeholder="Village"
               type="text"
               id="village"
-              name="village"
+              name="address.village"
               value={formData.address.village}
               onChange={handleChange}
             /></div>
@@ -239,7 +255,7 @@ const PresCription = () => {
               placeholder="Pincode"
               type="text"
               id="pincode"
-              name="pincode"
+              name="address.pincode"
               value={formData.address.pincode}
               onChange={handleChange}
             /></div>
