@@ -1,274 +1,330 @@
+import React from "react";
 import axios from "axios";
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
+const initialValues = {
+  patientName: "",
+  gender: "male",
+  age: "",
+  dob: "2018-07-22",
+  contact: "",
+  email: "",
+  idProof: "",
+  weight: "",
+  height: "",
+  complaint: "",
+  bloodGroup: "",
+  referredTo: "",
+  address: {
+    state: "bihar",
+    village: "babhaniya",
+    pincode: "810221",
+  },
+};
 
-
+const signupSchema = Yup.object().shape({
+  patientName: Yup.string().required("Patient name is required"),
+  gender: Yup.string().required("Gender is required"),
+  age: Yup.number().required("Age is required").positive().integer(),
+  dob: Yup.date().required("Date of birth is required").max(new Date()),
+  contact: Yup.string()
+    .required("Contact number is required")
+    .matches(/^\d+$/, "Invalid phone number"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  idProof: Yup.string().required("ID proof number is required"),
+  weight: Yup.number().required("Weight is required").positive(),
+  height: Yup.number().required("Height is required").positive(),
+  complaint: Yup.string().required("Complaint is required"),
+  bloodGroup: Yup.string().required("Blood group is required"),
+  referredTo: Yup.string().required("Referral doctor's name is required"),
+  address: Yup.object().shape({
+    state: Yup.string().required("State is required"),
+    village: Yup.string().required("Village is required"),
+    pincode: Yup.string().required("Pincode is required"),
+  }),
+});
 
 const PresCription = () => {
-
-  type FormData = {
-    patientName: string;
-    gender: string;
-    age: number;
-    dob: string;
-    contact: string;
-    email: string;
-    weight: number;
-    height: number;
-    complaint: string;
-    bloodGroup: string;
-    referredTo: string;
-    address: {
-      state: string;
-      village: string;
-      pincode: string;
-    };
-  }
-
-
-
-
-
-  const [formData, setFormData] = useState<FormData>({
-    patientName: '',
-    gender: 'male',
-    age: 0,
-    dob: '2018-07-22',
-    contact: '',
-    email: '',
-    weight: 0,
-    height: 0,
-    complaint: '',
-    bloodGroup: '',
-    referredTo: '',
-    address: {
-      state: 'bihar',
-      village: 'babhaniya',
-      pincode: '810221'
-    }
+  const { values, errors, handleChange, handleBlur, handleSubmit } = useFormik({
+    initialValues,
+    validationSchema: signupSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/admin/patient_registration",
+          values
+        );
+        console.log(response.data);
+        alert("Patient registration successful!");
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to register patient.");
+      }
+    },
   });
 
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData(prevState => ({
-  //     ...prevState,
-  //     [name]: value
-  //   }));
-  // };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name.includes(".")) {
-      const [parent, child] = name.split(".");
-      setFormData(prevState => ({
-        ...prevState,
-        [parent]: {...prevState[parent], [child]: value }
-      }));
-    } else {
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: value
-      }));
-    }
-  };
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    // console.log(formData)
-    e.preventDefault();
-    try {
-      console.log("................................")
-      const response = await axios.post('http://localhost:8000/api/admin/patient_registration', formData);
-      console.log(response.data);
-      alert("patient registration successful !") // handle success response
-    } catch (error) {
-      console.error('Error:', error); // handle error
-    }
-  };
-
   return (
-
-    <div className="  bg-blue-50  h-screen font-semibold ">
-      <h1 className="flex  justify-center h-10 border mt-10 rounded-lg text-2xl bg-slate-200 ">Patient Detail</h1>
-      <div className="mt-5 ml-5 flex justify-center items-center ">
-
-        <form className="border w-[700px] rounded-lg" onSubmit={handleSubmit}>
-          <div className="ml-5 mt-5 ">
-            <div className="flex items-center gap-5">
-              
-              <div><label htmlFor="">Patient Name :</label> 
-gg
-              <input 
-                placeholder="Full Name" 
-                className="rounded-lg" 
-                type="text"
-                id="patientName"
-                name="patientName"
-                value={formData.patientName}
-                onChange={handleChange}
-              /></div>
-
-              <div className="flex"><label className="gap-2" htmlFor="Gender">Gender :
-
-              </label>
-                <div className="flex  gap-2">
-
-
-
-                  <label htmlFor="male">Male</label>
-                  <input type="radio" name="gender" id="male" value="male"
-
-                    checked={formData.gender === 'male'}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="female">Female</label>
-                  <input type="radio" name="gender" id="female" value="female"
-                    checked={formData.gender === 'female'}
-                    onChange={handleChange}
-                  /></div></div>
-            </div>
-
-
-            <div className="flex mt-5 items-center gap-10 ml-5">
-              <div><label htmlFor="Age">Age : </label><input className="rounded-lg" placeholder="Enter Age" type="text"
-
-                name="age"
-                value={formData.age}
-                onChange={handleChange}
-              /></div>
-
-              <label htmlFor="start">Date Of Birth : <input className="rounded-lg" type="date" id="start" min="2018-01-01" max="2018-12-31"
-                name="dob"
-                value={formData.dob}
-                onChange={handleChange}
-              /></label>
-            </div>
+    <div className="h-screen font-semibold bg-gray-100">
+      <h1 className="text-2xl text-center border rounded-lg mt-10 bg-gray-200 py-2">
+        Patient Detail
+      </h1>
+      <div className="flex justify-center items-center mt-5">
+        <form className="w- rounded-lg bg-white shadow-lg p-5" onSubmit={handleSubmit}>
+          {/* Patient Name */}
+          <div className="flex gap-10">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Patient Name</label>
+            <input
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+              type="text"
+              name="patientName"
+              value={values.patientName}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.patientName && <p className="text-red-500 text-sm mt-1">{errors.patientName}</p>}
           </div>
 
-          <div className="flex gap-20 items-center mt-5 ml-5">
-            <div><label htmlFor="contact">Contact : </label> <input
-              className="rounded-lg"
-              placeholder="Mobile Number"
-              type="text"
-              id="contact"
-              name="contact"
-              value={formData.contact}
-              onChange={handleChange}
-            /></div>
-
-            <div><label htmlFor="email">Email : </label> <input
-              className="rounded-lg"
-              placeholder="Enter Email"
-              type="text"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            /></div>
-          </div>
-
-          <div className="flex gap-20 items-center mt-5 ml-5">
-            <div><label htmlFor="weight">Weight : </label>        <input
-              className="rounded-lg"
-              placeholder="Weight in (kg)"
-              type="text"
-              id="weight"
-              name="weight"
-              value={formData.weight}
-              onChange={handleChange}
-            /></div>
-
-            <div><label htmlFor="height">Height : </label>
-
+          {/* Gender */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Gender</label>
+            <div className="mt-1 flex gap-1 items-center">
               <input
-                className="rounded-lg"
-                placeholder="in cm"
-                type="text"
-                id="height"
-                name="height"
-                value={formData.height}
+                type="radio"
+                id="male"
+                name="gender"
+                value="male"
+                checked={values.gender === "male"}
                 onChange={handleChange}
               />
-
+              <label htmlFor="male" className="ml-2">Male</label>
+              <input
+                type="radio"
+                id="female"
+                name="gender"
+                value="female"
+                checked={values.gender === "female"}
+                onChange={handleChange}
+              />
+              <label htmlFor="female" className="ml-2">Female</label>
             </div>
+            {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
           </div>
 
-          <div className="flex mt-5 items-center gap-5 ml-5">
-            <div><label htmlFor="complaint">Complaint : </label> <input
-              className="rounded-lg"
-              placeholder="Describe Your Complaint"
+          {/* Age */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Age</label>
+            <input
               type="text"
-              id="complaint"
-              name="complaint"
-              value={formData.complaint}
+              name="age"
+              value={values.age}
               onChange={handleChange}
-            /></div>
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
+          </div>
+          </div>
 
+         <div className="flex gap-10">
+           {/* Date of Birth */}
+           <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+            <input
+              type="date"
+              name="dob"
+              value={values.dob}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
+          </div>
 
-            <div><label htmlFor="BloodGroup">Blood Group : </label>   <input
-              className="rounded-lg"
-              placeholder="Enter Blood Group"
+          {/* Contact Number */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Contact Number</label>
+            <input
               type="text"
-              id="bloodGroup"
+              name="contact"
+              value={values.contact}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact}</p>}
+          </div>
+
+            {/* Email */}
+            <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="text"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          </div>
+
+         </div>
+
+        
+         <div className="flex gap-5">
+          
+
+           {/* Blood Group */}
+           <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Blood Group</label>
+            <input
+              type="text"
               name="bloodGroup"
-              value={formData.bloodGroup}
+              value={values.bloodGroup}
               onChange={handleChange}
-            /></div>
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.bloodGroup && <p className="text-red-500 text-sm mt-1">{errors.bloodGroup}</p>}
           </div>
-          <div className="mt-5 ml-5">
-            <div><label htmlFor="referredTo">Referred To : </label> <input
-              className="rounded-lg w-[400px]"
-              placeholder="Doctor's Name"
+
+          {/* Weight */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
+            <input
               type="text"
-              id="referredTo"
+              name="weight"
+              value={values.weight}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+          </div>
+
+          {/* Height */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Height (cm)</label>
+            <input
+              type="text"
+              name="height"
+              value={values.height}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
+          </div>
+         </div>
+
+         <div className="flex gap-10">
+
+            {/* ID Proof Number */}
+            <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">ID Proof Number</label>
+            <input
+              type="text"
+              name="idProof"
+              value={values.idProof}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.idProof && <p className="text-red-500 text-sm mt-1">{errors.idProof}</p>}
+          </div>
+             
+
+          {/* Referred To */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Referred To</label>
+            <input
+              type="text"
               name="referredTo"
-              value={formData.referredTo}
+              value={values.referredTo}
               onChange={handleChange}
-            /></div>
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.referredTo && <p className="text-red-500 text-sm mt-1">{errors.referredTo}</p>}
+          </div>
+         </div>
+
+          {/* Complaint */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Complaint</label>
+            <input
+              type="text"
+              name="complaint"
+              value={values.complaint}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+            />
+            {errors.complaint && <p className="text-red-500 text-sm mt-1">{errors.complaint}</p>}
           </div>
 
+      
 
-
-
-
-          <div className="mt-10 ml-5"><label htmlFor="address">Address : </label> </div>
-          <div className="flex gap-3 items-center ml-5 mt-2">
-
-            <div><label htmlFor="state"> </label><input
-              className="rounded-lg w-[200px]"
-              placeholder="State"
-              type="text"
-              id="state"
-              name="address.state"
-              value={formData.address.state}
-              onChange={handleChange}
-            /></div>
-            <div><label htmlFor="Village"> </label> <input
-              className="rounded-lg w-[200px]"
-              placeholder="Village"
-              type="text"
-              id="village"
-              name="address.village"
-              value={formData.address.village}
-              onChange={handleChange}
-            /></div>
-            <div><label htmlFor="pin_code"> </label> <input
-              className="rounded-lg w-[200px]"
-              placeholder="Pincode"
-              type="text"
-              id="pincode"
-              name="address.pincode"
-              value={formData.address.pincode}
-              onChange={handleChange}
-            /></div>
+          
+            {/* Address */}
+          <div className="">
+            <label className="block text-sm font-medium text-gray-700">Address</label>
+           <div className="flex gap-5">
+           <div >
+           
+           <input
+             type="text"
+             name="address.state"
+             placeholder="State"
+             value={values.address.state}
+             onChange={handleChange}
+             onBlur={handleBlur}
+             className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+           />
+           {errors.address?.state && <p className="text-red-500 text-sm mt-1">{errors.address.state}</p>}
           </div>
-          <div className="flex justify-center items-center mt-10 ">
-            <button className="h-10 w-16 rounded-lg bg-blue-500" type="submit">Submit</button>
+
+         <div>
+         <input
+             type="text"
+             name="address.village"
+             placeholder="Village"
+             value={values.address.village}
+             onChange={handleChange}
+             onBlur={handleBlur}
+             className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+           />
+           {errors.address?.village && <p className="text-red-500 text-sm mt-1">{errors.address.village}</p>}
+         </div>
+
+          <div>
+          <input
+             type="text"
+             name="address.pincode"
+             placeholder="Pincode"
+             value={values.address.pincode}
+             onChange={handleChange}
+             onBlur={handleBlur}
+             className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+           />
+           {errors.address?.pincode && <p className="text-red-500 text-sm mt-1">{errors.address.pincode}</p>}
+          </div>
+           </div>
+          </div>
+        
+
+          {/* Submit button */}
+          <div className="flex justify-center mt-6">
+            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg">
+              Submit
+            </button>
           </div>
         </form>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-
-export default PresCription
+export default PresCription;
