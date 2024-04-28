@@ -80,8 +80,8 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick(".")}
              
             >  <li className="">
-           <RxDashboard className="" />
-                <div className={hidden} > <span className=" font-roboto font-semibold text-lg  ml-3" >Dashboard</span></div>
+           <RxDashboard className="new" />
+                <div className={hidden} > <span className=" new font-roboto font-semibold text-lg  ml-3" >Dashboard</span></div>
               </li>
             </NavLink>
             <NavLink
@@ -89,8 +89,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "prescription" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("prescription")}
             >  <li>
-           <BsPrescription2  className="" />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3" >Prescription</span> </div>
+           <BsPrescription2  className=" new " />
+                <div className={hidden} ><span className=" new font-roboto font-semibold text-lg ml-3" >Prescription</span> </div>
               </li>
             </NavLink>
 
@@ -99,8 +99,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("editquestions")}
             >  <li>
-            <MdOutlinePayment  className="" />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Payment Entry</span></div>
+            <MdOutlinePayment  className="new" />
+                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Payment Entry</span></div>
               </li>
             </NavLink>
             <NavLink
@@ -108,8 +108,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "patients" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("patients")}
             >  <li>
-                  <FaBed    className=""  />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Patients</span></div>
+                  <FaBed    className="new"  />
+                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Patients</span></div>
               </li>
             </NavLink>
 
@@ -120,8 +120,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "doctor_reference" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("doctor_reference")}
             >  <li>
-           <GoCrossReference />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Dr Reference</span></div>
+           <GoCrossReference className="new"/>
+                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Dr Reference</span></div>
               </li>
             </NavLink>
 
@@ -130,8 +130,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "MonthlyIncExp" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("MonthlyIncExp")}
             >  <li>
-                   <BiBarChart /> 
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Monthly Income</span></div>
+                   <BiBarChart className="new" /> 
+                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Monthly Income</span></div>
               </li>
             </NavLink>
 
@@ -140,8 +140,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "createtest" ? "active-link" : ""}`}
               onClick={() => handleLinkClick("createtest")}
             >  <li>
-              <FaBookMedical   className="" />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg ml-3 " >Patient Reacord</span></div>        
+              <FaBookMedical   className="new" />
+                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Patient Reacord</span></div>        
               </li>
             </NavLink>
 
@@ -152,8 +152,8 @@ const Leftbar = ({ children }) => {
                   className={`link ${activeLink === "createstaff" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("createstaff")}>
                   <li>
-                  <VscPersonAdd className=""  />
-                    <div className={hidden} ><span className=" font-roboto font-medium text-lg  ml-3" >Create Staff</span></div>
+                  <VscPersonAdd className="new"  />
+                    <div className={hidden} ><span className="new font-roboto font-medium text-lg  ml-3" >Create Staff</span></div>
                   </li>
                 </NavLink>
 
@@ -163,8 +163,8 @@ const Leftbar = ({ children }) => {
                   className={`link ${activeLink === "editstaffs" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("editstaffs")}>
                   <li>
-                  <LiaUserEditSolid />
-                    <div className={hidden} ><span className=" font-roboto font-medium text-lg  ml-3" >Edit Staff</span></div>
+                  <LiaUserEditSolid className="new" />
+                    <div className={hidden} ><span className="new font-roboto font-medium text-lg  ml-3" >Edit Staff</span></div>
                   </li>
                 </NavLink>
               </>
@@ -176,8 +176,8 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "logout" ? "active-link" : ""}`}
               onClick={() => logout()}
             > <li>
-              <ImExit  className="text-red-700" />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg  ml-3" >Logout</span></div>
+              <ImExit  className="text-red-700 new " />
+                <div className={hidden} ><span className=" font-roboto font-medium text-lg  new ml-3" >Logout</span></div>
               </li>
             </div>
 
