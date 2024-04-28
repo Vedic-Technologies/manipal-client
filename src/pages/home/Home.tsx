@@ -5,6 +5,8 @@ import LandingPage from "../landing/LandingPage";
 import DoctorReference from "../doctor_reference/DoctorReference";
 import PresCription from "../prescription/PresCription";
 import MonthlyIncExp from "../monthly_income/MonthlyIncExp";
+import Create_Staff from "../staff/Create_Staff";
+import Edit_Staff from "../staff/Edit_Staff";
 
 const Home = () => {
   return (
@@ -17,8 +19,9 @@ const Home = () => {
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCription />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
-        <Route path="/patients" element={<Patient/>} />
-         
+        <Route path="/createstaff" element={<Create_Staff/>} />
+        <Route path="/editstaffs" element={<Edit_Staff/>} />
+
         </Routes>
        
       </Leftbar>
