@@ -17,9 +17,9 @@ const initialValues = {
   bloodGroup: "",
   referredTo: "",
   address: {
-    state: "bihar",
-    village: "babhaniya",
-    pincode: "810221",
+    state: "",
+    village: "",
+    pincode: "",
   },
 };
 

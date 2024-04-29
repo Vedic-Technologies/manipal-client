@@ -21,19 +21,8 @@ import InfoCard from "./infocard/InfoCard";
 
 const LandingPage = () => {
   return (
-    <div className="h-auto w-[100%] m-auto flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
-      <nav className=" flex pr-10 justify-between gap-3 mt-5 text-xl ">
-        <div className="text-4xl">Dashboard</div>
-        <div className="flex gap-3">
-          <div className=" bg-white w-10 h-10 rounded-full center">
-            <i className="fa-regular fa-user "></i>
-          </div>
-          <div className=" bg-white w-10 h-10 rounded-full center relative">
-            <i className="fa-regular fa-bell "></i>
-            <div className="absolute bg-red-500 w-3 h-3 rounded-full top-0 right-0"></div>
-          </div>
-        </div>
-      </nav>
+    <div className="h-auto mb-10 w-[100%] m-auto flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
+     
 
       <div className=" flex  mt-10 w-full gap-5 lg- ">
         {data.map((item: InfoData) => {

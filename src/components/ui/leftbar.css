@@ -3,7 +3,7 @@
   display: flex;
   min-height: 100vh;
   width: 100%;  
-  background-color: #fafafa;
+  background-color: #ffffff;
   position: relative;
 }
 
@@ -15,6 +15,7 @@
   object-fit: contain;
   height: 600px;
   /* width: 500px; */
+  background-color: #9e1028;
 
 }
 .leftbar .drawer{
@@ -42,7 +43,7 @@
   /* position: relative; */
   overflow: hidden;
   height: 100%;
-  background-color: #fafafa;
+  background-color:white;
   padding: 20px;
   box-sizing: border-box;
  
@@ -57,13 +58,16 @@
   border-radius: 5px;
   margin-bottom: 15px;
   cursor: pointer;
-
 }
 
 .link:hover {
-  background-color: rgb(215, 246, 250);
+  background-color: rgb(18, 63, 122);
+  color: white;
 }
 
+.link_text:hover{
+  color: white;
+}
 .active-link {
   background-color: rgba(255, 0, 0, 0.14);
   width: 100%;
@@ -149,5 +153,7 @@ a {
 }
 .new
 {
- color: #677891 ;
+ color: #677891;
+ height: 22px;
+ width: 22px;
 }

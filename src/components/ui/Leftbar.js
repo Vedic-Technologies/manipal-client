@@ -49,7 +49,7 @@ const Leftbar = ({ children }) => {
   return (
     <div className="cpanel-container">
       {/* ------------- just for taking div space -------- */}
-      <div className="leftbar mr-20 opacity-0">
+      <div className="leftbar mr-20">
         <ul>
           <div className={hidden}></div>
         </ul>
@@ -79,9 +79,9 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "." ? "active-link" : ""}  ${ (activeLink === "default" ) && "active-link"  }` }
               onClick={() => handleLinkClick(".")}
              
-            >  <li className="">
+            >  <li className="hover:text-white">
            <RxDashboard className="new" />
-                <div className={hidden} > <span className=" new font-roboto font-semibold text-lg  ml-3" >Dashboard</span></div>
+                <div className={hidden} > <span className=" new font-roboto text-lg  ml-3">Dashboard</span></div>
               </li>
             </NavLink>
             <NavLink
@@ -90,17 +90,17 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("prescription")}
             >  <li>
            <BsPrescription2  className=" new " />
-                <div className={hidden} ><span className=" new font-roboto font-semibold text-lg ml-3" >Prescription</span> </div>
+                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3" >Prescription</span> </div>
               </li>
             </NavLink>
 
             <NavLink
-              to="editquestions"
-              className={`link ${activeLink === "editquestions" ? "active-link" : ""}`}
-              onClick={() => handleLinkClick("editquestions")}
+              to="payment_entry"
+              className={`link ${activeLink === "payment_entry" ? "active-link" : ""}`}
+              onClick={() => handleLinkClick("payment_entry")}
             >  <li>
             <MdOutlinePayment  className="new" />
-                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Payment Entry</span></div>
+                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3 " >Payment Entry</span></div>
               </li>
             </NavLink>
             <NavLink
@@ -109,7 +109,7 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("patients")}
             >  <li>
                   <FaBed    className="new"  />
-                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Patients</span></div>
+                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3 " >Patients</span></div>
               </li>
             </NavLink>
 
@@ -121,7 +121,7 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("doctor_reference")}
             >  <li>
            <GoCrossReference className="new"/>
-                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Dr Reference</span></div>
+                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3 " >Dr Reference</span></div>
               </li>
             </NavLink>
 
@@ -131,7 +131,7 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("MonthlyIncExp")}
             >  <li>
                    <BiBarChart className="new" /> 
-                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Monthly Income</span></div>
+                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3 " >Monthly Income</span></div>
               </li>
             </NavLink>
 
@@ -141,7 +141,7 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("createtest")}
             >  <li>
               <FaBookMedical   className="new" />
-                <div className={hidden} ><span className=" new font-roboto font-medium text-lg ml-3 " >Patient Reacord</span></div>        
+                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3 " >Patient Reacord</span></div>        
               </li>
             </NavLink>
 
@@ -153,7 +153,7 @@ const Leftbar = ({ children }) => {
                   onClick={() => handleLinkClick("createstaff")}>
                   <li>
                   <VscPersonAdd className="new"  />
-                    <div className={hidden} ><span className="new font-roboto font-medium text-lg  ml-3" >Create Staff</span></div>
+                    <div className={hidden} ><span className="new font-roboto  text-lg  ml-3" >Create Staff</span></div>
                   </li>
                 </NavLink>
 
@@ -164,7 +164,7 @@ const Leftbar = ({ children }) => {
                   onClick={() => handleLinkClick("editstaffs")}>
                   <li>
                   <LiaUserEditSolid className="new" />
-                    <div className={hidden} ><span className="new font-roboto font-medium text-lg  ml-3" >Edit Staff</span></div>
+                    <div className={hidden} ><span className="new font-roboto  text-lg  ml-3" >Edit Staff</span></div>
                   </li>
                 </NavLink>
               </>
@@ -177,7 +177,7 @@ const Leftbar = ({ children }) => {
               onClick={() => logout()}
             > <li>
               <ImExit  className="text-red-700 new " />
-                <div className={hidden} ><span className=" font-roboto font-medium text-lg  new ml-3" >Logout</span></div>
+                <div className={hidden} ><span className=" font-roboto  text-lg  new ml-3" >Logout</span></div>
               </li>
             </div>
 
