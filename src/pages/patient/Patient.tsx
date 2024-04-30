@@ -11,7 +11,7 @@ const Patient = () => {
   const [searchResult, setSearchResult] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
+  const [pageSize] = useState(8);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +19,7 @@ const Patient = () => {
       setError(null);
 
       try {
-        const response = await axios.get('http://localhost:8000/api/admin/all_patients');
+        const response = await axios.get('https://manipal-server.onrender.com/api/patient/all_patients');
         setPatients(response.data);
       } catch (error) {
         setError(error);
@@ -37,8 +37,11 @@ const Patient = () => {
 
   const handleDelete = async (patientId) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/admin/patient/${patientId}`);
+      const response = await axios.delete(`https://manipal-server.onrender.com/api/patient/${patientId}`);
       setPatients(patients.filter((patient) => patient._id !== patientId));
+
+      setSearchResult(null);
+      setShowDetails(false);
     } catch (error) {
       console.error('Error deleting patient:', error);
     }
@@ -107,18 +110,26 @@ const Patient = () => {
   };
 
   //Patient details on click 
-  // const handleDetails = (patient) => {
-  //   setShowDetails(true);
-  // };
+  const handleDetails = (patientId) => {
+const selectedPatient= patients.find((patient)=>patient._id ===patientId);
+if(selectedPatient){
+  setSearchResult(selectedPatient);
+  setShowDetails(true);
+}else{
+  setSearchResult(null);
+  setShowDetails(false);
+  alert("Patient not found.");
+}
+  };
   return (
-    <div className="patient-list px-4 py-2">
-      <div className=' pt-8 '><span>Patients &gt; </span>
+    <div className="patient-list px-4 py-2 ">
+      <div className='  '><span>Patients &gt; </span>
         <span className='text-gray-400 text-sm'>Patient List</span>
       </div>
 
-      <div className=' mt-4 p-4 rounded-md bg-white'>
-        <div className='flex justify-between p-2 pr-10'>
-          <div className='flex gap-12'>
+      <div className='h-[600px] mt-4 py-2 px-4 rounded-md bg-white relative'>
+        <div className='flex justify-between px-2 py-1 pr-10'>
+          <div className='flex gap-5'>
             <div className=' font-bold text-xl'>Patient List</div>
             <div className="search relative">
               <input onKeyDown={(e) => {
@@ -128,7 +139,7 @@ const Patient = () => {
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-8 bg-red-100 px-2 pb-3 pr-4' />
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-1 bottom-2 text-gray-500 cursor-pointer"></i>
               {showDetails && (
-                <div className=" bg-red-100 opacity-95 p-4 mt-4 absolute size-96 z-10 rounded-md ">
+                <div className=" bg-red-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-96 z-10 rounded-md ">
                   <div className='flex justify-between'>
                     <h2 className="text-xl font-semibold p-2">{searchResult?.patientName}</h2>
                     <div onClick={() => { setShowDetails(false) }} className="cut"><i className="fa-solid fa-xmark  text-2xl text-red-600"></i></div>
@@ -145,8 +156,8 @@ const Patient = () => {
                     </div>
                   </div>
                   <div className='flex gap-4 mt-5 ml-2'>
-                    <i className="fa-regular fa-pen-to-square  hover:text-blue-900 text-blue-400"></i>
-                    <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
+                    <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
+                    <i onClick={() => handleDelete(searchResult?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
                   </div>
                 </div>
               )}
@@ -154,7 +165,7 @@ const Patient = () => {
             <div className='bg-red-300 text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
             <div onClick={handleRefresh} className="bg-red-300 text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
           </div>
-          <div onClick={downloadExcel} className=' '> <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
+          <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
         <div className="patient-header flex border-b border-gray-200 justify-between items-center px-2 py-2 font-medium">
           <div className="w-1/4 ">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
@@ -166,8 +177,8 @@ const Patient = () => {
         </div>
         <div>
           {currentPatients.map((patient) => (
-            <div key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 transition-all duration-300">
-             
+            <div  key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 transition-all duration-300">
+             <div onClick={()=>{handleDetails(patient._id)}} className=' w-[85%] flex justify-between items-center'>
               <div className='w-1/4 flex gap-1 items-center '>
                 <img src="https://picsum.photos/200/300" alt="" className='bg-green-400 size-8 rounded-full' />
                 <div className=" ">{patient.patientName[0].toUpperCase() + patient.patientName.slice(1)}</div>
@@ -176,7 +187,9 @@ const Patient = () => {
               <div className="w-1/6">{patient.age}</div>
               <div className="w-1/6 text-blue-500">{patient.contact}</div>
               <div className="w-1/6 hidden sm:block">{patient.email}</div>
-              <div className="w-1/6 flex justify-center space-x-2">
+             
+              </div> <div className="w-1/6 flex justify-center space-x-2">
+
                 <button
                   className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-10 transition-all duration-300"
                   onClick={() => handleEdit(patient._id)}
@@ -193,7 +206,7 @@ const Patient = () => {
             </div>
           ))}
         </div>
-        <div className='flex justify-between pr-8 py-2 mt-2'>
+        <div className='flex justify-between pr-8 py-2 mt-2 absolute w-full bottom-0'>
           <div className='bg-red-500 text-white w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
           <div className='flex gap-2 bg-gray-200 rounded-md'>
             <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded-md'>Previous</button>
