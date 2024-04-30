@@ -11,8 +11,7 @@ const NavBar = () => {
 
 
         
-      <nav className=" flex pr-10 justify-between gap-3 h-14 text-xl items-center ">
-        <div className="text-4xl">Dashboard</div>
+      <nav className=" flex pr-10 justify-end gap-3 h-14 text-xl items-center ">        
         <div className="flex gap-3 items-center">
         <i className="fa-solid fa-expand"></i>
           <div className=" bg-white w-10 h-10 rounded-full center relative">
