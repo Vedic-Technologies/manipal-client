@@ -45,7 +45,7 @@ const PaymentEntry = () => {
         </div>
       </div>
     );
-  };
+  }; 
 
   const getUserDetails = () => {
     if (selectedPatient) {
