@@ -111,7 +111,6 @@ const PresCription = () => {
             </div>
             {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
           </div>
-
           {/* Age */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Age</label>
