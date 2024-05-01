@@ -35,7 +35,7 @@ const PaymentEntry = () => {
     return (
       <div className="flex items-center mb-4">
         <div className="w-1/3">
-          <img src={user.image} alt="User" className="rounded-full w-24 h-24" />
+          <img src={user.image} alt="User" className="rounded w-32 h-32" />
         </div>
         <div className="ml-4 w-2/3">
           <h2 className="text-lg font-semibold">{user.name}</h2>
@@ -45,7 +45,7 @@ const PaymentEntry = () => {
         </div>
       </div>
     );
-  };
+  }; 
 
   const getUserDetails = () => {
     if (selectedPatient) {
@@ -64,13 +64,14 @@ const PaymentEntry = () => {
     <>
      <h1 className="text-2xl font-semibold mb-6 ml-36 mt-3">Select Patient</h1>
        <div className="container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 border-dashed w-4/5">
-     <div className=" w-1/2 bg-red-300 center ">
-      <div className="flex items-center mb-4 flex-col">
+     <div className=" w-1/2 flex flex-col items-center justify-center ">
+     <div className="flex flex-col gap-3">
+     <div className="flex items-start mb-4 flex-col ">
         <label className="mr-2 font-medium">Enter Patient Name</label>
         <select
           value={selectedPatient}
           onChange={handleSelectChange}
-          className="border border-gray-300 rounded px-3 py-2 w-60"
+          className="border border-gray-300 rounded px-3 py-2 w-60 mt-1"
         >
           <option value="">Select a patient</option>
           {users.map(user => (
@@ -78,23 +79,28 @@ const PaymentEntry = () => {
           ))}
         </select>
       </div>
-      <div className="flex items-center mb-4">
-        <label className="mr-2">Patient ID:</label>
+      <div className="text-center font-semibold">---- OR ----</div>
+      <div className="flex items-start mb-4 flex-col  relative">
+        <label className="mr-2 font-medium">Patient ID:</label>
         <input
           type="text"
           value={patientId}
           onChange={handleInputChange}
-          className="border border-gray-300 rounded px-3 py-2"
+          className="border border-gray-300 rounded px-3 py-2 w-60 mt-1"
           placeholder="Enter patient ID"
         />
+        <div className="bg-blue-700 py-[5px] px-5 rounded text-white text-lg  cursor-pointer absolute -right-24 top-[30px]">Find</div>
       </div>
+     </div>
+     
+      
       </div>
-      {selectedUser && (
+      {selectedUser ? (
         <div className="bg-white shadow-lg rounded-lg p-6 w-1/2">
           <h2 className="text-lg font-semibold mb-4">User Details</h2>
           <UserDetails user={selectedUser} />
         </div>
-      )}
+      ) :  <div className="bg-white shadow-lg rounded-lg p-6 w-1/2"></div> }
     </div>
    
     <div className="container mx-auto px-4 py-8 w-4/5">
