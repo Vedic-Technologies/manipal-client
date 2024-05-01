@@ -63,14 +63,14 @@ const PaymentEntry = () => {
 
     <>
      <h1 className="text-2xl font-semibold mb-6 ml-36 mt-3">Select Patient</h1>
-       <div className="container mx-auto px-4 py-8 flex border-2 rounded-2xl h-72 p-3 border-gray-300 w-4/5">
-     <div className=" w-1/2">
-      <div className="flex items-center mb-4 ">
-        <label className="mr-2">Select Patient:</label>
+       <div className="container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 border-dashed w-4/5">
+     <div className=" w-1/2 bg-red-300 center ">
+      <div className="flex items-center mb-4 flex-col">
+        <label className="mr-2 font-medium">Enter Patient Name</label>
         <select
           value={selectedPatient}
           onChange={handleSelectChange}
-          className="border border-gray-300 rounded px-3 py-2"
+          className="border border-gray-300 rounded px-3 py-2 w-60"
         >
           <option value="">Select a patient</option>
           {users.map(user => (
