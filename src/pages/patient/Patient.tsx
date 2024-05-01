@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
-
+import ConfirmationModal from "../../components/ConfirmationModal"
 const Patient = () => {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -12,6 +12,9 @@ const Patient = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
+
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [selectedPatientId, setSelectedPatientId] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,18 +38,30 @@ const Patient = () => {
     console.log('Edit patient:', patientId);
   };
 
-  const handleDelete = async (patientId) => {
+  // logics to delete patients
+  const handleDelete=(patientId)=>{
+    setSelectedPatientId(patientId);
+    setOpenConfirm(true);
+  }
+  const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete(`https://manipal-server.onrender.com/api/patient/${patientId}`);
-      setPatients(patients.filter((patient) => patient._id !== patientId));
+      const response = await axios.delete(`https://manipal-server.onrender.com/api/patient/${selectedPatientId}`);
+      setPatients(patients.filter((patient) => patient._id !== selectedPatientId));
 
       setSearchResult(null);
       setShowDetails(false);
     } catch (error) {
       console.error('Error deleting patient:', error);
+    }finally {
+      setOpenConfirm(false)
     }
   };
 
+  const handleCancelDelete=()=>{
+    setOpenConfirm(false)
+  }
+
+  //pagination
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -215,6 +230,11 @@ if(selectedPatient){
           </div>
         </div>
       </div>
+      <ConfirmationModal
+      isOpen={openConfirm}
+      onCancel={handleCancelDelete}
+      onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };
