@@ -344,7 +344,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               placeholder="Enter your name"
             />
-            {errors.patientName && <p className="text-red-500 text-sm mt-1">{errors.patientName}</p>}
+            {/* {errors.patientName && <p className="text-red-500 text-sm mt-1">{errors.patientName}</p>} */}
           </div>
 
           {/* Gender */}
@@ -359,7 +359,7 @@ const PresCription = () => {
              
             </div>
             </div>
-            {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
+            {/* {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>} */}
           </div>
       
           
@@ -377,7 +377,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
+            {/* {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>} */}
           </div>
            {/* Date of Birth */}
            <div className="mb-4">
@@ -391,7 +391,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]"
             />
-            {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
+            {/* {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>} */}
           </div>
           </div>
           <div className="flex gap-10">
@@ -407,7 +407,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact}</p>}
+            {/* {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact}</p>} */}
           </div>
 
             {/* Email */}
@@ -422,7 +422,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]b"
             />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+            {/* {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>} */}
           </div>
           </div>
      
@@ -442,7 +442,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.idProof && <p className="text-red-500 text-sm mt-1">{errors.idProof}</p>}
+            {/* {errors.idProof && <p className="text-red-500 text-sm mt-1">{errors.idProof}</p>} */}
           </div>
 
           {/* Weight */}
@@ -457,7 +457,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+            {/* {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>} */}
           </div>
 
           {/* Height */}
@@ -472,7 +472,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
+            {/* {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>} */}
           </div>
          </div>
 
@@ -488,7 +488,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.complaint && <p className="text-red-500 text-sm mt-1">{errors.complaint}</p>}
+            {/* {errors.complaint && <p className="text-red-500 text-sm mt-1">{errors.complaint}</p>} */}
           </div>
 
       <div className="flex gap-10">
@@ -506,7 +506,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.bloodGroup && <p className="text-red-500 text-sm mt-1">{errors.bloodGroup}</p>}
+            {/* {errors.bloodGroup && <p className="text-red-500 text-sm mt-1">{errors.bloodGroup}</p>} */}
           </div>
  
           {/* Referred To */}
@@ -520,7 +520,7 @@ const PresCription = () => {
               onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.referredTo && <p className="text-red-500 text-sm mt-1">{errors.referredTo}</p>}
+            {/* {errors.referredTo && <p className="text-red-500 text-sm mt-1">{errors.referredTo}</p>} */}
           </div>
 
 
@@ -543,7 +543,7 @@ const PresCription = () => {
              onBlur={handleBlur}
              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
            />
-           {errors.address?.state && <p className="text-red-500 text-sm mt-1">{errors.address.state}</p>}
+           {/* {errors.address?.state && <p className="text-red-500 text-sm mt-1">{errors.address.state}</p>} */}
           </div>
 
          <div>
@@ -556,7 +556,7 @@ const PresCription = () => {
              onBlur={handleBlur}
              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
            />
-           {errors.address?.village && <p className="text-red-500 text-sm mt-1">{errors.address.village}</p>}
+           {/* {errors.address?.village && <p className="text-red-500 text-sm mt-1">{errors.address.village}</p>} */}
          </div>
 
           <div>
@@ -569,7 +569,7 @@ const PresCription = () => {
              onBlur={handleBlur}
              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
            />
-           {errors.address?.pincode && <p className="text-red-500 text-sm mt-1">{errors.address.pincode}</p>}
+           {/* {errors.address?.pincode && <p className="text-red-500 text-sm mt-1">{errors.address.pincode}</p>} */}
           </div>
            </div>
           </div>
