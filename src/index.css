@@ -25,3 +25,7 @@ code {
   justify-content: center;
   align-items: center;
 }
+
+.animate {
+  transition: all 0.3s ease-in-out  ;
+}

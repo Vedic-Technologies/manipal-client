@@ -13,9 +13,14 @@ const Patient = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
 
+  // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
 
+  //activate patient
+  const [isActive, setIsActive] = useState(false)
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -102,6 +107,8 @@ const Patient = () => {
     URL.revokeObjectURL(downloadLink.href);
   };
 
+
+  // search functionality 
   const searchPatient = () => {
     const result = patients.find((patient) =>
       patient.patientName === searchInput ||
@@ -136,6 +143,25 @@ if(selectedPatient){
   alert("Patient not found.");
 }
   };
+
+  //toggle patient active/inactive
+  const handleActive=()=>{
+    setIsActive(!isActive)
+  }
+
+  const handleUpdateActive= async(id)=>{
+   try{
+const patientToUpdate = patients.find(patient => patient._id ===id);
+if(patientToUpdate){
+  const updateActiveStatus= {...patientToUpdate, active: !patientToUpdate.active}
+  const response = await axios.patch(`https://manipal-server.onrender.com/api/patient/${id}`, updateActiveStatus);
+  setPatients(patients.map(patient=>(patient._id === id ? updateActiveStatus : patient)));
+}
+   } 
+   catch (error) {
+    console.error('Error changing active status:', error);
+  }
+  }
   return (
     <div className="patient-list px-4 py-2 ">
       <div className='  '><span>Patients &gt; </span>
@@ -151,12 +177,14 @@ if(selectedPatient){
                   if (e.key === "Enter") searchPatient();
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
-                value={searchInput} type="search" placeholder='Search' className='rounded-lg h-8 bg-red-100 px-2 pb-3 pr-4' />
+                value={searchInput} type="search" placeholder='Search' className='rounded-lg h-8 bg-gray-100 px-2 pb-2 pr-4' />
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-1 bottom-2 text-gray-500 cursor-pointer"></i>
               {showDetails && (
-                <div className=" bg-red-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-96 z-10 rounded-md ">
+                <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
+                  <div className='h-full relative'>
+                 
                   <div className='flex justify-between'>
-                    <h2 className="text-xl font-semibold p-2">{searchResult?.patientName}</h2>
+                    <h2 className="text-xl font-semibold p-2">{searchResult?.patientName[0].toUpperCase() + searchResult?.patientName.slice(1)}</h2>
                     <div onClick={() => { setShowDetails(false) }} className="cut"><i className="fa-solid fa-xmark  text-2xl text-red-600"></i></div>
                   </div>
                   <div className='center w-full '>
@@ -164,21 +192,24 @@ if(selectedPatient){
                       <div className='p-1 px-10'>
                         <img src="https://picsum.photos/200/300" alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
                       </div>
-                      <p className='mt-1 p-1 px-10 rounded-md transition-all duration-300 bg-red-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {searchResult?.gender}</p>
-                      <p className='mt-1 p-1 px-10 rounded-md transition-all duration-300 bg-red-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {searchResult?.age}</p>
-                      <p className='mt-1 p-1 px-10 rounded-md transition-all duration-300 bg-red-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {searchResult?.contact}</p>
-                      <p className='mt-1 p-1 px-10 rounded-md transition-all duration-300 bg-red-300 hover:bg-gray-400 font-medium  hover:text-white'>Email: {searchResult?.email}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {searchResult?.gender}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {searchResult?.age}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {searchResult?.contact}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Email: {searchResult?.email}</p>
+                      <p className={`mt-1 p-1 px-10 rounded-md animate bg-blue-300 font-medium  hover:text-white ${searchResult?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {searchResult?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
                     </div>
                   </div>
-                  <div className='flex gap-4 mt-5 ml-2'>
+                  <div className='flex gap-4 mt-5 ml-2 absolute bottom-0'>
                     <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
                     <i onClick={() => handleDelete(searchResult?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
                   </div>
                 </div>
+                   
+                </div>
               )}
             </div>
-            <div className='bg-red-300 text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
-            <div onClick={handleRefresh} className="bg-red-300 text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
+            <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
+            <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
           </div>
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
@@ -188,12 +219,13 @@ if(selectedPatient){
           <div className="w-1/6">Age <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
           <div className="w-1/6 ">Contact</div>
           <div className="w-1/6 hidden sm:block">Email</div>
+          <div className="w-1/6 hidden sm:block">Status</div>
           <div className="w-1/6 text-center">Actions</div>
         </div>
         <div>
           {currentPatients.map((patient) => (
-            <div  key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 transition-all duration-300">
-             <div onClick={()=>{handleDetails(patient._id)}} className=' w-[85%] flex justify-between items-center'>
+            <div  key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
+             <div onClick={()=>{handleDetails(patient._id)}} className=' w-[87%] flex justify-between items-center'>
               <div className='w-1/4 flex gap-1 items-center '>
                 <img src="https://picsum.photos/200/300" alt="" className='bg-green-400 size-8 rounded-full' />
                 <div className=" ">{patient.patientName[0].toUpperCase() + patient.patientName.slice(1)}</div>
@@ -202,31 +234,33 @@ if(selectedPatient){
               <div className="w-1/6">{patient.age}</div>
               <div className="w-1/6 text-blue-500">{patient.contact}</div>
               <div className="w-1/6 hidden sm:block">{patient.email}</div>
+              <div className="w-1/6 hidden sm:block">{patient.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
              
-              </div> <div className="w-1/6 flex justify-center space-x-2">
+              </div> <div className="w-[13%] flex justify-center items-center space-x-2">
 
                 <button
-                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-10 transition-all duration-300"
+                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-8 transition-all duration-300"
                   onClick={() => handleEdit(patient._id)}
                 >
                   <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
                 </button>
                 <button
-                  className="delete hover:bg-red-300 rounded-full size-10 transition-all duration-300 "
+                  className="delete hover:bg-red-300 rounded-full size-8 transition-all duration-300 "
                   onClick={() => handleDelete(patient._id)}
                 >
                   <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                 </button>
+                <button onClick={()=>{handleUpdateActive(patient._id)}} className=' rounded  text-sm font-n h-7 w-24 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
               </div>
             </div>
           ))}
         </div>
         <div className='flex justify-between pr-8 py-2 mt-2 absolute w-full bottom-0'>
-          <div className='bg-red-500 text-white w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
+          <div className='bg-blue-500 text-white w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
           <div className='flex gap-2 bg-gray-200 rounded-md'>
-            <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded-md'>Previous</button>
-            <button className='px-2 py-1 w-12 text-white bg-red-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:rounded-md'>{currentPage}</button>
-            <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded-md'>Next</button>
+            <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
+            <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
+            <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
           </div>
         </div>
       </div>
