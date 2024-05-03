@@ -1,10 +1,3 @@
-// searchbar padding
-// cpy id
-// resizeBy
-// vairaable store imge
-
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
@@ -170,6 +163,20 @@ if(patientToUpdate){
     console.error('Error changing active status:', error);
   }
   }
+
+
+  // enable user to copy patient id
+const handleCopyPatientId =(id)=>{
+  navigator.clipboard.writeText(id)
+  .then (()=>{
+    alert("Patient ID copied to clipboard")
+ 
+  })
+  .catch(err=>{
+    console.error("Failed to copy id ", err)
+  })
+}
+
   return (
     <div className="patient-list px-4 py-2 ">
       <div className='  '><span>Patients &gt; </span>
@@ -233,18 +240,18 @@ if(patientToUpdate){
         <div>
           {currentPatients.map((patient) => (
             <div  key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-             <div onClick={()=>{handleDetails(patient._id)}} className=' w-[87%] flex justify-between items-center'>
+             <div onDoubleClick={()=>{handleDetails(patient._id)}} className=' w-[87%] flex justify-between items-center'>
               <div className='w-1/4 flex gap-1 items-center '>
                 <img src="https://picsum.photos/200/300" alt="" className='bg-green-400 size-8 rounded-full' />
-                <div>
+                <div className='w-full flex  justify-between '>
                 <div className=" ">{patient.patientName[0].toUpperCase() + patient.patientName.slice(1)}</div>
-                <span>{patient._id}</span>
+                <span className='pr-8' onClick={()=>{handleCopyPatientId(patient._id)}}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
                 </div>
               
               </div>
               <div className="w-1/6">{patient.gender[0].toUpperCase() + patient.gender.slice(1)}</div>
               <div className="w-1/6">{patient.age}</div>
-              <div className="w-1/6 text-blue-500">{patient.contact}</div>
+              <div className="w-1/6">{patient.contact}</div>
               <div className="w-1/6 hidden sm:block">{patient.email}</div>
               <div className="w-1/6 hidden sm:block">{patient.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
              
