@@ -1,8 +1,16 @@
+// searchbar padding
+// cpy id
+// resizeBy
+// vairaable store imge
+
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
 import ConfirmationModal from "../../components/ConfirmationModal"
+import { LiaCopySolid } from 'react-icons/lia';
 const Patient = () => {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -168,7 +176,7 @@ if(patientToUpdate){
         <span className='text-gray-400 text-sm'>Patient List</span>
       </div>
 
-      <div className='h-[600px] mt-4 py-2 px-4 rounded-md bg-white relative'>
+      <div className='h-[600px] mt-4  py-2 px-4 rounded-md bg-white relative'>
         <div className='flex justify-between px-2 py-1 pr-10'>
           <div className='flex gap-5'>
             <div className=' font-bold text-xl'>Patient List</div>
@@ -177,8 +185,8 @@ if(patientToUpdate){
                   if (e.key === "Enter") searchPatient();
                 }}
                 onChange={(e) => setSearchInput(e.target.value)}
-                value={searchInput} type="search" placeholder='Search' className='rounded-lg h-8 bg-gray-100 px-2 pb-2 pr-4' />
-              <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-1 bottom-2 text-gray-500 cursor-pointer"></i>
+                value={searchInput} type="search" placeholder='Search' className='rounded-lg h-8 w-72 bg-gray-100 px-2 pb-3 pr-7`' />
+              <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-2 text-gray-500 cursor-pointer"></i>
               {showDetails && (
                 <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
                   <div className='h-full relative'>
@@ -228,7 +236,11 @@ if(patientToUpdate){
              <div onClick={()=>{handleDetails(patient._id)}} className=' w-[87%] flex justify-between items-center'>
               <div className='w-1/4 flex gap-1 items-center '>
                 <img src="https://picsum.photos/200/300" alt="" className='bg-green-400 size-8 rounded-full' />
+                <div>
                 <div className=" ">{patient.patientName[0].toUpperCase() + patient.patientName.slice(1)}</div>
+                <span>{patient._id}</span>
+                </div>
+              
               </div>
               <div className="w-1/6">{patient.gender[0].toUpperCase() + patient.gender.slice(1)}</div>
               <div className="w-1/6">{patient.age}</div>
@@ -239,13 +251,13 @@ if(patientToUpdate){
               </div> <div className="w-[13%] flex justify-center items-center space-x-2">
 
                 <button
-                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-8 transition-all duration-300"
+                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-8 animate"
                   onClick={() => handleEdit(patient._id)}
                 >
                   <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
                 </button>
                 <button
-                  className="delete hover:bg-red-300 rounded-full size-8 transition-all duration-300 "
+                  className="delete px-2 py-1 hover:bg-red-300 rounded-full size-8 animate "
                   onClick={() => handleDelete(patient._id)}
                 >
                   <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
