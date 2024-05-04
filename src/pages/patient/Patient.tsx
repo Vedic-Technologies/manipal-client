@@ -242,7 +242,8 @@ const handleCopyPatientId =(id)=>{
             <div  key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
              <div onDoubleClick={()=>{handleDetails(patient._id)}} className=' w-[87%] flex justify-between items-center'>
               <div className='w-1/4 flex gap-1 items-center '>
-                <img src="https://picsum.photos/200/300" alt="" className='bg-green-400 size-8 rounded-full' />
+                <img src={patient.image} alt="hi" className='bg-green-400 min-w-8 size-8 rounded-full' />
+                
                 <div className='w-full flex  justify-between '>
                 <div className=" ">{patient.patientName[0].toUpperCase() + patient.patientName.slice(1)}</div>
                 <span className='pr-8' onClick={()=>{handleCopyPatientId(patient._id)}}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
@@ -258,23 +259,23 @@ const handleCopyPatientId =(id)=>{
               </div> <div className="w-[13%] flex justify-center items-center space-x-2">
 
                 <button
-                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-8 animate"
+                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"
                   onClick={() => handleEdit(patient._id)}
                 >
                   <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
                 </button>
                 <button
-                  className="delete px-2 py-1 hover:bg-red-300 rounded-full size-8 animate "
+                  className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
                   onClick={() => handleDelete(patient._id)}
                 >
                   <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                 </button>
-                <button onClick={()=>{handleUpdateActive(patient._id)}} className=' rounded  text-sm font-n h-7 w-24 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
+                <button onClick={()=>{handleUpdateActive(patient._id)}} className=' rounded  text-sm font-n h-7 min-w-20 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
               </div>
             </div>
           ))}
         </div>
-        <div className='flex justify-between pr-8 py-2 mt-2 absolute w-full bottom-0'>
+        <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-0'>
           <div className='bg-blue-500 text-white w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
           <div className='flex gap-2 bg-gray-200 rounded-md'>
             <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
