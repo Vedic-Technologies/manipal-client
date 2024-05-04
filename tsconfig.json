@@ -8,7 +8,10 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "es2015",
-
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

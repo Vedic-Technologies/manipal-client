@@ -6,7 +6,7 @@ import center from "../../assets/images/center.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from 'axios';
-import ErrorPrompt from "../../components/ErrorPrompt";
+import ErrorPrompt from "../../custom_components/ErrorPrompt";
 import { BiSolidHide } from "react-icons/bi";
 import { IoMdEye } from "react-icons/io";
 const LoginBlock = () => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
-import ConfirmationModal from "../../components/ConfirmationModal"
+import ConfirmationModal from "../../custom_components/ConfirmationModal"
 import { LiaCopySolid } from 'react-icons/lia';
 const Patient = () => {
   const [patients, setPatients] = useState([]);

@@ -4,97 +4,199 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 
-const initialValues = {
-  patientName: "",
-  gender: "male",
-  age: "",
-  dob: "2018-07-22",
-  contact: "",
-  email: "",
-  idProof: "",
-  weight: "",
-  height: "",
-  complaint: "",
-  bloodGroup: "",
-  referredTo: "",
-  address: {
-    state: "",
-    village: "",
-    pincode: "",
-  },
-  image: null,
-};
+// const initialpatientData = {
+//   patientName: "",
+//   gender: "male",
+//   age: "",
+//   image:"",
+//   dob: "2018-07-22",
+//   contact: "",
+//   email: "",
+//   idProof: "",
+//   weight: "",
+//   height: "",
+//   complaint: "",
+//   bloodGroup: "",
+//   referredTo: "",
+//   address: {
+//     state: "",
+//     village: "",
+//     pincode: "",
+//   },
+//   image: null,
+// };
 
-const signupSchema = Yup.object().shape({
-  patientName: Yup.string().required("Patient name is required"),
-  gender: Yup.string().required("Gender is required"),
-  age: Yup.number().required("Age is required").positive().integer(),
-  dob: Yup.date().required("Date of birth is required").max(new Date()),
-  contact: Yup.string()
-    .required("Contact number is required")
-    .matches(/^\d+$/, "Invalid phone number"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  idProof: Yup.string().required("ID proof number is required"),
-  weight: Yup.number().required("Weight is required").positive(),
-  height: Yup.number().required("Height is required").positive(),
-  complaint: Yup.string().required("Complaint is required"),
-  bloodGroup: Yup.string().required("Blood group is required"),
-  referredTo: Yup.string().required("Referral doctor's name is required"),
-  address: Yup.object().shape({
-    state: Yup.string().required("State is required"),
-    village: Yup.string().required("Village is required"),
-    pincode: Yup.string().required("Pincode is required"),
-  }),
-  image: Yup.mixed().required("Profile image is required"),
-});
+// const signupSchema = Yup.object().shape({
+//   patientName: Yup.string().required("Patient name is required"),
+//   gender: Yup.string().required("Gender is required"),
+//   age: Yup.number().required("Age is required").positive().integer(),
+//   dob: Yup.date().required("Date of birth is required").max(new Date()),
+//   contact: Yup.string()
+//     .required("Contact number is required")
+//     .matches(/^\d+$/, "Invalid phone number"),
+//   email: Yup.string().email("Invalid email").required("Email is required"),
+//   idProof: Yup.string().required("ID proof number is required"),
+//   weight: Yup.number().required("Weight is required").positive(),
+//   height: Yup.number().required("Height is required").positive(),
+//   complaint: Yup.string().required("Complaint is required"),
+//   bloodGroup: Yup.string().required("Blood group is required"),
+//   referredTo: Yup.string().required("Referral doctor's name is required"),
+//   address: Yup.object().shape({
+//     state: Yup.string().required("State is required"),
+//     village: Yup.string().required("Village is required"),
+//     pincode: Yup.string().required("Pincode is required"),
+//   }),
+//   image: Yup.mixed().required("Profile image is required"),
+// });
+
+
+
 
 const PresCription = () => {
   const [previewImage, setPreviewImage] = useState(null);
 
-  const { values, errors, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
-    initialValues,
-    validationSchema: signupSchema,
-    onSubmit: async (values) => {
-      try {
-        const response = await axios.post(
-          "https://manipal-server.onrender.com/api/patient/patient_registration",
-          values
-        );
-        console.log(response.data);
-        alert("Patient registration successful!");
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Failed to register patient.");
-      }
+  const [patientData, setPatientData] = useState({
+    patientName: "",
+    gender: "male",
+    age: "",
+    dob: "2018-07-22",
+    contact: "",
+    email: "",
+    idProof: "",
+    weight: "",
+    height: "",
+    complaint: "",
+    bloodGroup: "",
+    referredTo: "",
+    address: {
+      state: "",
+      village: "",
+      pincode: "",
     },
+    image: null,
   });
 
-  //storing uploaded image on local storage for now..
-  const handleImageChange = (e) => {
-    const imageFile = e.target.files[0];
-    if (imageFile) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewImage(reader.result);
-        setFieldValue("image", reader.result);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  
+  //   // Create FormData to include image
+  //   const formData = new FormData();
+  //   Object.keys(patientData).forEach((key) => {
+  //     formData.append(key, patientData[key]);
+  //   });
+  
+  //   try {
+  //     const response = await axios.post(
+  //       "https://manipal-server.onrender.com/api/patient/patient_registration",
+  //       patientData
+  //     );
+  //     console.log(response.data);
+  //     alert("Patient registration successful!");
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     alert("Failed to register patient.");
+  //   }
+  // };
 
-        // Store the image data URL in local storage
-        localStorage.setItem("previewImage", reader.result);
-      };
-      reader.readAsDataURL(imageFile);
-    } else {
-      setPreviewImage(null);
-      setFieldValue("image", null);
-      localStorage.removeItem("previewImage");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPatientData({
+      ...patientData,
+      [name]: value,
+    });
+  };
+
+  // Function to handle address input changes
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setPatientData({
+      ...patientData,
+      address: {
+        ...patientData.address,
+        [name]: value,
+      },
+    });
+  };
+
+ 
+  const handleImageChange = (e) => {
+    console.log("image is ......")
+    setPatientData({
+      ...patientData,
+      image: e.target.files[0],
+    });
+  };
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Create FormData to include image
+    const formData = new FormData();
+    Object.keys(patientData).forEach((key) => {
+      formData.append(key, patientData[key]);
+    });
+
+    try {
+      const response = await axios.post(
+        "https://manipal-server.onrender.com/api/patient/patient_registration",
+        formData
+      );
+      console.log(response.data);
+      alert("Patient registration successful!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to register patient.");
     }
   };
 
-  useEffect(() => {
-    const savedImage = localStorage.getItem("previewImage");
-    if (savedImage) {
-      setPreviewImage(savedImage);
-    }
-  }, []);
+
+  // const { patientData, errors, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
+  //   initialpatientData,
+  //   validationSchema: signupSchema,
+  //   onSubmit: async (patientData) => {
+  //     try {
+  //       const response = await axios.post(
+  //         "https://manipal-server.onrender.com/api/patient/patient_registration",
+  //         patientData
+  //       );
+  //       console.log(response.data);
+  //       alert("Patient registration successful!");
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //       alert("Failed to register patient.");
+  //     }
+  //   },
+  // });
+
+
+
+  //storing uploaded image on local storage for now..
+  // const handleImageChange = (e) => {
+  //   const imageFile = e.target.files[0];
+  //   if (imageFile) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setPreviewImage(reader.result);
+  //       // setFieldValue("image", reader.result);
+
+  //       // Store the image data URL in local storage
+  //       localStorage.setItem("previewImage", reader.result);
+  //     };
+  //     reader.readAsDataURL(imageFile);
+  //   } else {
+  //     setPreviewImage(null);
+  //     // setFieldValue("image", null);
+  //     localStorage.removeItem("previewImage");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const savedImage = localStorage.getItem("previewImage");
+  //   if (savedImage) {
+  //     setPreviewImage(savedImage);
+  //   }
+  // }, []);
 
   return (
     // <div className="h-screen font-semibold bg-gray-100">
@@ -111,7 +213,7 @@ const PresCription = () => {
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
     //           type="text"
     //           name="patientName"
-    //           value={values.patientName}
+    //           value={patientData.patientName}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //         />
@@ -127,7 +229,7 @@ const PresCription = () => {
     //             id="male"
     //             name="gender"
     //             value="male"
-    //             checked={values.gender === "male"}
+    //             checked={patientData.gender === "male"}
     //             onChange={handleChange}
     //           />
     //           <label htmlFor="male" className="ml-2">Male</label>
@@ -136,7 +238,7 @@ const PresCription = () => {
     //             id="female"
     //             name="gender"
     //             value="female"
-    //             checked={values.gender === "female"}
+    //             checked={patientData.gender === "female"}
     //             onChange={handleChange}
     //           />
     //           <label htmlFor="female" className="ml-2">Female</label>
@@ -149,7 +251,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="age"
-    //           value={values.age}
+    //           value={patientData.age}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -165,7 +267,7 @@ const PresCription = () => {
     //         <input
     //           type="date"
     //           name="dob"
-    //           value={values.dob}
+    //           value={patientData.dob}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -179,7 +281,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="contact"
-    //           value={values.contact}
+    //           value={patientData.contact}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -193,7 +295,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="email"
-    //           value={values.email}
+    //           value={patientData.email}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -213,7 +315,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="bloodGroup"
-    //           value={values.bloodGroup}
+    //           value={patientData.bloodGroup}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -227,7 +329,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="weight"
-    //           value={values.weight}
+    //           value={patientData.weight}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -241,7 +343,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="height"
-    //           value={values.height}
+    //           value={patientData.height}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -258,7 +360,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="idProof"
-    //           value={values.idProof}
+    //           value={patientData.idProof}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -273,7 +375,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="referredTo"
-    //           value={values.referredTo}
+    //           value={patientData.referredTo}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -288,7 +390,7 @@ const PresCription = () => {
     //         <input
     //           type="text"
     //           name="complaint"
-    //           value={values.complaint}
+    //           value={patientData.complaint}
     //           onChange={handleChange}
     //           onBlur={handleBlur}
     //           className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -309,7 +411,7 @@ const PresCription = () => {
     //          type="text"
     //          name="address.state"
     //          placeholder="State"
-    //          value={values.address.state}
+    //          value={patientData.address.state}
     //          onChange={handleChange}
     //          onBlur={handleBlur}
     //          className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -322,7 +424,7 @@ const PresCription = () => {
     //          type="text"
     //          name="address.village"
     //          placeholder="Village"
-    //          value={values.address.village}
+    //          value={patientData.address.village}
     //          onChange={handleChange}
     //          onBlur={handleBlur}
     //          className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -335,7 +437,7 @@ const PresCription = () => {
     //          type="text"
     //          name="address.pincode"
     //          placeholder="Pincode"
-    //          value={values.address.pincode}
+    //          value={patientData.address.pincode}
     //          onChange={handleChange}
     //          onBlur={handleBlur}
     //          className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
@@ -373,9 +475,9 @@ const PresCription = () => {
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
                   type="text"
                   name="patientName"
-                  value={values.patientName}
+                  value={patientData.patientName}
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   placeholder="Enter your name"
                 />
                 {/* {errors.patientName && <p className="text-red-500 text-sm mt-1">{errors.patientName}</p>} */}
@@ -406,10 +508,10 @@ const PresCription = () => {
                 <input
                   type="text"
                   name="age"
-                  value={values.age}
+                  value={patientData.age}
                   onChange={handleChange}
                   placeholder="Enter Age"
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
                 {/* {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>} */}
@@ -420,10 +522,10 @@ const PresCription = () => {
                 <input
                   type="date"
                   name="dob"
-                  value={values.dob}
+                  value={patientData.dob}
                   placeholder="Enter DOB"
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]"
                 />
                 {/* {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>} */}
@@ -436,10 +538,10 @@ const PresCription = () => {
                 <input
                   type="text"
                   name="contact"
-                  value={values.contact}
+                  value={patientData.contact}
                   onChange={handleChange}
                   placeholder="Enter number"
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
                 {/* {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact}</p>} */}
@@ -451,10 +553,10 @@ const PresCription = () => {
                 <input
                   type="text"
                   name="email"
-                  value={values.email}
+                  value={patientData.email}
                   placeholder="Enter Email"
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]b"
                 />
                 {/* {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>} */}
@@ -469,11 +571,11 @@ const PresCription = () => {
                   type="file"
                   accept="image/*"
                   name="profileImage"
-                  onChange={handleImageChange}
+                  onChange={(e)=>handleImageChange(e)}
                   // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
-                {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
+                {/* {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>} */}
               </div>
               {/* Preview Image */}
               <div className="center">
@@ -498,10 +600,10 @@ const PresCription = () => {
               <input
                 type="text"
                 name="idProof"
-                value={values.idProof}
+                value={patientData.idProof}
                 onChange={handleChange}
                 placeholder="Enter ID number"
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
               />
               {/* {errors.idProof && <p className="text-red-500 text-sm mt-1">{errors.idProof}</p>} */}
@@ -513,10 +615,10 @@ const PresCription = () => {
               <input
                 type="text"
                 name="weight"
-                value={values.weight}
+                value={patientData.weight}
                 onChange={handleChange}
                 placeholder="Enter Weight"
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
               />
               {/* {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>} */}
@@ -528,10 +630,10 @@ const PresCription = () => {
               <input
                 type="text"
                 name="height"
-                value={values.height}
+                value={patientData.height}
                 onChange={handleChange}
                 placeholder="Enter Height"
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
               />
               {/* {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>} */}
@@ -545,9 +647,9 @@ const PresCription = () => {
             <textarea
 
               name="complaint"
-              value={values.complaint}
+              value={patientData.complaint}
               onChange={handleChange}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
             {/* {errors.complaint && <p className="text-red-500 text-sm mt-1">{errors.complaint}</p>} */}
@@ -562,10 +664,10 @@ const PresCription = () => {
               <input
                 type="text"
                 name="bloodGroup"
-                value={values.bloodGroup}
+                value={patientData.bloodGroup}
                 onChange={handleChange}
                 placeholder="Enter Blood Group"
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
               />
               {/* {errors.bloodGroup && <p className="text-red-500 text-sm mt-1">{errors.bloodGroup}</p>} */}
@@ -577,9 +679,9 @@ const PresCription = () => {
               <input
                 type="text"
                 name="referredTo"
-                value={values.referredTo}
+                value={patientData.referredTo}
                 onChange={handleChange}
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
               />
               {/* {errors.referredTo && <p className="text-red-500 text-sm mt-1">{errors.referredTo}</p>} */}
@@ -600,9 +702,9 @@ const PresCription = () => {
                   type="text"
                   name="address.state"
                   placeholder="State"
-                  value={values.address.state}
+                  value={patientData.address.state}
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
                 {/* {errors.address?.state && <p className="text-red-500 text-sm mt-1">{errors.address.state}</p>} */}
@@ -613,9 +715,9 @@ const PresCription = () => {
                   type="text"
                   name="address.village"
                   placeholder="Village"
-                  value={values.address.village}
+                  value={patientData.address.village}
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
                 {/* {errors.address?.village && <p className="text-red-500 text-sm mt-1">{errors.address.village}</p>} */}
@@ -626,9 +728,9 @@ const PresCription = () => {
                   type="text"
                   name="address.pincode"
                   placeholder="Pincode"
-                  value={values.address.pincode}
+                  value={patientData.address.pincode}
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
                 />
                 {/* {errors.address?.pincode && <p className="text-red-500 text-sm mt-1">{errors.address.pincode}</p>} */}
@@ -639,7 +741,7 @@ const PresCription = () => {
 
           {/* Submit button */}
           <div className="flex  justify-end gap-5 mt-6">
-            <button className="p-7  hover:bg-blue-600  font-bold py-2 rounded-lg">
+            <button className="p-7   font-bold py-2 rounded-lg border border-black">
               Cancel
             </button>
             <button type="submit" className="p-7 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg">

@@ -1,6 +1,6 @@
 
 import './App.css';
-import NavBar from './components/NavBar';
+import NavBar from './custom_components/NavBar';
 import Admin from './pages/admin/Admin';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
