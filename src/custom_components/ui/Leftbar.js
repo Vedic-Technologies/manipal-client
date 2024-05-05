@@ -135,15 +135,7 @@ const Leftbar = ({ children }) => {
               </li>
             </NavLink>
 
-            <NavLink
-              to="createtest"
-              className={`link ${activeLink === "createtest" ? "active-link" : ""}`}
-              onClick={() => handleLinkClick("createtest")}
-            >  <li>
-              <FaBookMedical   className="new" />
-                <div className={hidden} ><span className=" new font-roboto  text-lg ml-3 " >Patient Reacord</span></div>        
-              </li>
-            </NavLink>
+         
 
             {"admin" === "admin" && (
               <>
