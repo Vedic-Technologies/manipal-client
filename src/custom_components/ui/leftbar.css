@@ -1,13 +1,12 @@
-
 .cpanel-container {
   display: flex;
   min-height: 100vh;
-  width: 100%;  
+  width: 100%;
   /* background-color: #ffffff; */
   position: relative;
 }
 
-.blob{
+.blob {
   position: absolute;
   left: 100px;
   top: 0;
@@ -16,40 +15,33 @@
   height: 600px;
   /* width: 500px; */
   background-color: #9e1028;
-
 }
-.leftbar .drawer{
- font-size: 2em;
+.leftbar .drawer {
+  font-size: 2em;
   position: absolute;
-  right: 25px;
+  right: -60px;
   top: 20px;
   padding: 5px 10px;
   background-color: rgb(198, 230, 230);
   border-radius: 5px;
   cursor: pointer;
   box-shadow: inset 1px 1px 5px rgb(233, 228, 228);
-
-
 }
-.drawer:active{
+.drawer:active {
   background-color: rgb(128, 145, 145);
 }
 
-
 .leftbar {
   /* position: fixed; */
-   left: 0;
-   top: 0;
+  left: 0;
+  top: 0;
   /* position: relative; */
-  overflow: hidden;
+  /* overflow: hidden; */
   height: 100%;
-  background-color:#e5e7eb;
-  padding: 20px;
+  background-color: #e5e7eb;
+  padding: 15px;
   box-sizing: border-box;
-  
- 
 }
-
 
 .link {
   display: flex;
@@ -58,46 +50,39 @@
   overflow: hidden;
   border-radius: 5px;
   margin-bottom: 5px;
-  cursor: pointer;  
-  
+  cursor: pointer;
 }
 
 .link:hover {
-  background-color: rgb(18, 63, 122);
+  background-color: rgb(35, 60, 93);
   color: white;
 }
 
-.link_text:hover{
+.link_text:hover {
   color: white;
 }
 .active-link {
-  background-color: rgba(255, 0, 0, 0.14);
+  background-color: rgb(61, 97, 145);
   width: 100%;
   border-radius: 5px;
   display: flex;
-
 }
-.active-link:hover{
-  background-color: rgba(255, 0, 0, 0.249);
-
+.active-link:hover {
+  background-color: rgb(41, 72, 113);
 }
 
-.leftbar ul {
-  margin-top: 70px;
-}
-
-ul .hide{
+ul .hide {
   font-size: 20px;
   margin-left: 10px;
-  animation: collapse-in .3s ease-in forwards;
+  animation: collapse-in 0.3s linear forwards;
 }
 
-@keyframes collapse-in{
-  0%{
+@keyframes collapse-in {
+  0% {
     width: 170px;
   }
- 
-  100%{
+
+  100% {
     width: 0px;
     margin: 0;
     visibility: hidden;
@@ -114,25 +99,21 @@ ul .hide{
   /* background-color: bisque; */
 }
 
-
-
 .link_text {
+  /* color: red; */
   font-size: 20px;
   margin-left: 10px;
-  animation: collapse-out .3s ease-in forwards;
+  animation: collapse-out 0.3s linear forwards;
 }
-@keyframes collapse-out{
-  0%{
+@keyframes collapse-out {
+  0% {
     width: 0px;
   }
- 
-  100%{
-    width:170px;
-    
+
+  100% {
+    width: 170px;
   }
 }
-
-
 
 ul {
   list-style: none;
@@ -140,10 +121,9 @@ ul {
   margin: 0;
 }
 
-
 a {
   text-decoration: none;
-color: red;
+  color: red;
 }
 
 .main-content {
@@ -153,9 +133,40 @@ color: red;
   box-sizing: border-box;
   background-color: white;
 }
-.new
-{
- color: black; 
- height: 22px;
- width: 22px;
+.new {
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+
+  /* height: 22px;
+  width: 22px; */
+  font-size: 25px;
+}
+
+.new:hover {
+  color: white;
+}
+
+.showSidebar {
+  animation: sidebarShow 0.3s linear forwards;
+}
+@keyframes sidebarShow {
+  0% {
+    width: 20px;
+  }
+  100% {
+    width: 250px;
+  }
+}
+
+.hideSidebar {
+   width: 250px;
+  animation: sidebarhide  0.3s linear forwards;
+}
+@keyframes sidebarhide {
+  0% {
+    width: 250px;
+  }
+  100% {
+    width: 20px;
+  }
 }
