@@ -31,7 +31,7 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-12 px-4 sm:px-6 md:py-16 lg:px-8">
     <div className="space-y-2 text-center">
-      <h1 className="text-3xl font-bold sm:text-4xl md:text-5xl">Patient Information</h1>
+      <h1 className="text-3xl font-bold sm:text-4xl md:text-3xl">Patient Information</h1>
       <p className="text-gray-500 dark:text-gray-400">Fill out the form to collect patient details.</p>
     </div>
     <form className="space-y-4" onSubmit={handleSubmit} >
