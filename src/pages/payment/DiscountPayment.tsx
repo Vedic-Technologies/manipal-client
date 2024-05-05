@@ -23,7 +23,7 @@ const DiscountPayment = ({
         from: new Date(2022, 0, 20),
         to: addDays(new Date(2022, 0, 20), 20),
       })
-
+const [selected,setSelected]=useState("daily")
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission here, you can send the data to the server or handle it as needed
@@ -80,6 +80,19 @@ const DiscountPayment = ({
                   required
                 />
               </div> */}
+
+<RadioGroup defaultValue="comfortable" className='flex mb-3'>
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="default" id="daily" />
+        <Label htmlFor="daily">Daily</Label>
+      </div>
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="discount" id="discount" />
+        <Label htmlFor="r2">Discount</Label>
+      </div>
+      
+    </RadioGroup>
+
 
 <div className={cn("grid gap-2", className)}>
       <Popover>
