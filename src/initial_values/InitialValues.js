@@ -1,0 +1,20 @@
+export const initialData={    
+    patientName: "",
+    gender: "male",
+    age: "",
+    dob: "2018-07-22",
+    contact: "",
+    email: "",
+    idProof: "",
+    weight: "",
+    height: "",
+    complaint: "",
+    bloodGroup: "",
+    referredTo: "",
+    address: {
+      state: "",
+      village: "",
+      pincode: "",
+    },
+    image: null,
+  } 

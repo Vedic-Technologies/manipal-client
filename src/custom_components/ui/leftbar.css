@@ -3,7 +3,7 @@
   display: flex;
   min-height: 100vh;
   width: 100%;  
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   position: relative;
 }
 
@@ -43,9 +43,10 @@
   /* position: relative; */
   overflow: hidden;
   height: 100%;
-  background-color:white;
+  background-color:#e5e7eb;
   padding: 20px;
   box-sizing: border-box;
+  
  
 }
 
@@ -56,8 +57,9 @@
   text-overflow: ellipsis;
   overflow: hidden;
   border-radius: 5px;
-  margin-bottom: 15px;
-  cursor: pointer;
+  margin-bottom: 5px;
+  cursor: pointer;  
+  
 }
 
 .link:hover {
@@ -103,7 +105,7 @@ ul .hide{
 }
 
 .leftbar li {
-  color: #020000;
+  /* color: #000000; */
   padding: 10px 20px;
   width: 100%;
   display: flex;
@@ -141,7 +143,7 @@ ul {
 
 a {
   text-decoration: none;
-
+color: red;
 }
 
 .main-content {
@@ -149,11 +151,11 @@ a {
 
   /* padding: 20px; */
   box-sizing: border-box;
-  background-color: #f4f4f4;
+  background-color: white;
 }
 .new
 {
- color: #677891;
+ color: black; 
  height: 22px;
  width: 22px;
 }
