@@ -187,7 +187,7 @@ const DiscountPayment = ({
 
        <div className="flex justify-end gap-5">
         <Button onClick={()=>window.print()}>Print</Button>
-        <Button>Go to Petient</Button>
+        <Button onClick={()=>window.location.reload()}>Add New Payment</Button>
        </div>
        
       </div>

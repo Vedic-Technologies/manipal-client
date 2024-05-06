@@ -13,6 +13,7 @@ const [patientData, setPatientData] = useState<PatientType>(initialData)
 
 const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();  
+    console.log(patientData)
     try {
       const response = await axios.post(
         "https://manipal-server.onrender.com/api/patient/patient_registration",
@@ -25,7 +26,25 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
       alert("Failed to register patient.");
     }
   };
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPatientData({
+      ...patientData,
+      [name]: value,
+    });
+  };
 
+  // Function to handle address input changes
+  const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPatientData({
+      ...patientData,
+      address: {
+        ...patientData.address,
+        [name]: value,
+      },
+    });
+  };
 
 
   return (
@@ -35,14 +54,27 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
       <p className="text-gray-500 dark:text-gray-400">Fill out the form to collect patient details.</p>
     </div>
     <form className="space-y-4" onSubmit={handleSubmit} >
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        
+        
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
-          <Input id="name" placeholder="Enter patient name" required />
+          <Input id="name" placeholder="Enter patient name" required 
+           name="patientName"
+           value={patientData.patientName}
+           onChange={handleChange}
+          />
         </div>
+
+               {/* select gender */}
+
         <div className="space-y-2">
           <Label htmlFor="gender">Gender</Label>
-          <Select id="gender" required>
+          <Select id="gender" required
+          value={patientData.gender}
+          onValueChange={handleChange}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select gender" />
             </SelectTrigger>
@@ -53,47 +85,112 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
             </SelectContent>
           </Select>
         </div>
+
+
         <div className="space-y-2">
           <Label htmlFor="age">Age</Label>
-          <Input id="age" placeholder="Enter patient age" required type="number" />
+          <Input id="age" placeholder="Enter patient age" required type="number"
+           name="age"
+           value={patientData.age}
+           onChange={handleChange}
+          />
         </div>
+
       </div>
+
+
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+
         <div className="space-y-2">
           <Label htmlFor="dob">Date of Birth</Label>
-          <Input id="dob" required type="date" />
+          <Input id="dob" required type="date"
+           name="dob"
+           value={patientData.dob}
+           placeholder="Enter DOB"
+           onChange={handleChange}
+          />
         </div>
+
+
         <div className="space-y-2">
           <Label htmlFor="contact">Contact</Label>
-          <Input id="contact" placeholder="Enter patient contact" required type="tel" />
+          <Input id="contact" placeholder="Enter patient contact" required type="tel"
+           name="contact"
+           value={patientData.contact}
+           onChange={handleChange}
+          />
         </div>
+
+
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" placeholder="Enter patient email" required type="email" />
+          <Input id="email" placeholder="Enter patient email" required type="email" 
+           name="email"
+           value={patientData.email}           
+           onChange={handleChange}
+          />
         </div>
+
+
       </div>
+
+
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+
         <div className="space-y-2">
-          <Label htmlFor="id-proof">ID Proof</Label>
-          <Input id="id-proof" placeholder="Enter ID proof details" required />
+          <Label htmlFor="id-proof">Adhar Number</Label>
+          <Input id="id-proof" placeholder="Enter ID proof details" required 
+           name="idProof"
+           value={patientData.idProof}
+           onChange={handleChange}
+          />
         </div>
+
+
         <div className="space-y-2">
           <Label htmlFor="weight">Weight</Label>
-          <Input id="weight" placeholder="Enter patient weight" required type="number" />
+          <Input id="weight" placeholder="Enter patient weight" required type="number"
+           name="weight"
+           value={patientData.weight}
+           onChange={handleChange}
+          />
         </div>
+
+
         <div className="space-y-2">
           <Label htmlFor="height">Height</Label>
-          <Input id="height" placeholder="Enter patient height" required type="number" />
+          <Input id="height" placeholder="Enter patient height" required type="number"
+           name="height"
+           value={patientData.height}
+           onChange={handleChange}
+          />
         </div>
+
+
       </div>
+
+
       <div className="space-y-2">
         <Label htmlFor="complaint">Complaint</Label>
-        <Textarea id="complaint" placeholder="Enter patient complaint" required />
+        <Textarea id="complaint" placeholder="Enter patient complaint" required
+        name="complaint"
+        value={patientData.complaint}
+        onChange={handleChange}
+        />
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">        
         <div className="space-y-2">
           <Label htmlFor="blood-group">Blood Group</Label>
-          <Select id="blood-group" required>
+          <Select id="blood-group" required
+          value={patientData.bloodGroup}
+          onValueChange={handleChange}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select blood group" />
             </SelectTrigger>
@@ -109,24 +206,49 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
             </SelectContent>
           </Select>
         </div>
+
+
         <div className="space-y-2">
-          <Label htmlFor="referred-to">Referred To</Label>
-          <Input id="referred-to" placeholder="Enter referring doctor" required />
+          <Label htmlFor="referred-to">Referred By <span className="text-red-500">*</span></Label>
+          <Input id="referred-to" placeholder="Enter referring doctor" required 
+           name="referredTo"
+           value={patientData.referredTo}
+           onChange={handleChange}
+          />
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="state">State</Label>
-          <Input id="state" placeholder="Enter patient state" required />
+          <Input id="state" placeholder="Enter patient state" required 
+           name="address.state"           
+           value={patientData.address.state}
+           onChange={handleAddressChange}
+          />
         </div>
+
       </div>
+
+
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="village">Village</Label>
-          <Input id="village" placeholder="Enter patient village" required />
+          <Input id="village" placeholder="Enter patient village" required 
+           name="address.village"           
+           value={patientData.address.village}
+           onChange={handleAddressChange}
+          />
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="pincode">Pincode</Label>
-          <Input id="pincode" placeholder="Enter patient pincode" required type="number" />
+          <Input id="pincode" placeholder="Enter patient pincode" required type="number"
+           name="address.pincode"          
+           value={patientData.address.pincode}
+           onChange={handleAddressChange}          
+          />
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="profile-pic">Profile Picture</Label>
           <div className="flex items-center gap-4">
@@ -146,11 +268,17 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
             </div>
           </div>
         </div>
+
       </div>
+
+
+
       <div className="flex justify-end gap-2">
         <Button variant="outline">Cancel</Button>
         <Button type="submit">Submit</Button>
       </div>
+
+
     </form>
   </div>
   )
