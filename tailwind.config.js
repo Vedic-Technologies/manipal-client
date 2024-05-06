@@ -4,8 +4,7 @@ module.exports = {
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx,js}',
   ],
   prefix: "",
   theme: {
@@ -51,6 +50,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      backgroundImage:{
+        'hero-pattern': "url('/images/hero-pattern.png')"
       },
       borderRadius: {
         lg: "var(--radius)",

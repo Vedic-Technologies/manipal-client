@@ -9,17 +9,18 @@ import EditStaff from "../staff/EditStaff";
 import CreateStaff from "../staff/CreateStaff";
 import PaymentEntry from "../payment/PaymentEntry";
 import PresCriptionNew from "../prescription/PresCriptionNew";
+import PresCriptionSadcn from "../prescription/PresCriptionSadcn";
 
 const Home = () => {
   return (
-    <div className="cpanel-container">
+    <div className="">
       <Leftbar>
        
      <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path="/patients" element={<Patient />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
-        <Route path="/prescription" element={<PresCriptionNew />} />
+        <Route path="/prescription" element={<PresCriptionSadcn />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
         <Route path="/createstaff" element={<CreateStaff/>} />
         <Route path="/editstaffs" element={<EditStaff/>} />

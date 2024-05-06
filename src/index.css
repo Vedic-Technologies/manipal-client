@@ -71,6 +71,13 @@
       @apply border-border;
     }
     body {
-      @apply dark bg-background text-foreground;
+      @apply  bg-background text-foreground;
     }
+  }
+
+  .center
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
