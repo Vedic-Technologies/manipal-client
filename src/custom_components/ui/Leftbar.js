@@ -92,12 +92,12 @@ const Leftbar = ({ children }) => {
           <ul className="mt-2">
             <NavLink
               to="."
-              className={`link ${activeLink === "." ? "active-link" : ""}  ${
-                activeLink === "default" && "active-link"
-              }`}
+              className={`link ${
+                activeLink === "." ? "active-link" : ""
+              }  ${activeLink === "default" && "active-link"}`}
               onClick={() => handleLinkClick(".")}
             >
-              <li className="new">
+              <li className="">
                 <RxDashboard className="text-2xl" />
                 <div className={` ${hidden}  `}>
                   <span className="font-roboto text-lg  ml-3">Dashboard</span>
@@ -111,7 +111,7 @@ const Leftbar = ({ children }) => {
               }`}
               onClick={() => handleLinkClick("prescription")}
             >
-              <li className="new">
+              <li className="">
                 <BsPrescription2 className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3">
@@ -128,7 +128,7 @@ const Leftbar = ({ children }) => {
               }`}
               onClick={() => handleLinkClick("payment_entry")}
             >
-              <li className="new">
+              <li className="">
                 <MdOutlinePayment className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">
@@ -144,7 +144,7 @@ const Leftbar = ({ children }) => {
               }`}
               onClick={() => handleLinkClick("patients")}
             >
-              <li className="new">
+              <li className="">
                 <FaBed className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">Patients</span>
@@ -159,7 +159,7 @@ const Leftbar = ({ children }) => {
               }`}
               onClick={() => handleLinkClick("doctor_reference")}
             >
-              <li className="new">
+              <li className="">
                 <GoCrossReference className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">
@@ -176,7 +176,7 @@ const Leftbar = ({ children }) => {
               }`}
               onClick={() => handleLinkClick("MonthlyIncExp")}
             >
-              <li className="new">
+              <li className="">
                 <BiBarChart className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">
@@ -195,7 +195,7 @@ const Leftbar = ({ children }) => {
                   }`}
                   onClick={() => handleLinkClick("createstaff")}
                 >
-                  <li className="new">
+                  <li className="">
                     <VscPersonAdd className="text-2xl" />
                     <div className={hidden}>
                       <span className=" font-roboto  text-lg  ml-3">
@@ -212,7 +212,7 @@ const Leftbar = ({ children }) => {
                   }`}
                   onClick={() => handleLinkClick("editstaffs")}
                 >
-                  <li className="new">
+                  <li className="">
                     <LiaUserEditSolid className="text-2xl" />
                     <div className={hidden}>
                       <span className=" font-roboto  text-lg  ml-3">
@@ -228,7 +228,7 @@ const Leftbar = ({ children }) => {
               className={`link ${activeLink === "logout" ? "active-link" : ""}`}
               onClick={() => logout()}
             >
-              <li className="new">
+              <li className="">
                 <ImExit className="text-2xl " />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3">Logout</span>
