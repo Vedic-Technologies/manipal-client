@@ -86,11 +86,11 @@ const DiscountPayment = ({
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="daily" id="daily" />
-                    <Label htmlFor="daily">Daily</Label>
+                    <Label htmlFor="daily">Number of Days</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="discount" id="discount" />
-                    <Label htmlFor="r2">Discount</Label>
+                    <Label htmlFor="r2">Select Range of Dates</Label>
                   </div>
                 </RadioGroup>
 
@@ -143,12 +143,12 @@ const DiscountPayment = ({
                   </div>
                 )}
                 {selected === "daily" && (
-                  <div className="mb-4">
+                  <div className="mb-4 mt-5">
                     <label
-                      className="block text-gray-700 text-sm font-bold mb-2"
+                      className="block text-gray-700 text-sm font-bold mb-2 "
                       htmlFor="amount"
                     >
-                      Days
+                      Total Days
                     </label>
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -175,8 +175,24 @@ const DiscountPayment = ({
           </form>
         </div>
       </div>
-      <div className="bg-green-400 w-1/2">right {selected}</div>
-    </div>
+      <div className="shadow-lg rounded-xl border border-gay-300 w-1/2 py-5 px-10 printable">
+      <h1 className="text-lg font-semibold text-center">Payment Card</h1>
+      <div className=" w-full ">
+        <div className="mt-3   flex"><div className="w-32 ">Name </div>: Abhinav Kumar </div>
+        <div className="mt-3   flex"><div className="w-32 ">Payment Type </div>: Discount </div> 
+        <div className="mt-3   flex"><div className="w-32 ">Amount </div>: 2,000 rs </div> 
+        <div className="mt-3   flex"><div className="w-32 0">Payment Date </div>: 10-04-2024 </div> 
+        <div className="mt-3   flex"><div className="w-32 ">No of Days </div>: from 10-04-24 to 05-05-24 </div>  
+        </div>
+
+       <div className="flex justify-end gap-5">
+        <Button onClick={()=>window.print()}>Print</Button>
+        <Button>Go to Petient</Button>
+       </div>
+       
+      </div>
+      </div>
+  
   );
 };
 
