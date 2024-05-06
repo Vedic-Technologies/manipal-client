@@ -54,7 +54,7 @@
 }
 
 .link:hover {
-  background-color: rgb(35, 60, 93);
+  background-color:rgb(61, 97, 145) ;
   color: white;
 }
 
@@ -62,13 +62,14 @@
   color: white;
 }
 .active-link {
+  color: white;
   background-color: rgb(61, 97, 145);
   width: 100%;
   border-radius: 5px;
   display: flex;
 }
 .active-link:hover {
-  background-color: rgb(41, 72, 113);
+  background-color: rgb(61, 97, 145);
 }
 
 ul .hide {
@@ -123,7 +124,7 @@ ul {
 
 a {
   text-decoration: none;
-  color: red;
+  /* color: red; */
 }
 
 .main-content {
@@ -133,18 +134,15 @@ a {
   box-sizing: border-box;
   background-color: white;
 }
-.new {
+/* .new {
   color: rgb(0, 0, 0);
   font-weight: 500;
-
-  /* height: 22px;
-  width: 22px; */
   font-size: 25px;
 }
 
 .new:hover {
   color: white;
-}
+} */
 
 .showSidebar {
   animation: sidebarShow 0.3s linear forwards;
