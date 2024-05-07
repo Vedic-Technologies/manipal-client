@@ -33,7 +33,14 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
       [name]: value,
     });
   };
-
+const handleSelectChange=(value)=>
+  {
+    
+    setPatientData((prevData) => ({
+      ...prevData,
+      gender: value,
+    }));
+  }
   // Function to handle address input changes
   const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,7 +80,7 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
           <Label htmlFor="gender">Gender</Label>
           <Select id="gender" required
           value={patientData.gender}
-          onValueChange={handleChange}
+          onValueChange={handleSelectChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select gender" />
@@ -186,23 +193,23 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">        
         <div className="space-y-2">
-          <Label htmlFor="blood-group">Blood Group</Label>
-          <Select id="blood-group" required
+          <Label htmlFor="bloodGroup">Blood Group</Label>
+          <Select id="bloodGroup" required
           value={patientData.bloodGroup}
-          onValueChange={handleChange}
+          onValueChange={handleSelectChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select blood group" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="a-positive">A+</SelectItem>
-              <SelectItem value="a-negative">A-</SelectItem>
-              <SelectItem value="b-positive">B+</SelectItem>
-              <SelectItem value="b-negative">B-</SelectItem>
-              <SelectItem value="ab-positive">AB+</SelectItem>
-              <SelectItem value="ab-negative">AB-</SelectItem>
-              <SelectItem value="o-positive">O+</SelectItem>
-              <SelectItem value="o-negative">O-</SelectItem>
+              <SelectItem value="A+">A+</SelectItem>
+              <SelectItem value="A-">A-</SelectItem>
+              <SelectItem value="B+">B+</SelectItem>
+              <SelectItem value="B-">B-</SelectItem>
+              <SelectItem value="AB+">AB+</SelectItem>
+              <SelectItem value="AB-">AB-</SelectItem>
+              <SelectItem value="O+">O+</SelectItem>
+              <SelectItem value="O-">O-</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -276,10 +283,12 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
       <div className="flex justify-end gap-2">
         <Button variant="outline">Cancel</Button>
         <Button type="submit">Submit</Button>
+       
       </div>
 
 
     </form>
+  {JSON.stringify(patientData)}
   </div>
   )
 }
