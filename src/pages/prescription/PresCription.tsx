@@ -462,7 +462,7 @@ const PresCription = () => {
       <h1 className="text-2xl ml-[30rem]  bg-white rounded-lg mt-10 py-2">
         Patient Information
       </h1>
-      <h1 className=" ml-[27rem] font-normal">Fill out the foerm to collect patient details. </h1>
+      <h1 className=" ml-[27rem] font-normal">Fill out the form to collect patient details. </h1>
       <div className="flex justify-center items-center mt-5">
         <form className="w- rounded-lg bg-white  t shadow-lg p-5" onSubmit={handleSubmit}>
           {/* Patient Name */}
