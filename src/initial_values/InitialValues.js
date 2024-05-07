@@ -16,5 +16,5 @@ export const initialData={
       village: "",
       pincode: "",
     },
-    image: null,
+    photo: "",
   } 
