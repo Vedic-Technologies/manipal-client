@@ -1,6 +1,6 @@
 import Leftbar from "../../custom_components/ui/Leftbar";
 import { Routes, Route } from "react-router-dom";
-import Patient from "../patient/Patient";
+import AllPatients from "../patient/AllPatients";
 import LandingPage from "../landing/LandingPage";
 import DoctorReference from "../doctor_reference/DoctorReference";
 import PresCription from "../prescription/PresCription";
@@ -20,7 +20,7 @@ const Home = () => {
        
      <Routes>
         <Route path='/' element={<LandingPage />} />
-        <Route path="/patients" element={<Patient />} />
+        <Route path="/all_patients" element={<AllPatients />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCriptionSadcn />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />

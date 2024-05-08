@@ -26,7 +26,7 @@ const LandingPage = () => {
 
       <div className=" flex  mt-10 w-full gap-5 lg- ">
         {data.map((item: InfoData) => {
-          return <InfoCard item={item} />;
+          return <InfoCard item={item}/>;
         })}
       </div>
 

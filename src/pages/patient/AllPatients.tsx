@@ -11,7 +11,7 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip"
 
-const Patient = () => {
+const AllPatients = () => {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -313,4 +313,4 @@ const Patient = () => {
   );
 };
 
-export default Patient;
+export default AllPatients;
