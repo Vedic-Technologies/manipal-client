@@ -272,7 +272,7 @@ const Patient = () => {
                   <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
                   <div className="w-[12%]">{patient?.age}</div>
                   <div className="w-1/6">{patient?.contact}</div>
-                  <div className="w-1/4  hidden sm:block">{patient?.email}</div>
+                  <div className="w-[24%]  hidden sm:block">{patient?.email}</div>
                   <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
                 </div> <div className="w-[13%] flex justify-center items-center space-x-2">
