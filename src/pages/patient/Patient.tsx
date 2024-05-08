@@ -79,10 +79,11 @@ const Patient = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
   const indexOfLastPatient = (currentPage * pageSize);
-  const indexOfFirstPatient = indexOfLastPatient - pageSize ;
-  const currentPatients = patients.slice(indexOfFirstPatient, indexOfLastPatient);
+  const indexOfFirstPatient = indexOfLastPatient - pageSize;
+  const currentPatients = patients.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
+
+
 
   if (isLoading) {
     return <div className="text-center p-4">Loading patients...</div>;
@@ -237,77 +238,77 @@ const Patient = () => {
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
         <div className='mt-5'>
-        <div className="patient-header flex border-b border-gray-200 justify-between items-center px-2 py-2 font-medium">
-          <div className="w-1/3 ">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-[12%]">Gender <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-[12%]">Age <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-1/6 ">Contact</div>
-          <div className="w-1/6 hidden sm:block">Email</div>
-          <div className="w-[12%] hidden sm:block">Status</div>
-          <div className="w-1/6 text-center">Actions</div>
-        </div>
-        <div>
-          {currentPatients?.map((patient) => (
-            <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-              <div onDoubleClick={() => { handleDetails(patient?._id) }} className=' w-[86%] flex justify-between items-center'>
-                <div className='w-1/3 flex gap-1 items-center '>
-                  <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
+          <div className="patient-header flex border-b border-gray-200 justify-between items-center px-2 py-2 font-medium">
+            <div className="w-1/3 ">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
+            <div className="w-[12%]">Gender <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
+            <div className="w-[12%]">Age <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
+            <div className="w-1/6 ">Contact</div>
+            <div className="w-1/4 hidden sm:block">Email</div>
+            <div className="w-[12%] hidden sm:block">Status</div>
+            <div className="w-1/6 text-center">Actions</div>
+          </div>
+          <div className='pt-5'>
+            {currentPatients?.map((patient) => (
+              <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
+                <div onDoubleClick={() => { handleDetails(patient?._id) }} className=' w-[86%] flex justify-between items-center'>
+                  <div className='w-1/3 flex gap-1 items-center '>
+                    <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
 
-                  <div className='w-full flex  justify-between ml-4'>
-                    <div className=" ">{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className='pr-8' onClick={() => { handleCopyPatientId(patient._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Copy Patient ID</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <div className='w-full flex  justify-between ml-4'>
+                      <div className=" ">{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className='pr-8' onClick={() => { handleCopyPatientId(patient._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy Patient ID</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+
                   </div>
+                  <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
+                  <div className="w-[12%]">{patient?.age}</div>
+                  <div className="w-1/6">{patient?.contact}</div>
+                  <div className="w-1/4  hidden sm:block">{patient?.email}</div>
+                  <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
+                </div> <div className="w-[13%] flex justify-center items-center space-x-2">
+
+                  <button
+                    className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"
+                    onClick={() => handleEdit(patient?._id)}
+                  >
+                    <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
+                  </button>
+                  <button
+                    className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
+                    onClick={() => handleDelete(patient?._id)}
+                  >
+                    <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
+                  </button>
+                  <button onClick={() => { handleUpdateActive(patient?._id) }} className=' rounded  text-sm font-n h-7 min-w-20 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
                 </div>
-                <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
-                <div className="w-[12%]">{patient?.age}</div>
-                <div className="w-1/6">{patient?.contact}</div>
-                <div className="w-1/6 hidden sm:block">{patient?.email}</div>
-                <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
-
-              </div> <div className="w-[13%] flex justify-center items-center space-x-2">
-
-                <button
-                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"
-                  onClick={() => handleEdit(patient?._id)}
-                >
-                  <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
-                </button>
-                <button
-                  className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
-                  onClick={() => handleDelete(patient?._id)}
-                >
-                  <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
-                </button>
-                <button onClick={() => { handleUpdateActive(patient?._id) }} className=' rounded  text-sm font-n h-7 min-w-20 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
               </div>
+            ))}
+          </div>
+          <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
+            <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
+            <div className='flex gap-2 bg-gray-200 rounded-md'>
+              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
+              <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
+              <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
             </div>
-          ))}
-        </div>
-        <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
-          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
-          <div className='flex gap-2 bg-gray-200 rounded-md'>
-            <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-            <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-            <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
           </div>
         </div>
+        <ConfirmationModal
+          isOpen={openConfirm}
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+        />
       </div>
-      <ConfirmationModal
-        isOpen={openConfirm}
-        onCancel={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-      />
-    </div>
     </div>
   );
 };
