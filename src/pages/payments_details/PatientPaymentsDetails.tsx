@@ -35,7 +35,7 @@ const PatientPaymentsDetails = () => {
       setError(null);
 
       try {
-        const response = await axios.get('https://manipal-server.onrender.com/api/patient/all_patients');
+        const response = await axios.get('https://manipal-server.onrender.com/api/payment/all_payments');
         setPatients(response.data);
         console.log(response.data)
       } catch (error) {
@@ -158,21 +158,6 @@ const PatientPaymentsDetails = () => {
     setIsActive(!isActive)
   }
 
-  const handleUpdateActive = async (id) => {
-    try {
-      const patientToUpdate = patients.find(patient => patient._id === id);
-      if (patientToUpdate) {
-        const updateActiveStatus = { ...patientToUpdate, active: !patientToUpdate.active }
-        const response = await axios.patch(`https://manipal-server.onrender.com/api/patient/${id}`, updateActiveStatus);
-        setPatients(patients.map(patient => (patient._id === id ? updateActiveStatus : patient)));
-      }
-    }
-    catch (error) {
-      console.error('Error changing active status:', error);
-    }
-  }
-
-
   // enable user to copy patient id
   const handleCopyPatientId = (id) => {
     navigator.clipboard.writeText(id)
@@ -288,7 +273,7 @@ const PatientPaymentsDetails = () => {
                 >
                   <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                 </button>
-                <button onClick={() => { handleUpdateActive(patient?._id) }} className=' rounded  text-sm font-n h-7 min-w-20 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
+               
               </div>
             </div>
           ))}
