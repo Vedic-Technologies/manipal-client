@@ -105,6 +105,7 @@ const DiscountPayment = ({
                     </label>
                     <Popover>
                       <PopoverTrigger asChild>
+                        
                         <Button
                           id="date"
                           variant={"outline"}
@@ -186,7 +187,7 @@ const DiscountPayment = ({
         </div>
 
        <div className="flex justify-end gap-5">
-        <Button onClick={()=>window.print()}>Print</Button>
+        <Button variant="ashish" onClick={()=>window.print()}>Print</Button>
         <Button onClick={()=>window.location.reload()}>Add New Payment</Button>
        </div>
        

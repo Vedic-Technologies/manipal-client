@@ -10,7 +10,6 @@ import axios from "axios";
 const PresCriptionSadcn=()=> {
 
 const [patientData, setPatientData] = useState<PatientType>(initialData)
-
 const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();  
     console.log(patientData)
@@ -26,7 +25,7 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
       alert("Failed to register patient.");
     }
   };
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {  
     const { name, value } = e.target;
     setPatientData({
       ...patientData,
@@ -41,9 +40,18 @@ const handleSelectChange=(value)=>
       gender: value,
     }));
   }
+const handleBloodGroupSelectChange=(value)=>
+  {
+    setPatientData((prevData) => ({
+      ...prevData,
+      bloodGroup: value,
+    }));
+  }
+
   // Function to handle address input changes
   const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setPatientData({
       ...patientData,
       address: {
@@ -52,7 +60,26 @@ const handleSelectChange=(value)=>
       },
     });
   };
-
+const handleImage=(event)=>
+  {
+    const file = event.target.files[0];
+  
+  if (!file) return; 
+  
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    const binaryData = e.target.result; 
+    setPatientData({
+      ...patientData,
+      photo: binaryData,
+    });
+    
+    
+  };
+  
+  reader.readAsDataURL(file); // Read the file as a data URL
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-12 px-4 sm:px-6 md:py-16 lg:px-8">
@@ -79,6 +106,7 @@ const handleSelectChange=(value)=>
         <div className="space-y-2">
           <Label htmlFor="gender">Gender</Label>
           <Select id="gender" required
+          name="gender"
           value={patientData.gender}
           onValueChange={handleSelectChange}
           >
@@ -102,10 +130,7 @@ const handleSelectChange=(value)=>
            onChange={handleChange}
           />
         </div>
-
       </div>
-
-
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
 
@@ -195,8 +220,9 @@ const handleSelectChange=(value)=>
         <div className="space-y-2">
           <Label htmlFor="bloodGroup">Blood Group</Label>
           <Select id="bloodGroup" required
+          name="bloodGroup"
           value={patientData.bloodGroup}
-          onValueChange={handleSelectChange}
+          onValueChange={handleBloodGroupSelectChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select blood group" />
@@ -224,10 +250,12 @@ const handleSelectChange=(value)=>
           />
         </div>
 
+
+
         <div className="space-y-2">
           <Label htmlFor="state">State</Label>
           <Input id="state" placeholder="Enter patient state" required 
-           name="address.state"           
+           name="state"           
            value={patientData.address.state}
            onChange={handleAddressChange}
           />
@@ -235,13 +263,11 @@ const handleSelectChange=(value)=>
 
       </div>
 
-
-
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="village">Village</Label>
           <Input id="village" placeholder="Enter patient village" required 
-           name="address.village"           
+           name="village"           
            value={patientData.address.village}
            onChange={handleAddressChange}
           />
@@ -250,7 +276,7 @@ const handleSelectChange=(value)=>
         <div className="space-y-2">
           <Label htmlFor="pincode">Pincode</Label>
           <Input id="pincode" placeholder="Enter patient pincode" required type="number"
-           name="address.pincode"          
+           name="pincode"          
            value={patientData.address.pincode}
            onChange={handleAddressChange}          
           />
@@ -259,19 +285,11 @@ const handleSelectChange=(value)=>
         <div className="space-y-2">
           <Label htmlFor="profile-pic">Profile Picture</Label>
           <div className="flex items-center gap-4">
-            <Input id="profile-pic" type="file" />
+            <Input id="profile-pic" type="file" name="photo"
+            onChange={handleImage}
+            />
             <div className="hidden" id="profile-pic-preview">
-              <img
-                alt="Profile Picture Preview"
-                className="rounded-full"
-                height={100}
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "100/100",
-                  objectFit: "cover",
-                }}
-                width={100}
-              />
+             
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ export type PatientType = {
     patientName: string;
     gender: string;
     age: string;
-    image: string | null;
+    photo: string | null;
     dob: string;
     contact: string;
     email: string;

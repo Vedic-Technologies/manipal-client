@@ -19,8 +19,8 @@ const DailyPayment = () => {
           className=""
         >
           <div className=" flex ">
-            <div className=" w-full ">
-              <div className="mb-4 ">
+            <div className=" w-full">
+              <div className="mb-4">
                 
 
                 <div className="space-y-2">
