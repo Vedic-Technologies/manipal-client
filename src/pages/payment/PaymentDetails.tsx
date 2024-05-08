@@ -9,7 +9,7 @@ import {
 import DailyPayment from "./DailyPayment";
 import DiscountPayment from "./DiscountPayment";
 
-const PaymentDetails = () => {
+const PaymentDetails = ({patientId}) => {
   const [paymentType, setPaymentType] = useState("");
  
 
@@ -38,7 +38,7 @@ const PaymentDetails = () => {
                   </Select> </div>
         
         </div>
-     {paymentType==="daily" && <DailyPayment/>}
+     {paymentType==="daily" && <DailyPayment patientId={patientId} />}
      {paymentType==="discount" && <DiscountPayment/>}
       </div>
     </>

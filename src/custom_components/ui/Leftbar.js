@@ -138,6 +138,21 @@ const Leftbar = ({ children }) => {
               </li>
             </NavLink>
             <NavLink
+              to="payment_detail"
+              className={`link ${
+                activeLink === " payment_detail" ? "active-link" : ""
+              }`}
+              onClick={() => handleLinkClick(" payment_detail")}
+            >
+              <li className="">
+              <i className="fa-solid fa-indian-rupee-sign text-2xl"></i>
+                <div className={hidden}>
+                  <span className=" font-roboto  text-lg ml-3 ">Payment Detail</span>
+                </div>
+              </li>
+            </NavLink>
+           
+            <NavLink
               to="patients"
               className={`link ${
                 activeLink === "patients" ? "active-link" : ""

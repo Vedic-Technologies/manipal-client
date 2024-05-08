@@ -105,7 +105,7 @@ const PaymentEntry = () => {
     </div>
     </div>
 
-   {selectedUser && (<PaymentDetails />)}
+   {selectedUser && (<PaymentDetails patientId={selectedUser._id}/>)}
    
    
     </>

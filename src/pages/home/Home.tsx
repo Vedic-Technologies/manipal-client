@@ -10,6 +10,8 @@ import CreateStaff from "../staff/CreateStaff";
 import PaymentEntry from "../payment/PaymentEntry";
 import PresCriptionNew from "../prescription/PresCriptionNew";
 import PresCriptionSadcn from "../prescription/PresCriptionSadcn";
+import PaymentDetails from "../payment/PaymentDetails";
+import PatientPaymentsDetails from "../payments_details/PatientPaymentsDetails";
 
 const Home = () => {
   return (
@@ -25,6 +27,7 @@ const Home = () => {
         <Route path="/createstaff" element={<CreateStaff/>} />
         <Route path="/editstaffs" element={<EditStaff/>} />
         <Route path="/payment_entry" element={<PaymentEntry/>} />
+        <Route path="/payment_detail" element={<PatientPaymentsDetails/>} />
 
         </Routes>
        
