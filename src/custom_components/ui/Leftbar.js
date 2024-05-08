@@ -218,7 +218,7 @@ const [isPayment, setIsPayment] = useState(false)
                       Patient
                     </span>
                     <div className="absolute top-0.5 right-1">
-                    {isPatient ? <i className={`fa-solid fa-chevron-up  ${activeLink === "payment" ? "fa-shake" : ""}`}></i>:  <i className={`fa-solid fa-angle-down  ${activeLink === "payment" ? "fa-shake" : ""}`}></i>}
+                    {isPatient ? <i className={`fa-solid fa-chevron-up  ${activeLink === "patient" ? "fa-shake" : ""}`}></i>:  <i className={`fa-solid fa-angle-down  ${activeLink === "patient" ? "fa-shake" : ""}`}></i>}
                     </div>
                   </div>
                 </div>
