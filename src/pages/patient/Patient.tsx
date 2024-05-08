@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../components/ui/tooltip"
+} from "@radix-ui/react-tooltip"
 
 const Patient = () => {
   const [patients, setPatients] = useState([]);
@@ -262,7 +262,7 @@ const Patient = () => {
                             <span className='pr-8' onClick={() => { handleCopyPatientId(patient._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Copy Patient ID</p>
+                            <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
