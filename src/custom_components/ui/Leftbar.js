@@ -15,7 +15,7 @@ import { GoCrossReference } from "react-icons/go";
 import { BiBarChart } from "react-icons/bi";
 import { LiaUserEditSolid } from "react-icons/lia";
 import useWindowSize from "@rooks/use-window-size";
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
 
 const Leftbar = ({ children }) => {
   const navigate = useNavigate();
@@ -26,21 +26,20 @@ const Leftbar = ({ children }) => {
   // const [, , removeCookie] = useCookies();
   // const { setLoginStatus, loginStatus } = useLoginContext();
   //payment drop down
-const [isPayment, setIsPayment] = useState(false)
+  const [isPayment, setIsPayment] = useState(false);
 
   //patient dropdown
   const [isPatient, setIsPatient] = useState(false);
-  
 
   const handleIsPayment = () => {
     setIsPayment(!isPayment);
-    handleLinkClick("payment")
+    handleLinkClick("payment");
   };
 
-  const handleIsPatient=()=>{
+  const handleIsPatient = () => {
     setIsPatient(!isPatient);
-    handleLinkClick("patient")
-  }
+    handleLinkClick("patient");
+  };
   const handleLinkClick = (path) => {
     setActiveLink(path);
   };
@@ -135,124 +134,159 @@ const [isPayment, setIsPayment] = useState(false)
             </NavLink>
 
             {/* ----------------payment drop down---------- */}
-            
-            <li style={{padding:0}}>
+
+            <li style={{ padding: 0 }}>
               <div className="">
-              <div
-                className={`link ${
-                  activeLink === "payment" || activeLink === "payment_entry" || activeLink === "payment_detail" ? "active-link" : ""
-                }`}
-                
-                onClick={handleIsPayment}>
-                <div className="center  px-[20px] py-[10px] ">
-                  <MdOutlinePayment className="text-2xl" />
-                  <div className={`${hidden} relative`}>
-                    <span className=" font-roboto  text-lg ml-3 ">
-                      Payment
-                    </span>
-                    <div className="absolute top-0.5 right-1">
-                    {isPayment ? <i className={`fa-solid fa-chevron-up  ${activeLink === "payment" ? "fa-shake" : ""}`}></i>:  <i className={`fa-solid fa-angle-down  ${activeLink === "payment" ? "fa-shake" : ""}`}></i>}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {isPayment && (
-                <div className="overflow-hidden">
-                <motion.div
-                initial={{y:-200}}
-                animate={{y:0}}
-                transition={{type:"keyframes", ease:"easeInOut", delay: .2, duration:.4}}
-                className="bg-blue-100 overflow-hidden p-1 rounded h-28">
-                  <NavLink
-                    to="payment_entry "
-                    className={`drop-down  flex w-4/5 rounded transition animate ${
-                      activeLink === "payment_entry" ? "active-link-drop-down   text-white" : "hover:text-white"
-                    }`}
-                    onClick={() => handleLinkClick("payment_entry")}>
-                    <li className=" w-fit  ">
-                      <MdOutlinePayment className="text-base" />
-                      <div className={hidden}>
-                        <span className=" font-roboto  text-base ml-1 ">
-                          Payment Entry
-                        </span>
+                <div
+                  className={`link ${
+                    activeLink === "payment" ||
+                    activeLink === "payment_entry" ||
+                    activeLink === "payment_detail"
+                      ? "active-link"
+                      : ""
+                  }`}
+                  onClick={handleIsPayment}>
+                  <div className="center  px-[20px] py-[10px] ">
+                    <MdOutlinePayment className="text-2xl" />
+                    <div className={`${hidden} relative`}>
+                      <span className=" font-roboto  text-lg ml-3 ">
+                        Payment
+                      </span>
+                      <div className="absolute top-0.5 right-1">
+                        {isPayment ? (
+                          <i
+                            className={`fa-solid fa-chevron-up  ${
+                              activeLink === "payment" ? "fa-shake" : ""
+                            }`}></i>
+                        ) : (
+                          <i
+                            className={`fa-solid fa-angle-down  ${
+                              activeLink === "payment" ? "fa-shake" : ""
+                            }`}></i>
+                        )}
                       </div>
-                    </li>
-                  </NavLink>
-                  <NavLink
-              to="payment_detail"
-              className={`drop-down mt-1  flex w-4/5 rounded ${
-                activeLink === "payment_detail" ? "active-link-drop-down    text-white" : "hover:text-white"
-              }`}
-              onClick={() => handleLinkClick("payment_detail")}>
-              <li className=" w-fit ">
-                <i className="fa-solid fa-indian-rupee-sign text-base "></i>
-                <div className={hidden}>
-                  <span className=" font-roboto  text-base ml-1 ">
-                    Payment Detail
-                  </span>
-                </div>
-              </li>
-            </NavLink>
-                </motion.div>
-                </div>
-              )}
-              </div>
-            </li>
-
-
-                 {/* ----------------patient drop down---------- */}
-
-
-                 <li style={{padding:0}}>
-              <div className="">
-              <div 
-                className={`link ${
-                  activeLink === "patient" || activeLink === "all_patients" ? "active-link" : ""
-                }`}
-                
-                onClick={handleIsPatient}>
-                <div className="center  px-[20px] py-[10px] ">
-                  <MdOutlinePayment className="text-2xl" />
-                  <div className={`${hidden} relative`}>
-                    <span className=" font-roboto  text-lg ml-3 ">
-                      Patient
-                    </span>
-                    <div className="absolute top-0.5 right-1">
-                    {isPatient ? <i className={`fa-solid fa-chevron-up  ${activeLink === "patient" ? "fa-shake" : ""}`}></i>:  <i className={`fa-solid fa-angle-down  ${activeLink === "patient" ? "fa-shake" : ""}`}></i>}
                     </div>
                   </div>
                 </div>
-              </div>
-              {isPatient && (
-                <div className="overflow-hidden">
-                <motion.div
-                initial={{y:-200}}
-                animate={{y:0}}
-                transition={{type:"keyframes", ease:"easeInOut", delay: .2, duration:.4}}
-                className="bg-blue-100 overflow-hidden p-1 rounded h-16">
-                 <NavLink
-              to="all_patients"
-              className={`drop-down  flex w-4/5  rounded ${
-                activeLink === "patients" ? "active-link-drop-down  text-white" : "hover:text-white"
-              }`}
-              onClick={() => handleLinkClick("all_patients")}>
-              <li className="w-fit">
-                <FaBed className="text-base" />
-                <div className={hidden}>
-                  <span className=" font-roboto  text-base ml-1 ">Patients</span>
-                </div>
-              </li>
-            </NavLink>
-                </motion.div>
-                </div>
-              )}
+                {isPayment && (
+                  <div className="overflow-hidden">
+                    <motion.div
+                      initial={{ y: -200 }}
+                      animate={{ y: 0 }}
+                      transition={{
+                        type: "keyframes",
+                        ease: "easeInOut",
+                        delay: 0.2,
+                        duration: 0.4,
+                      }}
+                      className="bg-blue-100 overflow-hidden p-1 rounded h-28">
+                      <NavLink
+                        to="payment_entry "
+                        className={`drop-down  flex w-4/5 rounded transition animate ${
+                          activeLink === "payment_entry"
+                            ? "active-link-drop-down   text-white"
+                            : "hover:text-white"
+                        }`}
+                        onClick={() => handleLinkClick("payment_entry")}>
+                        <li className=" w-fit  ">
+                          <MdOutlinePayment className="text-base" />
+                          <div className={hidden}>
+                            <span className=" font-roboto  text-base ml-1 ">
+                              Payment Entry
+                            </span>
+                          </div>
+                        </li>
+                      </NavLink>
+                      <NavLink
+                        to="payment_detail"
+                        className={`drop-down mt-1  flex w-4/5 rounded ${
+                          activeLink === "payment_detail"
+                            ? "active-link-drop-down    text-white"
+                            : "hover:text-white"
+                        }`}
+                        onClick={() => handleLinkClick("payment_detail")}>
+                        <li className=" w-fit ">
+                          <i className="fa-solid fa-indian-rupee-sign text-sm "></i>
+                          <div className={hidden}>
+                            <span className=" font-roboto  text-base ml-1 ">
+                              Payment Detail
+                            </span>
+                          </div>
+                        </li>
+                      </NavLink>
+                    </motion.div>
+                  </div>
+                )}
               </div>
             </li>
 
+            {/* ----------------patient drop down---------- */}
 
-
-
-
+            <li style={{ padding: 0 }}>
+              <div className="">
+                <div
+                  className={`link ${
+                    activeLink === "patient" || activeLink === "all_patients"
+                      ? "active-link"
+                      : ""
+                  }`}
+                  onClick={handleIsPatient}>
+                  <div className="center  px-[20px] py-[10px] ">
+                    <MdOutlinePayment className="text-2xl" />
+                    <div className={`${hidden} relative`}>
+                      <span className=" font-roboto  text-lg ml-3 ">
+                        Patient
+                      </span>
+                      <div className="absolute top-0.5 right-1">
+                        {isPatient ? (
+                          <i
+                            className={`fa-solid fa-chevron-up  ${
+                              activeLink === "patient" ? "fa-shake" : ""
+                            }`}></i>
+                        ) : (
+                          <i
+                            className={`fa-solid fa-angle-down  ${
+                              activeLink === "patient" ? "fa-shake" : ""
+                            }`}></i>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {isPatient && (
+                  <div className="overflow-hidden">
+                    <motion.div
+                      initial={{ y: -200 }}
+                      animate={{ y: 0 }}
+                      transition={{
+                        type: "keyframes",
+                        ease: "easeInOut",
+                        delay: 0.2,
+                        duration: 0.4,
+                      }}
+                      className="bg-blue-100 overflow-hidden p-1 rounded h-16">
+                      <NavLink
+                        to="all_patients"
+                        className={`drop-down  flex w-4/5  rounded ${
+                          activeLink === "patients"
+                            ? "active-link-drop-down  text-white"
+                            : "hover:text-white"
+                        }`}
+                        onClick={() => handleLinkClick("all_patients")}>
+                        <li className="w-fit">
+                          <FaBed className="text-base" />
+                          <div className={hidden}>
+                            <span className=" font-roboto  text-base ml-1 ">
+                              Patients
+                            </span>
+                          </div>
+                        </li>
+                      </NavLink>
+                    </motion.div>
+                  </div>
+                )}
+              </div>
+            </li>
 
             {/* <NavLink
               to="patients"
