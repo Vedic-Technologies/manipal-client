@@ -249,9 +249,26 @@ const Leftbar = ({ children }) => {
                         ease: "easeInOut",
                       }}
                       className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end">
+                        <NavLink
+                        to="patient_details"
+                        className={`drop-down flex w-4/5  rounded ${
+                          activeLink === "patient_details"
+                            ? "active-link-drop-down  text-white"
+                            : "hover:text-white"
+                        }`}
+                        onClick={() => handleLinkClick("patient_details")}>
+                        <li className="w-fit">
+                          <FaBed className="text-base" />
+                          <div className={` ${hidden} h-full center`}>
+                            <span className=" font-roboto  text-base ml-1">
+                              Patient Details
+                            </span>
+                          </div>
+                        </li>
+                      </NavLink>
                       <NavLink
                         to="all_patients"
-                        className={`drop-down  flex w-4/5  rounded ${
+                        className={`drop-down  mt-1  flex w-4/5  rounded ${
                           activeLink === "all_patients"
                             ? "active-link-drop-down  text-white"
                             : "hover:text-white"
@@ -267,23 +284,7 @@ const Leftbar = ({ children }) => {
                         </li>
                       </NavLink>
 
-                      <NavLink
-                        to="patient_details"
-                        className={`drop-down mt-1  flex w-4/5  rounded ${
-                          activeLink === "patient_details"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:text-white"
-                        }`}
-                        onClick={() => handleLinkClick("patient_details")}>
-                        <li className="w-fit">
-                          <FaBed className="text-base" />
-                          <div className={` ${hidden} h-full center`}>
-                            <span className=" font-roboto  text-base ml-1">
-                              Patient Details
-                            </span>
-                          </div>
-                        </li>
-                      </NavLink>
+                      
                     </motion.div>
                   </div>
                 )}
