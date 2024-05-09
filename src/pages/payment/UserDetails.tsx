@@ -6,7 +6,7 @@ const UserDetails = ({ user } :PatientType) => {
   return (
     <div className="flex items-center mb-4">
     <div className="w-1/3">
-      <img src={sun} alt="User" className="rounded-lg border boder-gray-200 h-40 p-2" />
+      <img src={user.image} alt="User" className="rounded-lg border boder-gray-200 h-40 p-2" />
     </div>
     <div className="ml-4 w-2/3">
       <h2 className="text-lg font-semibold">Name : {user.patientName}</h2>
