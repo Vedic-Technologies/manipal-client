@@ -83,7 +83,7 @@ const PatientPaymentsDetails = () => {
 
   const indexOfLastPatient = (currentPage * pageSize);
   const indexOfFirstPatient = indexOfLastPatient - pageSize ;
-  const currentPatients = patients.slice(indexOfFirstPatient, indexOfLastPatient);
+  const currentPatients = patients?.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
 
   if (isLoading) {
     return <div className="text-center p-4">Loading patients...</div>;
