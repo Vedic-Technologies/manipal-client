@@ -17,15 +17,15 @@
   background-color: #9e1028;
 }
 .leftbar .drawer {
+  color: white;
   font-size: 2em;
   position: absolute;
   right: -60px;
   top: 20px;
   padding: 5px 10px;
-  background-color: rgb(198, 230, 230);
+  background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
   border-radius: 5px;
   cursor: pointer;
-  box-shadow: inset 1px 1px 5px rgb(233, 228, 228);
 }
 .drawer:active {
   background-color: rgb(128, 145, 145);
