@@ -26,8 +26,8 @@ const patientId = "663b32004bb1f7e416bea4e9";
     fetchData();
   }, []);
   return (
-    <div className="flex flex-col w-full p-10 m-5 ">
-    <div className="flex items-center justify-between gap-4 p-4 border-b">
+    <div className="flex flex-col w-3/5 m-auto  m-5 ">
+    <div className="flex items-center  justify-between gap-4 p-4 border-b">
       <div className="flex items-center gap-4">
         <Select>
           <SelectTrigger className="w-[200px]">
@@ -53,7 +53,7 @@ const patientId = "663b32004bb1f7e416bea4e9";
         <div className="flex flex-col items-center gap-4 w-1/3">
           <img src={patient.image} alt="" className="rounded h-60"/>
           <div className="text-center">
-            <div className="font-medium">{patient.patientName}</div>            
+            <div className="font-medium text-xl" >{patient.patientName}</div>            
           </div>
         </div>
         <div className="flex-1 grid grid-cols-2 gap-4">
@@ -89,16 +89,78 @@ const patientId = "663b32004bb1f7e416bea4e9";
         </div>
       </Card>
     </div>
-   <div className="">
-    <div className="w-96 bg-red-200 flex justify-around">
-      <div className="">Date</div>
-    <div className="">Amount</div>
+  {/* Payment component  */}
+
+  <div className="container mx-auto px-0 py-8 ">
+      <div className="grid grid-cols-1  gap-6">
+        <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-bold mb-4">Payments</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="bg-gray-100 dark:bg-gray-700">
+                  <th className="px-4 py-3 text-left">Date</th>
+                  <th className="px-4 py-3 text-left">Amount</th>
+                  <th className="px-4 py-3 text-end pr-24">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b dark:border-gray-600 ">
+                  <td className="px-4 py-3">2023-05-09</td>
+                  <td className="px-4 py-3">$100.00</td>
+                  <td className="px-4 py-3 flex items-center justify-end space-x-2 ">
+                    <Button size="sm" variant="outline">
+                      Delete
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Update
+                    </Button>
+                  </td>
+                </tr>
+                <tr className="border-b dark:border-gray-600">
+                  <td className="px-4 py-3">2023-05-01</td>
+                  <td className="px-4 py-3">$50.00</td>
+                  <td className="px-4 py-3 flex items-center space-x-2 justify-end">
+                    <Button size="sm" variant="outline">
+                      Delete
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Update
+                    </Button>
+                  </td>
+                </tr>
+                <tr className="border-b dark:border-gray-600">
+                  <td className="px-4 py-3">2023-04-25</td>
+                  <td className="px-4 py-3">$75.00</td>
+                  <td className="px-4 py-3 flex items-center space-x-2 justify-end">
+                    <Button size="sm" variant="outline">
+                      Delete
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Update
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {/* <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-bold mb-4">Summary</h2>
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <span>Total Transactions:</span>
+              <span>3</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Total Amount:</span>
+              <span>$225.00</span>
+            </div>
+          </div>
+        </div> */}
+      </div>
     </div>
-    <div className="w-96 bg-blue-200 flex justify-around">
-    <div className="">Date</div>
-    <div className="">Amount</div>
-    </div>
-   </div>
+
   </div>
   )
 } 
