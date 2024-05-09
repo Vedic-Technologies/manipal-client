@@ -188,8 +188,8 @@ const AllPatients = () => {
 
   return (
     <div className="patient-list px-4 pl-8 py-2 ">
-      <div className='  '><span>Patients &gt; </span>
-        <span className='text-gray-400 text-sm'>Patient List</span>
+      <div className='  '><span>Patient &gt; </span>
+        <span className='text-gray-400 text-sm'>All Patients</span>
       </div>
 
       <div className='h-[600px] mt-4  py-2 px-4 rounded-md bg-white relative'>

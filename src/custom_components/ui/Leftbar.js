@@ -179,18 +179,18 @@ const Leftbar = ({ children }) => {
                         delay: 0.2,
                         duration: 0.4,
                       }}
-                      className="bg-blue-100 overflow-hidden p-1 rounded h-28">
+                      className="bg-blue-100 overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col justify-end items-end ">
                       <NavLink
                         to="payment_entry "
-                        className={`drop-down  flex w-4/5 rounded transition animate ${
+                        className={`drop-down flex w-4/5 rounded transition animate ${
                           activeLink === "payment_entry"
                             ? "active-link-drop-down   text-white"
                             : "hover:text-white"
                         }`}
                         onClick={() => handleLinkClick("payment_entry")}>
                         <li className=" w-fit  ">
-                          <MdOutlinePayment className="text-base" />
-                          <div className={hidden}>
+                          <MdOutlinePayment className="text-base mt-1" />
+                          <div className={` ${hidden}`} >
                             <span className=" font-roboto  text-base ml-1 ">
                               Payment Entry
                             </span>
@@ -206,9 +206,9 @@ const Leftbar = ({ children }) => {
                         }`}
                         onClick={() => handleLinkClick("payment_detail")}>
                         <li className=" w-fit ">
-                          <i className="fa-solid fa-indian-rupee-sign text-sm "></i>
+                          <i className="fa-solid fa-indian-rupee-sign text-sm mt-2 "></i>
                           <div className={hidden}>
-                            <span className=" font-roboto  text-base ml-1 ">
+                            <span className=" font-roboto  text-base ml-1">
                               Payment Detail
                             </span>
                           </div>
@@ -264,7 +264,7 @@ const Leftbar = ({ children }) => {
                         delay: 0.2,
                         duration: 0.4,
                       }}
-                      className="bg-blue-100 overflow-hidden p-1 rounded h-16">
+                      className="bg-blue-100 overflow-hidden p-1 rounded h-16 w-[96%] flex flex-col justify-end items-end">
                       <NavLink
                         to="all_patients"
                         className={`drop-down  flex w-4/5  rounded ${
@@ -274,10 +274,10 @@ const Leftbar = ({ children }) => {
                         }`}
                         onClick={() => handleLinkClick("all_patients")}>
                         <li className="w-fit">
-                          <FaBed className="text-base" />
+                          <FaBed className="text-base mt-1" />
                           <div className={hidden}>
                             <span className=" font-roboto  text-base ml-1 ">
-                              Patients
+                              All Patients
                             </span>
                           </div>
                         </li>
