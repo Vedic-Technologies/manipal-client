@@ -282,25 +282,27 @@ const Leftbar = ({ children }) => {
                           </div>
                         </li>
                       </NavLink>
+
+                      
                     </motion.div>
                   </div>
                 )}
               </div>
             </li>
 
-            {/* <NavLink
-              to="patients"
+            <NavLink
+              to="patient"
               className={`link ${
-                activeLink === "patients" ? "active-link" : ""
+                activeLink === "patient" ? "active-link" : ""
               }`}
-              onClick={() => handleLinkClick("patients")}>
+              onClick={() => handleLinkClick("patient")}>
               <li className="">
                 <FaBed className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">Patients</span>
                 </div>
               </li>
-            </NavLink> */}
+            </NavLink>
 
             <NavLink
               to="doctor_reference"

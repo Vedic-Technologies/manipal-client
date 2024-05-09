@@ -12,6 +12,7 @@ import PresCriptionNew from "../prescription/PresCriptionNew";
 import PresCriptionSadcn from "../prescription/PresCriptionSadcn";
 import PaymentDetails from "../payment/PaymentDetails";
 import PatientPaymentsDetails from "../payments_details/PatientPaymentsDetails";
+import Patient from "../patient/Patient";
 
 const Home = () => {
   return (
@@ -21,6 +22,7 @@ const Home = () => {
      <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path="/all_patients" element={<AllPatients />} />
+        <Route path="/patient" element={<Patient />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCriptionSadcn />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
