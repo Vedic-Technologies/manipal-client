@@ -1,0 +1,188 @@
+.cpanel-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  /* background-color: #ffffff; */
+  position: relative;
+}
+
+.blob {
+  position: absolute;
+  left: 100px;
+  top: 0;
+  /* border: 1px solid black; */
+  object-fit: contain;
+  height: 600px;
+  /* width: 500px; */
+  background-color: #9e1028;
+}
+.leftbar .drawer {
+  color: white;
+  font-size: 2em;
+  position: absolute;
+  right: -60px;
+  top: 20px;
+  padding: 5px 10px;
+  background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.drawer:active {
+  background-color: rgb(128, 145, 145);
+}
+
+.leftbar {
+  /* position: fixed; */
+  left: 0;
+  top: 0;
+  /* position: relative; */
+  /* overflow: hidden; */
+  height: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.link {
+  display: flex;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.link:hover {
+  /* background-color: rgb(45, 118, 201); */
+  background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
+  color: white;
+  width: 95%;
+  transition: all .5s ease-in-out;
+}
+
+/* .link_text:hover {
+  color: white;
+} */
+
+/* .drop-down{
+  width: 90% !important;
+  font-size: 12px !important;
+} */
+.active-link {
+  color: white;
+  /* background-color: rgb(45, 118, 201); */
+  width: 95%;
+  border-radius: 5px;
+  display: flex;
+  background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
+  transition: all .5s ease-in-out;
+}
+
+.active-link-drop-down , .drop-down:hover{
+  background-image: linear-gradient(to right top, #1e5baa, #1c60b7, #1a65c4, #1969d1, #196ede);
+  transition: all 1.3s ease-in-out;
+}
+
+
+
+/* .active-link:hover {
+  background-color: rgb(45, 118, 201);
+} */
+
+ul .hide {
+  font-size: 20px;
+  margin-left: 10px;
+  animation: collapse-in 0.3s linear forwards;
+}
+
+@keyframes collapse-in {
+  0% {
+    width: 170px;
+  }
+
+  100% {
+    width: 0px;
+    margin: 0;
+    visibility: hidden;
+  }
+}
+
+.leftbar li {
+  /* color: #000000; */
+  padding: 10px 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30px;
+  /* background-color: bisque; */
+}
+
+.link_text {
+  /* color: red; */
+  font-size: 20px;
+  margin-left: 10px;
+  animation: collapse-out 0.3s linear forwards;
+}
+@keyframes collapse-out {
+  0% {
+    width: 0px;
+  }
+
+  100% {
+    width: 170px;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  /* color: red; */
+}
+
+.main-content {
+  flex: 1;
+
+  /* padding: 20px; */
+  box-sizing: border-box;
+  background-color: white;
+}
+/* .new {
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  font-size: 25px;
+}
+
+.new:hover {
+  color: white;
+} */
+
+.showSidebar {
+  animation: sidebarShow 0.3s linear forwards;
+}
+@keyframes sidebarShow {
+  0% {
+    width: 20px;
+  }
+  100% {
+    width: 250px;
+  }
+}
+
+.hideSidebar {
+   width: 250px;
+  animation: sidebarhide  0.3s linear forwards;
+}
+@keyframes sidebarhide {
+  0% {
+    width: 250px;
+  }
+  100% {
+    width: 20px;
+  }
+}

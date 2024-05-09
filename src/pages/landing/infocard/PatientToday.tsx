@@ -3,7 +3,7 @@ import { FaBed } from "react-icons/fa";
 const PatientToday = () => {
   return (
     <div>
-         <div className=" min-w-[24%] h-24 bg-white  rounded-2xl p-4 flex-grow shadow-basic relative overflow-hidden">
+         <div className=" min-w-[24%] h-24 bg-white  rounded-2xl p-4 flex-grow shadow-basic relative overflow-hidden ">
           <div className="text-sm font-bold"> Patients Today</div>
           <div className="flex mt-2 items-center">
             <div className="bg-red-400 center min-h-10 min-w-10 rounded-full text-xl  text-white ">

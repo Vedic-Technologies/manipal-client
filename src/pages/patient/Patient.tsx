@@ -1,295 +1,188 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import * as XLSX from 'xlsx';
-import { Link } from 'react-router-dom';
-import ConfirmationModal from "../../components/ConfirmationModal"
-import { LiaCopySolid } from 'react-icons/lia';
-const Patient = () => {
-  const [patients, setPatients] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchResult, setSearchResult] = useState(null);
-  const [showDetails, setShowDetails] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(8);
 
-  // confirmation dialogue box
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [selectedPatientId, setSelectedPatientId] = useState(null)
+import { SelectValue, SelectTrigger, SelectItem, SelectGroup, SelectContent, Select } from "../../components/ui/select"
+import { Input } from "../../components/ui/input"
+import { Button } from "../../components/ui/button"
+import { AvatarImage, AvatarFallback, Avatar } from "../../components/ui/avatar"
+import { Card } from "../../components/ui/card"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
-  //activate patient
-  const [isActive, setIsActive] = useState(false)
-  
-  
+const Patient=()=> {
+const [patient, setPatient] = useState({})
+const patientId = "663b32004bb1f7e416bea4e9";
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.get('https://manipal-server.onrender.com/api/patient/all_patients');
-        setPatients(response.data);
+            try {
+        const response = await axios.get(`https://manipal-server.onrender.com/api/patient/${patientId}`);
+        setPatient(response.data);
+        console.log(response.data)
       } catch (error) {
-        setError(error);
+       
       } finally {
-        setIsLoading(false);
+      
       }
     };
 
     fetchData();
   }, []);
-
-  const handleEdit = (patientId) => {
-    console.log('Edit patient:', patientId);
-  };
-
-  // logics to delete patients
-  const handleDelete=(patientId)=>{
-    setSelectedPatientId(patientId);
-    setOpenConfirm(true);
-  }
-  const handleConfirmDelete = async () => {
-    try {
-      const response = await axios.delete(`https://manipal-server.onrender.com/api/patient/${selectedPatientId}`);
-      setPatients(patients.filter((patient) => patient._id !== selectedPatientId));
-
-      setSearchResult(null);
-      setShowDetails(false);
-    } catch (error) {
-      console.error('Error deleting patient:', error);
-    }finally {
-      setOpenConfirm(false)
-    }
-  };
-
-  const handleCancelDelete=()=>{
-    setOpenConfirm(false)
-  }
-
-  //pagination
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const indexOfLastPatient = currentPage * pageSize;
-  const indexOfFirstPatient = indexOfLastPatient - pageSize;
-  const currentPatients = patients.slice(indexOfFirstPatient, indexOfLastPatient);
-
-  if (isLoading) {
-    return <div className="text-center p-4">Loading patients...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center p-4 text-red-500">Error: {error.message}</div>;
-  }
-
-  if (!currentPatients.length) {
-    return <div className="text-center p-4">No patients found.</div>;
-  }
-
-  const downloadExcel = () => {
-    const headers = ['Patient Name', 'Gender', 'Age', 'Contact', 'Email'];
-    const data = currentPatients.map(patient => {
-      return [patient.patientName, patient.gender, patient.age, patient.contact, patient.email];
-    });
-    data.unshift(headers);
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(data);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Patients');
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const excelBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(excelBlob);
-    downloadLink.download = 'patients.xlsx';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    URL.revokeObjectURL(downloadLink.href);
-  };
-
-
-  // search functionality 
-  const searchPatient = () => {
-    const result = patients.find((patient) =>
-      patient.patientName === searchInput ||
-      patient.patientName === searchInput.toLowerCase() ||
-      patient.contact === searchInput ||
-      patient.email === searchInput
-    );
-
-    if (result) {
-      setSearchResult(result);
-      setShowDetails(true);
-    } else {
-      setSearchResult(null);
-      setShowDetails(false);
-      alert("Patient not found, make sure spelling is correct");
-    }
-  };
-
-  const handleRefresh = () => {
-    window.location.reload();
-  };
-
-  //Patient details on click 
-  const handleDetails = (patientId) => {
-const selectedPatient= patients.find((patient)=>patient._id ===patientId);
-if(selectedPatient){
-  setSearchResult(selectedPatient);
-  setShowDetails(true);
-}else{
-  setSearchResult(null);
-  setShowDetails(false);
-  alert("Patient not found.");
-}
-  };
-
-  //toggle patient active/inactive
-  const handleActive=()=>{
-    setIsActive(!isActive)
-  }
-
-  const handleUpdateActive= async(id)=>{
-   try{
-const patientToUpdate = patients.find(patient => patient._id ===id);
-if(patientToUpdate){
-  const updateActiveStatus= {...patientToUpdate, active: !patientToUpdate.active}
-  const response = await axios.patch(`https://manipal-server.onrender.com/api/patient/${id}`, updateActiveStatus);
-  setPatients(patients.map(patient=>(patient._id === id ? updateActiveStatus : patient)));
-}
-   } 
-   catch (error) {
-    console.error('Error changing active status:', error);
-  }
-  }
-
-
-  // enable user to copy patient id
-const handleCopyPatientId =(id)=>{
-  navigator.clipboard.writeText(id)
-  .then (()=>{
-    alert("Patient ID copied to clipboard")
- 
-  })
-  .catch(err=>{
-    console.error("Failed to copy id ", err)
-  })
-}
-
   return (
-    <div className="patient-list px-4 py-2 ">
-      <div className='  '><span>Patients &gt; </span>
-        <span className='text-gray-400 text-sm'>Patient List</span>
-      </div>
-
-      <div className='h-[600px] mt-4  py-2 px-4 rounded-md bg-white relative'>
-        <div className='flex justify-between px-2 py-1 pr-10'>
-          <div className='flex gap-5'>
-            <div className=' font-bold text-xl'>Patient List</div>
-            <div className="search relative">
-              <input onKeyDown={(e) => {
-                  if (e.key === "Enter") searchPatient();
-                }}
-                onChange={(e) => setSearchInput(e.target.value)}
-                value={searchInput} type="search" placeholder='Search' className='rounded-lg h-8 w-72 bg-gray-100 px-2 pb-3 pr-7`' />
-              <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-2 text-gray-500 cursor-pointer"></i>
-              {showDetails && (
-                <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
-                  <div className='h-full relative'>
-                 
-                  <div className='flex justify-between'>
-                    <h2 className="text-xl font-semibold p-2">{searchResult?.patientName[0].toUpperCase() + searchResult?.patientName.slice(1)}</h2>
-                    <div onClick={() => { setShowDetails(false) }} className="cut"><i className="fa-solid fa-xmark  text-2xl text-red-600"></i></div>
-                  </div>
-                  <div className='center w-full '>
-                    <div>
-                      <div className='p-1 px-10'>
-                        <img src="https://picsum.photos/200/300" alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
-                      </div>
-                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {searchResult?.gender}</p>
-                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {searchResult?.age}</p>
-                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {searchResult?.contact}</p>
-                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Email: {searchResult?.email}</p>
-                      <p className={`mt-1 p-1 px-10 rounded-md animate bg-blue-300 font-medium  hover:text-white ${searchResult?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {searchResult?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
-                    </div>
-                  </div>
-                  <div className='flex gap-4 mt-5 ml-2 absolute bottom-0'>
-                    <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
-                    <i onClick={() => handleDelete(searchResult?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
-                  </div>
-                </div>
-                   
-                </div>
-              )}
-            </div>
-            <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
-            <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
-          </div>
-          <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
-        </div>
-        <div className="patient-header flex border-b border-gray-200 justify-between items-center px-2 py-2 font-medium">
-          <div className="w-1/4 ">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-1/6">Gender <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-1/6">Age <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-1/6 ">Contact</div>
-          <div className="w-1/6 hidden sm:block">Email</div>
-          <div className="w-1/6 hidden sm:block">Status</div>
-          <div className="w-1/6 text-center">Actions</div>
-        </div>
-        <div>
-          {currentPatients.map((patient) => (
-            <div  key={patient._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-             <div onDoubleClick={()=>{handleDetails(patient._id)}} className=' w-[87%] flex justify-between items-center'>
-              <div className='w-1/4 flex gap-1 items-center '>
-                <img src="https://picsum.photos/200/300" alt="" className='bg-green-400 size-8 rounded-full' />
-                <div className='w-full flex  justify-between '>
-                <div className=" ">{patient.patientName[0].toUpperCase() + patient.patientName.slice(1)}</div>
-                <span className='pr-8' onClick={()=>{handleCopyPatientId(patient._id)}}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                </div>
-              
-              </div>
-              <div className="w-1/6">{patient.gender[0].toUpperCase() + patient.gender.slice(1)}</div>
-              <div className="w-1/6">{patient.age}</div>
-              <div className="w-1/6">{patient.contact}</div>
-              <div className="w-1/6 hidden sm:block">{patient.email}</div>
-              <div className="w-1/6 hidden sm:block">{patient.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
-             
-              </div> <div className="w-[13%] flex justify-center items-center space-x-2">
-
-                <button
-                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full size-8 animate"
-                  onClick={() => handleEdit(patient._id)}
-                >
-                  <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
-                </button>
-                <button
-                  className="delete px-2 py-1 hover:bg-red-300 rounded-full size-8 animate "
-                  onClick={() => handleDelete(patient._id)}
-                >
-                  <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
-                </button>
-                <button onClick={()=>{handleUpdateActive(patient._id)}} className=' rounded  text-sm font-n h-7 w-24 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className='flex justify-between pr-8 py-2 mt-2 absolute w-full bottom-0'>
-          <div className='bg-blue-500 text-white w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
-          <div className='flex gap-2 bg-gray-200 rounded-md'>
-            <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-            <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-            <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
-          </div>
+    <div className="flex flex-col w-3/5 m-auto  m-5 ">
+    <div className="flex items-center  justify-between gap-4 p-4 border-b">
+      <div className="flex items-center gap-4">
+        <Select>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Search by name" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="john-doe">John Doe</SelectItem>
+              <SelectItem value="jane-smith">Jane Smith</SelectItem>
+              <SelectItem value="bob-johnson">Bob Johnson</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <div className="relative">
+          <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
+          <Input className="pl-8 w-[200px]" placeholder="Search by patient ID" type="text" />
         </div>
       </div>
-      <ConfirmationModal
-      isOpen={openConfirm}
-      onCancel={handleCancelDelete}
-      onConfirm={handleConfirmDelete}
-      />
+      <Button variant="outline">View All</Button>
     </div>
-  );
-};
+    <div className="flex justify-center m-auto w-full">
+      <Card className="w-full flex gap-6 p-6">
+        <div className="flex flex-col items-center gap-4 w-1/3">
+          <img src={patient.image} alt="" className="rounded h-60"/>
+          <div className="text-center">
+            <div className="font-medium text-xl" >{patient.patientName}</div>            
+          </div>
+        </div>
+        <div className="flex-1 grid grid-cols-2 gap-4">
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Address</div>
+            <div>123 Main St, Anytown USA</div>
+          </div>
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Contact</div>
+            <div>+1 (555) 555-5555</div>
+            <div>john.doe@example.com</div>
+          </div>
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Blood Group</div>
+            <div>O+</div>
+          </div>
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Height</div>
+            <div>180 cm</div>
+          </div>
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Weight</div>
+            <div>80 kg</div>
+          </div>
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Complaints</div>
+            <div>Headache, Fever</div>
+          </div>
+          <div className="grid gap-1">
+            <div className="text-gray-500 dark:text-gray-400">Referrals</div>
+            <div>Cardiologist, Neurologist</div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  {/* Payment component  */}
 
-export default Patient;
+  <div className="container mx-auto px-0 py-8 ">
+      <div className="grid grid-cols-1  gap-6">
+        <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-bold mb-4">Payments</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="bg-gray-100 dark:bg-gray-700">
+                  <th className="px-4 py-3 text-left">Date</th>
+                  <th className="px-4 py-3 text-left">Amount</th>
+                  <th className="px-4 py-3 text-end pr-24">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b dark:border-gray-600 ">
+                  <td className="px-4 py-3">2023-05-09</td>
+                  <td className="px-4 py-3">$100.00</td>
+                  <td className="px-4 py-3 flex items-center justify-end space-x-2 ">
+                    <Button size="sm" variant="outline">
+                      Delete
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Update
+                    </Button>
+                  </td>
+                </tr>
+                <tr className="border-b dark:border-gray-600">
+                  <td className="px-4 py-3">2023-05-01</td>
+                  <td className="px-4 py-3">$50.00</td>
+                  <td className="px-4 py-3 flex items-center space-x-2 justify-end">
+                    <Button size="sm" variant="outline">
+                      Delete
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Update
+                    </Button>
+                  </td>
+                </tr>
+                <tr className="border-b dark:border-gray-600">
+                  <td className="px-4 py-3">2023-04-25</td>
+                  <td className="px-4 py-3">$75.00</td>
+                  <td className="px-4 py-3 flex items-center space-x-2 justify-end">
+                    <Button size="sm" variant="outline">
+                      Delete
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Update
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {/* <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-bold mb-4">Summary</h2>
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <span>Total Transactions:</span>
+              <span>3</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Total Amount:</span>
+              <span>$225.00</span>
+            </div>
+          </div>
+        </div> */}
+      </div>
+    </div>
+
+  </div>
+  )
+} 
+
+export default Patient
+
+function SearchIcon(props) {
+    return (
+      <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+    )
+  }
