@@ -84,7 +84,7 @@ const Leftbar = ({ children }) => {
           innerWidth < 800 ? "hideSidebar" : "showSidebar"
         } `}></div>
       <div
-        className={`leftbar fixed  bg-gradient-to-r from-neutral-50 to-blue-100`}>
+        className={`leftbar fixed  bg-gradient-to-l from-neutral-50 to-blue-100`}>
         <div className=" m-2 relative overflow-hidden h-20 bg-lue-700">
           <div className="  w-full overflow-hidden absolute pl-1 text-5xl text-nowrap font-bold bg-gradient-to-r  from-blue-600 to-indigo-900 bg-clip-text text-transparent">
             <span className="">M</span>anipal
@@ -154,15 +154,9 @@ const Leftbar = ({ children }) => {
                       </span>
                       <div className="absolute top-0.5 right-1">
                         {isPayment ? (
-                          <i
-                            className={`fa-solid fa-chevron-up  ${
-                              activeLink === "payment" ? "fa-shake" : ""
-                            }`}></i>
+                          <i className={`fa-solid fa-chevron-up`}></i>
                         ) : (
-                          <i
-                            className={`fa-solid fa-angle-down  ${
-                              activeLink === "payment" ? "fa-shake" : ""
-                            }`}></i>
+                          <i className={`fa-solid fa-angle-down`}></i>
                         )}
                       </div>
                     </div>
@@ -176,22 +170,20 @@ const Leftbar = ({ children }) => {
                       transition={{
                         type: "keyframes",
                         ease: "easeInOut",
-                        delay: 0.2,
-                        duration: 0.4,
                       }}
-                      className="bg-blue-100 overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col justify-end items-end ">
+                      className="overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col items-end ">
                       <NavLink
                         to="payment_entry "
-                        className={`drop-down flex w-4/5 rounded transition animate ${
+                        className={`drop-down flex w-4/5 rounded ${
                           activeLink === "payment_entry"
                             ? "active-link-drop-down   text-white"
                             : "hover:text-white"
                         }`}
                         onClick={() => handleLinkClick("payment_entry")}>
                         <li className=" w-fit  ">
-                          <MdOutlinePayment className="text-base mt-1" />
-                          <div className={` ${hidden}`} >
-                            <span className=" font-roboto  text-base ml-1 ">
+                          <MdOutlinePayment className="text-base" />
+                          <div className={` ${hidden} h-full center`}>
+                            <span className=" font-roboto  text-base ml-1  ">
                               Payment Entry
                             </span>
                           </div>
@@ -206,9 +198,9 @@ const Leftbar = ({ children }) => {
                         }`}
                         onClick={() => handleLinkClick("payment_detail")}>
                         <li className=" w-fit ">
-                          <i className="fa-solid fa-indian-rupee-sign text-sm mt-2 "></i>
-                          <div className={hidden}>
-                            <span className=" font-roboto  text-base ml-1">
+                          <i className="fa-solid fa-indian-rupee-sign text-sm  "></i>
+                          <div className={`${hidden} h-full center `}>
+                            <span className=" font-roboto  text-base ml-1 ">
                               Payment Detail
                             </span>
                           </div>
@@ -239,15 +231,9 @@ const Leftbar = ({ children }) => {
                       </span>
                       <div className="absolute top-0.5 right-1">
                         {isPatient ? (
-                          <i
-                            className={`fa-solid fa-chevron-up  ${
-                              activeLink === "patient" ? "fa-shake" : ""
-                            }`}></i>
+                          <i className={`fa-solid fa-chevron-up`}></i>
                         ) : (
-                          <i
-                            className={`fa-solid fa-angle-down  ${
-                              activeLink === "patient" ? "fa-shake" : ""
-                            }`}></i>
+                          <i className={`fa-solid fa-angle-down `}></i>
                         )}
                       </div>
                     </div>
@@ -261,21 +247,19 @@ const Leftbar = ({ children }) => {
                       transition={{
                         type: "keyframes",
                         ease: "easeInOut",
-                        delay: 0.2,
-                        duration: 0.4,
                       }}
-                      className="bg-blue-100 overflow-hidden p-1 rounded h-16 w-[96%] flex flex-col justify-end items-end">
+                      className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end">
                       <NavLink
                         to="all_patients"
                         className={`drop-down  flex w-4/5  rounded ${
-                          activeLink === "patients"
+                          activeLink === "all_patients"
                             ? "active-link-drop-down  text-white"
                             : "hover:text-white"
                         }`}
                         onClick={() => handleLinkClick("all_patients")}>
                         <li className="w-fit">
-                          <FaBed className="text-base mt-1" />
-                          <div className={hidden}>
+                          <FaBed className="text-base " />
+                          <div className={` ${hidden} h-full center`}>
                             <span className=" font-roboto  text-base ml-1 ">
                               All Patients
                             </span>
@@ -283,26 +267,28 @@ const Leftbar = ({ children }) => {
                         </li>
                       </NavLink>
 
-                      
+                      <NavLink
+                        to="patient_details"
+                        className={`drop-down mt-1  flex w-4/5  rounded ${
+                          activeLink === "patient_details"
+                            ? "active-link-drop-down  text-white"
+                            : "hover:text-white"
+                        }`}
+                        onClick={() => handleLinkClick("patient_details")}>
+                        <li className="w-fit">
+                          <FaBed className="text-base" />
+                          <div className={` ${hidden} h-full center`}>
+                            <span className=" font-roboto  text-base ml-1">
+                              Patient Details
+                            </span>
+                          </div>
+                        </li>
+                      </NavLink>
                     </motion.div>
                   </div>
                 )}
               </div>
             </li>
-
-            <NavLink
-              to="patient"
-              className={`link ${
-                activeLink === "patient" ? "active-link" : ""
-              }`}
-              onClick={() => handleLinkClick("patient")}>
-              <li className="">
-                <FaBed className="text-2xl" />
-                <div className={hidden}>
-                  <span className=" font-roboto  text-lg ml-3 ">Patients</span>
-                </div>
-              </li>
-            </NavLink>
 
             <NavLink
               to="doctor_reference"
