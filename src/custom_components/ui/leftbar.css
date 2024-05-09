@@ -57,7 +57,7 @@
   background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
   color: white;
   width: 95%;
-  transition: all .5s ease-in-out;
+  transition: all .1s ease-in-out;
 }
 
 /* .link_text:hover {
@@ -75,12 +75,10 @@
   border-radius: 5px;
   display: flex;
   background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
-  transition: all .5s ease-in-out;
 }
 
 .active-link-drop-down , .drop-down:hover{
   background-image: linear-gradient(to right top, #1e5baa, #1c60b7, #1a65c4, #1969d1, #196ede);
-  transition: all 1.3s ease-in-out;
 }
 
 
