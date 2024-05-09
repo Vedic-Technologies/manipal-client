@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
 import ConfirmationModal from "../../custom_components/ConfirmationModal"
 import { LiaCopySolid } from 'react-icons/lia';
+import formatDate from '../../util/TimeFormate'
 import {
   Tooltip,
   TooltipContent,
@@ -97,7 +98,7 @@ const PatientPaymentsDetails = () => {
   }
 
   const downloadExcel = () => {
-    const headers = ['Patient Name', 'Gender', 'Age', 'Contact', 'Email'];
+    const headers = ['Patient Name', 'Contact', 'Amount', 'Date', 'Active'];
     const data = currentPatients.map(patient => {
       return [patient.patientName, patient.gender, patient.age, patient.contact, patient.email];
     });
@@ -224,26 +225,26 @@ const PatientPaymentsDetails = () => {
         <div className='mt-5'>
         <div className="patient-header flex border-b border-gray-200 justify-between items-center px-2 py-2 font-medium">
           <div className="w-1/3 ">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-[12%]">Gender <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-[12%]">Age <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
-          <div className="w-1/6 ">Contact</div>
-          <div className="w-1/6 hidden sm:block">Email</div>
+          <div className="w-[12%]">Contact <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
+          <div className="w-[12%]">Amount <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
+          <div className="w-1/6 ">Date</div>
+          <div className="w-1/6 hidden sm:block">payment Type</div>
           <div className="w-[12%] hidden sm:block">Status</div>
           <div className="w-1/6 text-center">Actions</div>
         </div>
         <div>
-          {currentPatients?.map((patient) => (
-            <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-              <div onDoubleClick={() => { handleDetails(patient?._id) }} className=' w-[86%] flex justify-between items-center'>
+          {currentPatients?.map((item) => (
+            <div key={item?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
+              <div onDoubleClick={() => { handleDetails(item?._id) }} className=' w-[86%] flex justify-between items-center'>
                 <div className='w-1/3 flex gap-1 items-center '>
-                  <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
+                  <img src={item.patient.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
 
                   <div className='w-full flex  justify-between ml-4'>
-                    <div className=" ">{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
+                    <div className=" ">{item.patient.name?.[0]?.toUpperCase() + item.patient.name?.slice(1)}</div>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span className='pr-8' onClick={() => { handleCopyPatientId(patient._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                          <span className='pr-8' onClick={() => { handleCopyPatientId(item._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>Copy Patient ID</p>
@@ -253,23 +254,23 @@ const PatientPaymentsDetails = () => {
                   </div>
 
                 </div>
-                <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
-                <div className="w-[12%]">{patient?.age}</div>
-                <div className="w-1/6">{patient?.contact}</div>
-                <div className="w-1/6 hidden sm:block">{patient?.email}</div>
-                <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
+                <div className="w-[12%]">{item?.patient.contact}</div>
+                <div className="w-[12%]">{item?.amount}</div>
+                <div className="w-1/6">{formatDate(item?.paymentDate)}</div>
+                <div className="w-1/6 hidden sm:block">{item?.paymentType}</div>
+                <div className="w-[12%] hidden sm:block">{item?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
               </div> <div className="w-[13%] flex justify-center items-center space-x-2">
 
                 <button
                   className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"
-                  onClick={() => handleEdit(patient?._id)}
+                  onClick={() => handleEdit(item?._id)}
                 >
                   <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
                 </button>
                 <button
                   className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
-                  onClick={() => handleDelete(patient?._id)}
+                  onClick={() => handleDelete(item?._id)}
                 >
                   <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                 </button>
