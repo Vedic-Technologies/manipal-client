@@ -6,6 +6,7 @@ import { Button } from "../../components/ui/button";
 import {PatientType} from '../../types/PatientTypes';
 import { ChangeEvent, useState } from "react";
 import { initialData } from "../../initial_values/InitialValues";
+import Webcam from "../webcam/Camera";
 import axios from "axios";
 const PresCriptionSadcn=()=> {
 
@@ -62,9 +63,11 @@ const handleBloodGroupSelectChange=(value)=>
   };
 
     const handleimage = (e) => {
-      const file = e.target.files[0];
-      setFileToBase(file);
-      console.log(file);
+      // const file = e.target.files[0];
+      // setFileToBase(file);
+      // console.log(file);
+
+      <Webcam/>
     };
 
     const setFileToBase = (file) => {
@@ -314,9 +317,11 @@ const handleBloodGroupSelectChange=(value)=>
           <div className="space-y-2">
             <Label htmlFor="profile-pic">Profile Picture</Label>
             <div className="flex items-center gap-4">
-              <Input id="profile-pic" type="file" onChange={handleimage} />
+              {/* <Input id="profile-pic" type="photo" /> */}
+              <Webcam/>
               <div className="hidden" id="profile-pic-preview"></div>
             </div>
+        
           </div>
         </div>
 
