@@ -8,31 +8,32 @@ const videoConstraints={
 	height:500,
 	facingMode:"user"
 }
-const Camera = () => {
+const Camera = ({setImageFile}) => {
 	const [image,setImage]=useState('')
 	const webcamRef=React.useRef(null);
 	const capture =React.useCallback(
 		()=>{
 			const imageSrc=webcamRef.current.getScreenshot();
-			setImage(imageSrc)
+			setImage(imageSrc);
+			setImageFile(imageSrc);
 		}
 	)
   return (
 	<>
 	<div>
 {
-	image==''?<Webcam
+	image===''?
+	<Webcam
 	audio={false}
 	height={500}
 	Width={500}
 	ref={webcamRef}
 	screenshotFormate="image/jpeg"
 	videoConstraints={videoConstraints}
-	/>:<img src={image}/>
+	/>:<img src={image} alt='cam_pic'/>
 
 }
-{image != '' ?
-                    <button onClick={(e) => {
+{image !== '' ?<button onClick={(e) => {
                         e.preventDefault();
                         setImage('')
                     }}
