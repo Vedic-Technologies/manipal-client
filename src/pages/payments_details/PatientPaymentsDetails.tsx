@@ -60,7 +60,7 @@ const PatientPaymentsDetails = () => {
   }
   const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete(`https://manipal-server.onrender.com/api/patient/${selectedPatientId}`);
+      const response = await axios.delete(`https://manipal-server.onrender.com/api/payment/${selectedPatientId}`);
       setPatients(patients.filter((patient) => patient._id !== selectedPatientId));
 
       setSearchResult(null);
