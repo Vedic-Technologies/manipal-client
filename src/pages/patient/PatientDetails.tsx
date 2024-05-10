@@ -46,7 +46,7 @@ const patientId = "663b32004bb1f7e416bea4e9";
           <Input className="pl-8 w-[200px]" placeholder="Search by patient ID" type="text" />
         </div>
       </div>
-      <Button variant="outline">View All</Button>
+      <Button variant="outline">View Alll</Button>
     </div>
     <div className="flex justify-center m-auto w-full">
       <Card className="w-full flex gap-6 p-6">

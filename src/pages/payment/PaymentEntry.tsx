@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import UserDetails from './UserDetails';
 import DefaultUserDetails from './DefaultUserDetails';
@@ -14,9 +15,11 @@ const PaymentEntry = () => {
     setData(response.data);
   };
 
-  useEffect(() => {
+ useEffect (()=>{    
     getData();
-  }, []);
+ },[]);
+
+  
 
   const handleSelectChange = (e) => {
     setSelectedPatient(e.target.value);
@@ -101,5 +104,10 @@ const PaymentEntry = () => {
     </>
   );
 };
+
+
+   
+  
+ 
 
 export default PaymentEntry;
