@@ -469,38 +469,6 @@ const PresCription = () => {
           <div className="flex gap-12">
             <div>
           <div className="flex gap-10">
-<<<<<<< HEAD
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700"> Name</label>
-            <input
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-              type="text"
-              name="patientName"
-              value={values.patientName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Enter your name"
-            />
-            {errors.patientName && <p className="text-red-500 text-sm mt-1">{errors.patientName}</p>}
-          </div>
-
-          {/* Gender */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Gender</label>
-            <div className="mt-1 flex gap-1 items-center">
-              <select name="" id="" className=" rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-             </select>
-             
-            </div>
-            </div>
-            {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
-          </div>
-      
-          
-=======
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700"> Name</label>
                 <input
@@ -524,7 +492,6 @@ const PresCription = () => {
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                   </select>
->>>>>>> 64313e55ab503c02202191b404559c10c7a6b909
 
                 </div>
               </div>
@@ -537,51 +504,6 @@ const PresCription = () => {
             <div className="flex gap-10">
               {/* Age */}
               <div className="mb-4">
-<<<<<<< HEAD
-            <label className="block text-sm font-medium text-gray-700">Age</label>
-            <input
-              type="text"
-              name="age"
-              value={values.age}
-              onChange={handleChange}
-              placeholder="Enter Age"
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
-          </div>
-
-           {/* Date of Birth */}
-           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-            <input
-              type="date"
-              name="dob"
-              value={values.dob}
-              placeholder="Enter DOB"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]"
-            />
-            {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
-          </div>
-
-          </div>
-          <div className="flex gap-10">
-          {/* Contact Number */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Contact Number</label>
-            <input
-              type="text"
-              name="contact"
-              value={values.contact}
-              onChange={handleChange}
-              placeholder="Enter number"
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact}</p>}
-=======
                 <label className="block text-sm font-medium text-gray-700">Age</label>
                 <input
                   type="text"
@@ -666,7 +588,6 @@ const PresCription = () => {
                 <div className="mb-4 h-36 w-32 border border-gray-400 overflow-hidden rounded text-xs font-normal center"> Image will appear here </div>
               )}
             </div></div>
->>>>>>> 64313e55ab503c02202191b404559c10c7a6b909
           </div>
 
 
@@ -675,72 +596,6 @@ const PresCription = () => {
 
             {/* ID Proof Number */}
             <div className="mb-4">
-<<<<<<< HEAD
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="text"
-              name="email"
-              value={values.email}
-              placeholder="Enter Email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-[15rem]b"
-            />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-          </div>
-          </div>
-     
-
-        
-         <div className="flex gap-5">
-          
-        {/* ID Proof Number */}
-             <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">ID Proof Number</label>
-            <input
-              type="text"
-              name="idProof"
-              value={values.idProof}
-              onChange={handleChange}
-              placeholder="Enter ID number"
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {errors.idProof && <p className="text-red-500 text-sm mt-1">{errors.idProof}</p>}
-          </div>
-
-          {/* Weight */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
-            <input
-              type="text"
-              name="weight"
-              value={values.weight}
-              onChange={handleChange}
-              placeholder="Enter Weight"
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
-          </div>
-
-          {/* Height */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Height (cm)</label>
-            <input
-              type="text"
-              name="height"
-              value={values.height}
-              onChange={handleChange}
-              placeholder="Enter Height"
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
-          </div>
-         </div>
-
-=======
               <label className="block text-sm font-medium text-gray-700">ID Proof Number</label>
               <input
                 type="text"
@@ -785,7 +640,6 @@ const PresCription = () => {
             </div>
           </div>
 
->>>>>>> 64313e55ab503c02202191b404559c10c7a6b909
 
           {/* Complaint */}
           <div className="mb-4">
@@ -798,7 +652,7 @@ const PresCription = () => {
               // onBlur={handleBlur}
               className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
             />
-            {errors.complaint && <p className="text-red-500 text-sm mt-1">{errors.complaint}</p>}
+            {/* {errors.complaint && <p className="text-red-500 text-sm mt-1">{errors.complaint}</p>} */}
           </div>
 
           <div className="flex gap-10">
@@ -835,87 +689,12 @@ const PresCription = () => {
 
 
 
-<<<<<<< HEAD
-           {/* Blood Group */}
-           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Blood Group</label>
-            <input
-              type="text"
-              name="bloodGroup"
-              value={values.bloodGroup}
-              onChange={handleChange}
-              placeholder="Enter Blood Group"
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {/* {errors.bloodGroup && <p className="text-red-500 text-sm mt-1">{errors.bloodGroup}</p>} */}
-          </div>
- 
-          {/* Referred To */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Referred To</label>
-            <input
-              type="text"
-              name="referredTo"
-              value={values.referredTo}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-            />
-            {errors.referredTo && <p className="text-red-500 text-sm mt-1">{errors.referredTo}</p>}
-=======
->>>>>>> 64313e55ab503c02202191b404559c10c7a6b909
           </div>
 
 
           {/* Address */}
           <div className="">
             <label className="block text-sm font-medium text-gray-700">Address</label>
-<<<<<<< HEAD
-           <div className="flex gap-5">
-           <div >
-           
-           <input
-             type="text"
-             name="address.state"
-             placeholder="State"
-             value={values.address.state}
-             onChange={handleChange}
-             onBlur={handleBlur}
-             className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-           />
-           {errors.address?.state && <p className="text-red-500 text-sm mt-1">{errors.address.state}</p>}
-          </div>
-
-         <div>
-         <input
-             type="text"
-             name="address.village"
-             placeholder="Village"
-             value={values.address.village}
-             onChange={handleChange}
-             onBlur={handleBlur}
-             className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-           />
-           {errors.address?.village && <p className="text-red-500 text-sm mt-1">{errors.address.village}</p>}
-         </div>
-
-          <div>
-          <input
-             type="text"
-             name="address.pincode"
-             placeholder="Pincode"
-             value={values.address.pincode}
-             onChange={handleChange}
-             onBlur={handleBlur}
-             className="mt-1 rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
-           />
-           {errors.address?.pincode && <p className="text-red-500 text-sm mt-1">{errors.address.pincode}</p>}
-          </div>
-           </div>
-          </div>
-        
-=======
             <div className="flex gap-5">
               <div >
 
@@ -959,7 +738,6 @@ const PresCription = () => {
             </div>
           </div>
 
->>>>>>> 64313e55ab503c02202191b404559c10c7a6b909
 
           {/* Submit button */}
           <div className="flex  justify-end gap-5 mt-6">
