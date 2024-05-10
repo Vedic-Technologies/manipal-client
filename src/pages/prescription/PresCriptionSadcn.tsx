@@ -6,17 +6,20 @@ import { Button } from "../../components/ui/button";
 import {PatientType} from '../../types/PatientTypes';
 import { ChangeEvent, useState } from "react";
 import { initialData } from "../../initial_values/InitialValues";
+import Webcam from "../webcam/Camera";
 import axios from "axios";
 const PresCriptionSadcn=()=> {
 
 const [patientData, setPatientData] = useState<PatientType>(initialData)
+const [imageFile, setImageFile]=useState("");
+
 const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();  
     console.log(patientData)
     try {
       const response = await axios.post(
         "https://manipal-server.onrender.com/api/patient/patient_registration",
-        patientData
+        {...patientData,image:imageFile}
       );
       console.log(response.data);
       alert("Patient registration successful!");
@@ -62,22 +65,24 @@ const handleBloodGroupSelectChange=(value)=>
   };
 
     const handleimage = (e) => {
-      const file = e.target.files[0];
-      setFileToBase(file);
-      console.log(file);
+      // const file = e.target.files[0];
+      // setFileToBase(file);
+      // console.log(file);
+
+      // <Webcam/>
     };
 
-    const setFileToBase = (file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setPatientData({
-          ...patientData,
-          image: reader.result,
-        });
-        console.log({ ...patientData, image: reader.result });
-      };
-    };
+    // const setFileToBase = (imageFile) => {
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(imageFile);
+    //   reader.onloadend = () => {
+    //     setPatientData({
+    //       ...patientData,
+    //       image: reader.result,
+    //     });
+    //     console.log({ ...patientData, image: reader.result });
+    //   };
+    // };
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-12 px-4 sm:px-6 md:py-16 lg:px-8">
@@ -314,9 +319,11 @@ const handleBloodGroupSelectChange=(value)=>
           <div className="space-y-2">
             <Label htmlFor="profile-pic">Profile Picture</Label>
             <div className="flex items-center gap-4">
-              <Input id="profile-pic" type="file" onChange={handleimage} />
-              <div className="hidden" id="profile-pic-preview"></div>
+              {/* <Input id="profile-pic" type="photo" /> */}
+             
+              <Webcam setImageFile={setImageFile}/>           
             </div>
+        
           </div>
         </div>
 
@@ -324,8 +331,7 @@ const handleBloodGroupSelectChange=(value)=>
           <Button variant="outline">Cancel</Button>
           <Button type="submit">Submit</Button>
         </div>
-      </form>
-      {JSON.stringify(patientData)}
+      </form>     
     </div>
   );
 }
