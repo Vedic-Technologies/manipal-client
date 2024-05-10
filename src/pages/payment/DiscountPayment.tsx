@@ -13,12 +13,12 @@ import {
   PopoverTrigger,
 } from "../../components/ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import PaymentCard from "./PaymentCard";
 
-const DiscountPayment = ({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) => {
+const DiscountPayment = () => {
   const [amount, setAmount] = useState("");
   const [days, setDyas] = useState("");
+  const [showPymentCard, setShowPaymentCard]=useState(false);
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
@@ -29,10 +29,71 @@ const DiscountPayment = ({
     // Handle form submission here, you can send the data to the server or handle it as needed
     // console.log({ paymentType, amount, paymentDate });
   };
+  type paymentType={
+    amount:number,
+    paymentDate:string,
+    paymentType:string,
+    patientId:string
+  }
+  const initialData={
+    amount:null,
+    paymentDate:"",
+    paymentType:"daily",
+    patientId:"3456"
+  }
+
+  const [paymentData, setPaymentData] = useState<paymentType>(initialData)
+
+
+
+
+
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setPaymentData({
+  //     ...paymentData,
+  //     [name]: value,
+  //   });
+  // };
+
+  const addDailyPayment = async() => {
+    console.log(paymentData);
+    try {
+      const response = await axios.post(
+        "https://manipal-server.onrender.com/api/payment/add_payment",
+        paymentData
+      );
+      console.log(response.data);
+      alert("Payment added successful!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to add paymentt.");
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-dashed border-gray-300  flex">
-      <div className=" w-1/2 center">
+      <div className=" w-1/2 center bg-green-300">
         <div className=" w-1/2">
           <form onSubmit={handleSubmit} className="">
             <div className=" flex ">
@@ -176,22 +237,7 @@ const DiscountPayment = ({
           </form>
         </div>
       </div>
-      <div className="shadow-lg rounded-xl border border-gay-300 w-1/2 py-5 px-10 printable">
-      <h1 className="text-lg font-semibold text-center">Payment Card</h1>
-      <div className=" w-full ">
-        <div className="mt-3   flex"><div className="w-32 ">Name </div>: Abhinav Kumar </div>
-        <div className="mt-3   flex"><div className="w-32 ">Payment Type </div>: Discount </div> 
-        <div className="mt-3   flex"><div className="w-32 ">Amount </div>: 2,000 rs </div> 
-        <div className="mt-3   flex"><div className="w-32 0">Payment Date </div>: 10-04-2024 </div> 
-        <div className="mt-3   flex"><div className="w-32 ">No of Days </div>: from 10-04-24 to 05-05-24 </div>  
-        </div>
-
-       <div className="flex justify-end gap-5">
-        <Button variant="ashish" onClick={()=>window.print()}>Print</Button>
-        <Button onClick={()=>window.location.reload()}>Add New Payment</Button>
-       </div>
-       
-      </div>
+     <PaymentCard/>
       </div>
   
   );
