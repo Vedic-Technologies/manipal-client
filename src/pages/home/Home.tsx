@@ -13,6 +13,8 @@ import PresCriptionSadcn from "../prescription/PresCriptionSadcn";
 import PaymentDetails from "../payment/PaymentDetails";
 import PatientPaymentsDetails from "../payments_details/PatientPaymentsDetails";
 import PatientDetails from "../patient/PatientDetails";
+import StaffSignup from "../staff/StaffSignup";
+import UpdateStaff from "../staff/updatestaff";
 
 const Home = () => {
   return (
@@ -26,8 +28,8 @@ const Home = () => {
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCriptionSadcn />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
-        <Route path="/createstaff" element={<CreateStaff/>} />
-        <Route path="/editstaffs" element={<EditStaff/>} />
+        <Route path="/createstaff" element={<StaffSignup/>} />
+        <Route path="/editstaffs" element={<UpdateStaff/>} />
         <Route path="/payment_entry" element={<PaymentEntry/>} />
         <Route path="/payment_detail" element={<PatientPaymentsDetails/>} />
 
