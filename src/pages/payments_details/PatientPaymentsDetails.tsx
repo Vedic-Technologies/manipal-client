@@ -13,11 +13,12 @@ import {
 } from "../../components/ui/tooltip"
 
 const PatientPaymentsDetails = () => {
-  const [patients, setPatients] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState("");
-  const [searchResult, setSearchResult] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [displaySearch, setDisplaySearch] = useState(0)
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
@@ -26,9 +27,7 @@ const PatientPaymentsDetails = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
 
-  //activate patient
-  const [isActive, setIsActive] = useState(false)
-
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +36,7 @@ const PatientPaymentsDetails = () => {
 
       try {
         const response = await axios.get('https://manipal-server.onrender.com/api/payment/all_payments');
-        setPatients(response.data);
+        setPayments(response.data);
         console.log(response.data)
       } catch (error) {
         setError(error);
@@ -48,6 +47,54 @@ const PatientPaymentsDetails = () => {
 
     fetchData();
   }, []);
+
+
+ // search functionality 
+ const searchPatient = () => {
+  const trimmedSearchInput = searchInput.trim().toLowerCase();
+
+  const results = payments.filter((patient) =>
+    patient?.patientName?.toLowerCase().includes(trimmedSearchInput) ||
+    patient?.contact?.toLowerCase().includes(trimmedSearchInput) ||
+    patient?.paymentType?.toLowerCase().includes(trimmedSearchInput) ||
+    patient?._id?.toLowerCase().includes(trimmedSearchInput)
+  );
+
+  if (results.length > 0) {
+    setSearchResults(results);
+    setShowDetails(true);
+  } else {
+    setSearchResults([]);
+    setShowDetails(false);
+    alert("Patient not found, make sure spelling is correct");
+  }
+};
+
+const displaySearchResult = searchResults.filter((result, idx)=> idx=== displaySearch)
+
+const nextSearchResult = () => {
+ 
+  if(displaySearch < searchResults.length -1){
+    setDisplaySearch(displaySearch + 1)
+  }else{
+    setDisplaySearch(0)
+  }
+  }
+
+const prevSearchResult=()=>{
+  if(displaySearch>0){
+    setDisplaySearch(displaySearch - 1)
+  }else{
+    setDisplaySearch(searchResults.length-1)
+  }
+  }
+
+  const handleCancelShowDetail=()=>{
+    setShowDetails(false)
+    setDisplaySearch(0)
+    setSearchInput("")
+  }
+
 
   const handleEdit = (patientId) => {
     console.log('Edit patient:', patientId);
@@ -61,9 +108,9 @@ const PatientPaymentsDetails = () => {
   const handleConfirmDelete = async () => {
     try {
       const response = await axios.delete(`https://manipal-server.onrender.com/api/payment/${selectedPatientId}`);
-      setPatients(patients.filter((patient) => patient._id !== selectedPatientId));
+      setPayments(payments.filter((patient) => patient._id !== selectedPatientId));
 
-      setSearchResult(null);
+      setSearchResults(null);
       setShowDetails(false);
     } catch (error) {
       console.error('Error deleting patient:', error);
@@ -83,10 +130,10 @@ const PatientPaymentsDetails = () => {
 
   const indexOfLastPatient = (currentPage * pageSize);
   const indexOfFirstPatient = indexOfLastPatient - pageSize ;
-  const currentPatients = patients?.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
+  const currentPatients = payments?.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
 
   if (isLoading) {
-    return <div className="text-center p-4">Loading patients...</div>;
+    return <div className="text-center p-4">Loading payments...</div>;
   }
 
   if (error) {
@@ -94,7 +141,7 @@ const PatientPaymentsDetails = () => {
   }
 
   if (!currentPatients.length) {
-    return <div className="text-center p-4">No patients found.</div>;
+    return <div className="text-center p-4">No payments found.</div>;
   }
 
   const downloadExcel = () => {
@@ -105,12 +152,12 @@ const PatientPaymentsDetails = () => {
     data.unshift(headers);
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.aoa_to_sheet(data);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Patients');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'payments');
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const excelBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(excelBlob);
-    downloadLink.download = 'patients.xlsx';
+    downloadLink.download = 'payments.xlsx';
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -118,46 +165,26 @@ const PatientPaymentsDetails = () => {
   };
 
 
-  // search functionality 
-  const searchPatient = () => {
-    const result = patients.find((patient) =>
-      patient.patientName === searchInput ||
-      patient.patientName === searchInput.toLowerCase() ||
-      patient.contact === searchInput ||
-      patient.email === searchInput
-    );
-
-    if (result) {
-      setSearchResult(result);
-      setShowDetails(true);
-    } else {
-      setSearchResult(null);
-      setShowDetails(false);
-      alert("Patient not found, make sure spelling is correct");
-    }
-  };
+ 
 
   const handleRefresh = () => {
     window.location.reload();
   };
 
-  //Patient details on click 
-  const handleDetails = (patientId) => {
-    const selectedPatient = patients.find((patient) => patient._id === patientId);
-    if (selectedPatient) {
-      setSearchResult(selectedPatient);
-      setShowDetails(true);
-    } else {
-      setSearchResult(null);
-      setShowDetails(false);
-      alert("Patient not found.");
-    }
-  };
+  // //Patient details on click 
+  // const handleDetails = (patientId) => {
+  //   const selectedPatient = patients.find((patient) => patient._id === patientId);
+  //   if (selectedPatient) {
+  //     setSearchResults(selectedPatient);
+  //     setShowDetails(true);
+  //   } else {
+  //     setSearchResults(null);
+  //     setShowDetails(false);
+  //     alert("Patient not found.");
+  //   }
+  // };
 
-  //toggle patient active/inactive
-  const handleActive = () => {
-    setIsActive(!isActive)
-  }
+
 
   // enable user to copy patient id
   const handleCopyPatientId = (id) => {
@@ -173,7 +200,7 @@ const PatientPaymentsDetails = () => {
 
   return (
     <div className="patient-list px-4 pl-8 py-2 ">
-      <div className='  '><span>Patients &gt; </span>
+      <div className='  '><span>Payments &gt; </span>
         <span className='text-gray-400 text-sm'>Payment Detail</span>
       </div>
 
@@ -190,41 +217,54 @@ const PatientPaymentsDetails = () => {
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
                 <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
-                  <div className='h-full relative'>
+              {displaySearchResult.map((patient)=>{
+                return (
+                  <div key={patient?._id}  className='h-full relative'>
 
-                    <div className='flex justify-between'>
-                      <h2 className="text-xl font-semibold p-2">{searchResult?.patientName[0].toUpperCase() + searchResult?.patientName.slice(1)}</h2>
-                      <div onClick={() => { setShowDetails(false) }} className="cut"><i className="fa-solid fa-xmark  text-2xl text-red-600"></i></div>
-                    </div>
-                    <div className='center w-full '>
-                      <div>
-                        <div className='p-1 px-10'>
-                          <img src={searchResult?.image} alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
-                        </div>
-                        <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {searchResult?.gender}</p>
-                        <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {searchResult?.age}</p>
-                        <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {searchResult?.contact}</p>
-                        <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Email: {searchResult?.email}</p>
-                        <p className={`mt-1 p-1 px-10 rounded-md animate bg-blue-300 font-medium  hover:text-white ${searchResult?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {searchResult?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
+                  <div className='flex justify-between'>
+                    <h2 className="text-xl font-semibold p-2">{patient?.patientName[0].toUpperCase() + patient?.patientName.slice(1)}</h2>
+                    <div onClick= {handleCancelShowDetail} className="cut"><i className="fa-solid fa-xmark  text-2xl text-red-600"></i></div>
+                  </div>
+                  <div className='center w-full '>
+                    <div>
+                      <div className='p-1 px-10'>
+                        <img src={patient?.image} alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
                       </div>
-                    </div>
-                    <div className='flex gap-4 mt-5 ml-2 absolute bottom-0'>
-                      <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
-                      <i onClick={() => handleDelete(searchResult?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {patient?.gender}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {patient?.age}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {patient?.contact}</p>
+                      <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Email: {patient?.email}</p>
+                      <p className={`mt-1 p-1 px-10 rounded-md animate bg-blue-300 font-medium  hover:text-white ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
                     </div>
                   </div>
+                  <div className='absolute bottom-0 mt-5 w-full  flex justify-between'>
+                        <div className='flex gap-4 ml-2 '>
+                          <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
+                          <i onClick={() => handleDelete(patient?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
+                        </div>
+                        <div className='text-sm flex gap-2'>
+                         Showing {displaySearch + 1}th of {searchResults.length} found
+                         <button onClick={prevSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-left"></i></button>
+                         <span  className='size-5 rounded bg-blue-200 hover:bg-blue-300 center'>{displaySearch + 1}</span>
+                         <button onClick={nextSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                        </div>
+                </div>
+                )
+              })}
+     
 
                 </div>
               )}
             </div>
-            <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
+            <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/payment_entry"><i className="fa-solid fa-plus"></i></Link></div>
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
           </div>
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
         <div className='mt-5'>
         <div className="patient-header flex border-b border-gray-200 justify-between items-center px-2 py-2 font-medium">
-          <div className="w-1/3 ">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
+          <div className="w-[30%]">Patient Name <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
           <div className="w-[12%]">Contact <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
           <div className="w-[12%]">Amount <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
           <div className="w-1/6 ">Date</div>
@@ -235,22 +275,13 @@ const PatientPaymentsDetails = () => {
         <div>
           {currentPatients?.map((item) => (
             <div key={item?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-              <div onDoubleClick={() => { handleDetails(item?._id) }} className=' w-[86%] flex justify-between items-center'>
-                <div className='w-1/3 flex gap-1 items-center '>
+              <div className=' w-[86%] flex justify-between items-center'>
+                <div className='w-[30%] flex gap-1 items-center '>
                   <img src={item.patient.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
 
                   <div className='w-full flex  justify-between ml-4'>
                     <div className=" ">{item.patient.name?.[0]?.toUpperCase() + item.patient.name?.slice(1)}</div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className='pr-8' onClick={() => { handleCopyPatientId(item._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Copy Patient ID</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                   
                   </div>
 
                 </div>
@@ -261,13 +292,20 @@ const PatientPaymentsDetails = () => {
                 <div className="w-[12%] hidden sm:block">{item?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
               </div> <div className="w-[13%] flex justify-center items-center space-x-2">
+<div className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
 
-                <button
-                  className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"
-                  onClick={() => handleEdit(item?._id)}
-                >
-                  <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
-                </button>
+              <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className='pr-8' onClick={() => { handleCopyPatientId(item._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Copy Patient ID</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                      
+</div >
                 <button
                   className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
                   onClick={() => handleDelete(item?._id)}
@@ -280,11 +318,11 @@ const PatientPaymentsDetails = () => {
           ))}
         </div>
         <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
-          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
+          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, payments.length)} of {payments.length}</div>
           <div className='flex gap-2 bg-gray-200 rounded-md'>
             <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
             <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-            <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+            <button disabled={indexOfLastPatient >= payments.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
           </div>
         </div>
       </div>

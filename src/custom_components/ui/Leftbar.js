@@ -106,8 +106,8 @@ const Leftbar = ({ children }) => {
           <ul className="mt-2">
             <NavLink
               to="."
-              className={`link ${activeLink === "." ? "active-link" : ""}  ${
-                activeLink === "default" && "active-link"
+              className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${activeLink === "." ? "active-link  text-white  " : "hover: hover:border-blue-600"}  ${
+                activeLink === "default" && "active-link  text-white "
               }`}
               onClick={() => handleLinkClick(".")}>
               <li className="">
@@ -119,8 +119,8 @@ const Leftbar = ({ children }) => {
             </NavLink>
             <NavLink
               to="prescription"
-              className={`link ${
-                activeLink === "prescription" ? "active-link" : ""
+              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                activeLink === "prescription" ? "active-link  text-white  " : "hover:border-blue-600"
               }`}
               onClick={() => handleLinkClick("prescription")}>
               <li className="">
@@ -138,12 +138,12 @@ const Leftbar = ({ children }) => {
             <li style={{ padding: 0 }}>
               <div className="">
                 <div
-                  className={`link ${
+                  className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer  border border-transparent ${
                     activeLink === "payment" ||
                     activeLink === "payment_entry" ||
                     activeLink === "payment_detail"
-                      ? "active-link"
-                      : ""
+                      ? "active-link  text-white  "
+                      : "hover:border-blue-600"
                   }`}
                   onClick={handleIsPayment}>
                   <div className="center  px-[20px] py-[10px] ">
@@ -156,7 +156,7 @@ const Leftbar = ({ children }) => {
                         {isPayment ? (
                           <i className={`fa-solid fa-chevron-up`}></i>
                         ) : (
-                          <i className={`fa-solid fa-angle-down`}></i>
+                          <i className={`fa-solid fa-angle-right`}></i>
                         )}
                       </div>
                     </div>
@@ -174,37 +174,37 @@ const Leftbar = ({ children }) => {
                       className="overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col items-end ">
                       <NavLink
                         to="payment_entry "
-                        className={`drop-down flex w-4/5 rounded ${
+                        className={`drop-down flex w-4/5 rounded border border-transparent ${
                           activeLink === "payment_entry"
-                            ? "active-link-drop-down   text-white"
-                            : "hover:text-white"
+                            ? "active-link-drop-down  text-white"
+                            : "hover:border-blue-500"
                         }`}
                         onClick={() => handleLinkClick("payment_entry")}>
-                        <li className=" w-fit  ">
+                        <div className="w-full flex items-center px-[20px] py-[10px]">
                           <MdOutlinePayment className="text-base" />
-                          <div className={` ${hidden} h-full center`}>
+                          <div className={` ${hidden} h-full flex items-center `}>
                             <span className=" font-roboto  text-base ml-1  ">
                               Payment Entry
                             </span>
                           </div>
-                        </li>
+                        </div>
                       </NavLink>
                       <NavLink
                         to="payment_detail"
-                        className={`drop-down mt-1  flex w-4/5 rounded ${
+                        className={`drop-down mt-1  flex w-4/5 rounded border border-transparent ${
                           activeLink === "payment_detail"
                             ? "active-link-drop-down    text-white"
-                            : "hover:text-white"
+                            : "hover:border-blue-500"
                         }`}
                         onClick={() => handleLinkClick("payment_detail")}>
-                        <li className=" w-fit ">
+                        <div className="w-full flex items-center  px-[20px] py-[10px]">
                           <i className="fa-solid fa-indian-rupee-sign text-sm  "></i>
-                          <div className={`${hidden} h-full center `}>
+                          <div className={`${hidden} h-full flex items-center  `}>
                             <span className=" font-roboto  text-base ml-1 ">
                               Payment Detail
                             </span>
                           </div>
-                        </li>
+                        </div>
                       </NavLink>
                     </motion.div>
                   </div>
@@ -217,14 +217,14 @@ const Leftbar = ({ children }) => {
             <li style={{ padding: 0 }}>
               <div className="">
                 <div
-                  className={`link ${
-                    activeLink === "patient" || activeLink === "all_patients"
-                      ? "active-link"
-                      : ""
+                  className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent   ${
+                    activeLink === "patient" || activeLink === "patient_details" || activeLink === "all_patients"
+                      ? "active-link  text-white  "
+                      : "hover:border-blue-600"
                   }`}
                   onClick={handleIsPatient}>
                   <div className="center  px-[20px] py-[10px] ">
-                    <MdOutlinePayment className="text-2xl" />
+                    <FaBed className="text-2xl" />
                     <div className={`${hidden} relative`}>
                       <span className=" font-roboto  text-lg ml-3 ">
                         Patient
@@ -233,7 +233,7 @@ const Leftbar = ({ children }) => {
                         {isPatient ? (
                           <i className={`fa-solid fa-chevron-up`}></i>
                         ) : (
-                          <i className={`fa-solid fa-angle-down `}></i>
+                          <i className={`fa-solid fa-angle-right `}></i>
                         )}
                       </div>
                     </div>
@@ -251,37 +251,37 @@ const Leftbar = ({ children }) => {
                       className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end">
                         <NavLink
                         to="patient_details"
-                        className={`drop-down flex w-4/5  rounded ${
+                        className={`drop-down flex w-4/5  rounded border border-transparent  ${
                           activeLink === "patient_details"
                             ? "active-link-drop-down  text-white"
-                            : "hover:text-white"
+                            : "hover:border-blue-500"
                         }`}
                         onClick={() => handleLinkClick("patient_details")}>
-                        <li className="w-fit">
+                        <div className="w-full flex items-center  px-[20px] py-[10px]">
                           <FaBed className="text-base" />
-                          <div className={` ${hidden} h-full center`}>
+                          <div className={` ${hidden} h-full flex items-center`}>
                             <span className=" font-roboto  text-base ml-1">
                               Patient Details
                             </span>
                           </div>
-                        </li>
+                        </div>
                       </NavLink>
                       <NavLink
                         to="all_patients"
-                        className={`drop-down  mt-1  flex w-4/5  rounded ${
+                        className={`drop-down  mt-1  flex w-4/5  rounded  border border-transparent ${
                           activeLink === "all_patients"
                             ? "active-link-drop-down  text-white"
-                            : "hover:text-white"
+                            : "hover:border-blue-500"
                         }`}
                         onClick={() => handleLinkClick("all_patients")}>
-                        <li className="w-fit">
+                        <div className="w-full flex items-center  px-[20px] py-[10px]">
                           <FaBed className="text-base " />
-                          <div className={` ${hidden} h-full center`}>
+                          <div className={` ${hidden} h-full flex items-center`}>
                             <span className=" font-roboto  text-base ml-1 ">
                               All Patients
                             </span>
                           </div>
-                        </li>
+                        </div>
                       </NavLink>
 
                       
@@ -293,8 +293,8 @@ const Leftbar = ({ children }) => {
 
             <NavLink
               to="doctor_reference"
-              className={`link ${
-                activeLink === "doctor_reference" ? "active-link" : ""
+              className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                activeLink === "doctor_reference" ? "active-link  text-white  " : "hover:border-blue-600"
               }`}
               onClick={() => handleLinkClick("doctor_reference")}>
               <li className="">
@@ -309,8 +309,8 @@ const Leftbar = ({ children }) => {
 
             <NavLink
               to="MonthlyIncExp"
-              className={`link ${
-                activeLink === "MonthlyIncExp" ? "active-link" : ""
+              className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                activeLink === "MonthlyIncExp" ? "active-link text-white" : "hover:border-blue-600"
               }`}
               onClick={() => handleLinkClick("MonthlyIncExp")}>
               <li className="">
@@ -327,8 +327,8 @@ const Leftbar = ({ children }) => {
               <>
                 <NavLink
                   to="createstaff"
-                  className={`link ${
-                    activeLink === "createstaff" ? "active-link" : ""
+                  className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                    activeLink === "createstaff" ? "active-link text-white after: " : "hover:border-blue-600"
                   }`}
                   onClick={() => handleLinkClick("createstaff")}>
                   <li className="">
@@ -343,8 +343,8 @@ const Leftbar = ({ children }) => {
 
                 <NavLink
                   to="editstaffs"
-                  className={`link ${
-                    activeLink === "editstaffs" ? "active-link" : ""
+                  className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent ${
+                    activeLink === "editstaffs" ? "active-link  text-white  " : "hover:border-blue-600"
                   }`}
                   onClick={() => handleLinkClick("editstaffs")}>
                   <li className="">
@@ -360,7 +360,7 @@ const Leftbar = ({ children }) => {
             )}
 
             <div
-              className={`link ${activeLink === "logout" ? "active-link" : ""}`}
+              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${activeLink === "logout" ? "active-link  text-white  " : "hover:border-red-600"}`}
               onClick={() => logout()}>
               <li className="">
                 <ImExit className="text-2xl " />
