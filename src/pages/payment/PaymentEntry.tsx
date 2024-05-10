@@ -1,6 +1,7 @@
 
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
+// import profile from '../../assets/images/profile.jpg'
 import UserDetails from './UserDetails';
 import DefaultUserDetails from './DefaultUserDetails';
 import PaymentDetails from './PaymentDetails';
@@ -41,6 +42,8 @@ const PaymentEntry = () => {
   const getUserDetails = () => {
     if (selectedPatient) {
       return data.find(user => user._id === selectedPatient);
+    } else if (patientId) {
+      return data.find(user => user._id === parseInt(patientId));
     } else {
       return null;
     }
@@ -92,7 +95,9 @@ const PaymentEntry = () => {
               <h2 className="text-lg font-semibold mb-4">User Details</h2>
               <UserDetails user={selectedUser} />
             </div>
-          ) : (
+          ) : 
+      
+     (
             <div className="bg-white shadow-lg rounded-lg p-6 w-1/2 border boder-gray-200">
               <h2 className="text-lg font-semibold mb-4">User Details</h2>
               <DefaultUserDetails />
