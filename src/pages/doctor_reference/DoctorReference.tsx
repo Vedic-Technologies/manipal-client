@@ -103,13 +103,13 @@ const DoctorReference = () => {
                 <tbody>
                   {sortedData.map((item, index) => (
                     <tr className="p-4 rounded-full shadow  hover:shadow-md hover:bg-gray-200 hover:border hover:rounded-md transition duration-300 mt-5" key={index}>
-                      <td className="text-center h-16 px-4 py-2  font-bold text-blue-500 hover:underline">{item.docId}</td>
+                      <td className=" h-16 px-4 py-2  font-bold text-blue-500 hover:underline">{item.docId}</td>
                       <td className="h-20 px-4 py-2 flex justify-center items-center ">{item.profileImg}</td>
-                      <td className="text-center h-16 px-4 py-2 font-semibold ">{item.doctorName}</td>
-                      <td className="text-center h-16 px-4 py-2 font-semibold ">{item.docSpeciality}</td>
-                      <td className="text-center h-16 px-4 py-2  "><div className='w-20 p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-green-300t rounded-lg bg=opacity-50' >{item.currentStatus}</div></td>
+                      <td className=" h-16 px-4 py-2 font-semibold ">{item.doctorName}</td>
+                      <td className=" h-16 px-4 py-2 font-semibold ">{item.docSpeciality}</td>
+                      <td className=" text-center h-16 px-4 py-2  "><div className='w-20 p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-green-300t rounded-lg bg=opacity-50' >{item.currentStatus}</div></td>
                       <td className="text-center h-16 px-4 py-2 ">{item.patientNum}</td>
-                      <td className="text-center h-16 px-4 py-2  "><button>{item.contactNum}</button></td>
+                      <td className=" h-16 px-4 py-2  "><button>{item.contactNum}</button></td>
                     </tr>
                   ))}
                 </tbody>
