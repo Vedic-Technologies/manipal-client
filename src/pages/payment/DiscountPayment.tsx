@@ -71,29 +71,9 @@ const DiscountPayment = () => {
     }
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-dashed border-gray-300  flex">
-      <div className=" w-1/2 center bg-green-300">
+      <div className=" w-1/2 center ">
         <div className=" w-1/2">
           <form onSubmit={handleSubmit} className="">
             <div className=" flex ">

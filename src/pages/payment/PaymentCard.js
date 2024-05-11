@@ -3,7 +3,7 @@ import { Button } from "../../components/ui/button";
 const PaymentCard = () => {
   return (
    
-         <div className="shadow-lg rounded-xl border border-gay-300 w-full py-5 px-10 printable flex-1 bg-red-300">
+         <div className="shadow-lg rounded-xl border border-gay-300 w-full py-5 px-10 printable flex-1">
       <h1 className="text-lg font-semibold text-center">Payment Card</h1>
       <div className=" w-full ">
         <div className="mt-3   flex"><div className="w-32 ">Name </div>: Abhinav Kumar </div>

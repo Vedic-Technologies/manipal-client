@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import { Label } from "../../components/ui/label";
 import pay from "../../assets/images/payment.jpg";
 import axios from "axios";
+import PaymentCard from "./PaymentCard";
 const DailyPayment = ({patientId}) => {
   type paymentType={
     amount:number,
@@ -17,6 +18,7 @@ const DailyPayment = ({patientId}) => {
   }
 
   const [paymentData, setPaymentData] = useState<paymentType>(initialData)
+  const [showPrintCard,setShowPrintCard]=useState(false)
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission here, you can send the data to the server or handle it as needed
@@ -39,6 +41,7 @@ const DailyPayment = ({patientId}) => {
         paymentData
       );
       console.log(response.data);
+      setShowPrintCard(true);
       alert("Payment added successful!");
     } catch (error) {
       console.error("Error:", error);
@@ -110,7 +113,8 @@ const DailyPayment = ({patientId}) => {
           </form>
         </div>
       </div>
-      <div className="bg-green-400 w-1/2">right</div>
+      {showPrintCard && <PaymentCard/>}     
+      {/* <div className="bg-green-400 w-1/2">right</div> */}
     </div>
   );
 };
