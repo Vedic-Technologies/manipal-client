@@ -53,7 +53,12 @@ const AllPatients = () => {
   const searchPatient = () => {
   
     const trimmedSearchInput = searchInput.trim();
-
+    if (trimmedSearchInput === "") {
+      // Reset search results and hide details
+      setSearchResults([]);
+      setShowDetails(false);
+      return;
+    }
     const results = patients?.filter((patient) =>
       patient?.patientName === trimmedSearchInput ||
       patient?.patientName?.toLowerCase() === trimmedSearchInput.toLowerCase() ||
