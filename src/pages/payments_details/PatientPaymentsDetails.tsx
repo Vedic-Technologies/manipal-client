@@ -74,7 +74,8 @@ const PatientPaymentsDetails = () => {
       item?.paymentType?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
       item?.patient?.email?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
       item?.patient?.age === parseInt(trimmedSearchInput) ||
-      item?.patient?._id?.includes(trimmedSearchInput)
+      item?.patient?._id?.includes(trimmedSearchInput) ||
+      formatDate(item?.paymentDate).includes(trimmedSearchInput)
     )
     if (results.length > 0) {
       setSearchResults(results);
@@ -232,7 +233,7 @@ const PatientPaymentsDetails = () => {
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
-                <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
+                <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] h-[500px] z-10 rounded-md ">
                   {displaySearchResult?.map((item) => {
                     return (
                       <div key={item?.patient?._id} className='h-full relative'>
@@ -246,12 +247,13 @@ const PatientPaymentsDetails = () => {
                             <div className='p-1 px-10'>
                               <img src={item?.patient?.image} alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
                             </div>
-                            <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {item?.patient?.gender}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {item?.patient?.age}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {item?.patient?.contact}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Payment Type: {item?.paymentType}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Amount: {item?.amount}</p>
-                            <p className={`mt-1 p-1 px-10 rounded-md animate bg-blue-300 font-medium  hover:text-white ${item?.patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {item?.patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate  bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {item?.patient?.gender}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {item?.patient?.age}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {item?.patient?.contact}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Payment Type: {item?.paymentType}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Amount: {item?.amount}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Date: {formatDate(item?.paymentDate)}</p>
+                            <p className={`mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 font-medium  hover:text-white ${item?.patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {item?.patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
                           </div>
                         </div>
                         <div className='absolute bottom-0 mt-5 w-full  flex justify-between'>
