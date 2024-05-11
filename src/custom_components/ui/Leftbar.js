@@ -250,7 +250,7 @@ const Leftbar = ({ children }) => {
                       }}
                       className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end">
                         <NavLink
-                        to="patient_details"
+                        to="patient_details/0"
                         className={`drop-down flex w-4/5  rounded border border-transparent  ${
                           activeLink === "patient_details"
                             ? "active-link-drop-down  text-white"

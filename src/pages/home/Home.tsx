@@ -24,7 +24,7 @@ const Home = () => {
      <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path="/all_patients" element={<AllPatients />} />
-        <Route path="/patient_details" element={<PatientDetails />} />
+        <Route path="/patient_details/:id" element={<PatientDetails />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCriptionSadcn />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
