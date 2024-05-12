@@ -16,6 +16,7 @@ const Patient = () => {
   const [payment, setPayment] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const param = useParams();
+  console.log(param, "6566666666666666666");
 
   const getData = async () => {
     try {
@@ -28,7 +29,12 @@ const Patient = () => {
     }
   };
   useEffect(() => {
-    fetchPatientDetails(param.id);
+    if (param.id !== "0") {
+      // alert(param.id)
+      fetchPatientDetails(param.id);
+    }
+
+    // getData()
   }, []);
   const handleSelectChange = async (e) => {
     const id = e.target.value;
