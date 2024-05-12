@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../components/ui/tooltip"
+import JobDoneAlert from "../../custom_components/JobDoneAlert"
 
 const PatientPaymentsDetails = () => {
   const [payments, setPayments] = useState([]);
@@ -27,7 +28,17 @@ const PatientPaymentsDetails = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
 
+  // jodDone alert message 
+  const [jobDoneMessage, setJobDoneMessage] = useState("")
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
 
+  const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
+  const [idCopied, setIdCopied] = useState("")
+
+
+  const handleCancelAlert = () => {
+    setOpenJobDoneAlert(false)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,9 +67,10 @@ const PatientPaymentsDetails = () => {
       // Reset search results and hide details
       setSearchResults([]);
       setShowDetails(false);
+      setOpenJobDoneAlert(false)
       return;
     }
-  
+
     const results = payments?.filter((item) =>
       item?.patient?.name === trimmedSearchInput ||
       item?.patient?.name?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
@@ -80,10 +92,18 @@ const PatientPaymentsDetails = () => {
     if (results.length > 0) {
       setSearchResults(results);
       setShowDetails(true);
+      setJobDoneMessage("")
+      setOpenJobDoneAlert(false)
     } else {
       setSearchResults([]);
       setShowDetails(false);
-      alert("Patient not found, make sure spelling is correct");
+      setJobDoneMessage("Sorry, no payment found. Double-check input !!");
+      setOpenJobDoneAlert(true)
+
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
     }
   };
 
@@ -110,6 +130,7 @@ const PatientPaymentsDetails = () => {
     setShowDetails(false)
     setDisplaySearch(0)
     setSearchInput("")
+    setJobDoneMessage("")
   }
 
 
@@ -207,11 +228,23 @@ const PatientPaymentsDetails = () => {
   const handleCopyPatientId = (id) => {
     navigator.clipboard.writeText(id)
       .then(() => {
-        alert("Patient ID copied to clipboard")
+        setOpenIdCopiedAlert(true)
+        setIdCopied("ID Copied.")
+
+        setTimeout(() => {
+          setOpenIdCopiedAlert(false)
+        }, 300);
+
 
       })
       .catch(err => {
-        console.error("Failed to copy id ", err)
+        setOpenIdCopiedAlert(true)
+        setIdCopied("Error, no ID")
+
+        setTimeout(() => {
+          setOpenIdCopiedAlert(false)
+        }, 300);
+
       })
   }
 
@@ -309,12 +342,15 @@ const PatientPaymentsDetails = () => {
                   <div className="w-[12%] hidden sm:block">{item?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
                 </div> <div className="w-[13%] flex justify-center items-center space-x-2">
-                  <div className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+
+                  <div>
 
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span className='pr-8' onClick={() => { handleCopyPatientId(item._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                          <div onClick={() => { handleCopyPatientId(item._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+                            <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                          </div >
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>Copy Patient ID</p>
@@ -322,11 +358,10 @@ const PatientPaymentsDetails = () => {
                       </Tooltip>
                     </TooltipProvider>
 
-                  </div >
+                  </div>
                   <button
                     className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
-                    onClick={() => handleDelete(item?._id)}
-                  >
+                    onClick={() => handleDelete(item?._id)}>
                     <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                   </button>
 
@@ -343,12 +378,43 @@ const PatientPaymentsDetails = () => {
             </div>
           </div>
         </div>
-        hi {payments[0].patient.name}
-        <ConfirmationModal
-          isOpen={openConfirm}
-          onCancel={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-        />
+        <div>
+          <ConfirmationModal
+            isOpen={openConfirm}
+            question="Are you sure you want to delete this patient?"
+            onCancel={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+          />
+
+        </div>
+        <div>
+          <JobDoneAlert
+            height="h-24"
+            width="w-52"
+            textColor="text-white"
+            bgColor="bg-red-400"
+            boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+            message={jobDoneMessage}
+            isOpen={openJobDoneAlert}
+            OnCancel={handleCancelAlert}
+            isCancelButton="block"
+          />
+        </div>
+
+        <div>
+        <JobDoneAlert
+            height="h-12"
+            width="w-24"
+            textColor="text-black"
+            bgColor="bg-gray-300"
+            boxShadow={null}
+            message={idCopied}
+            isOpen={openIdCopiedAlert}
+            OnCancel={null}
+            isCancelButton="hidden"
+          />
+        </div>
+
       </div>
     </div>
   );
