@@ -12,11 +12,10 @@ import PatientPaymentCard from "./PatientPaymentCard";
 const Patient = () => {
   const [data, setData] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
-  const [patient, setPatient] = useState({});
+  const [patient, setPatient] = useState();
   const [payment, setPayment] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const param = useParams();
-  console.log(param, "6566666666666666666");
 
   const getData = async () => {
     try {
@@ -34,7 +33,7 @@ const Patient = () => {
       fetchPatientDetails(param.id);
     }
 
-    // getData()
+    getData();
   }, []);
   const handleSelectChange = async (e) => {
     const id = e.target.value;
@@ -116,18 +115,18 @@ const Patient = () => {
         <Button variant="outline">View All</Button>
       </div>
 
-      {param.id !== "0" && (
-        <div className="flex justify-center m-auto w-full mt-10">
-          <Card className="w-full shadow-lg">
-            {selectedPatient ? (
+      <div className="flex justify-center m-auto w-full mt-10">
+        <Card className="w-full shadow-lg">
+          {selectedPatient ? (
+            <div>
               <PatientDetailCard patient={patient} />
-            ) : (
-              <PatientDetailCard patient={patient} />
-            )}
-          </Card>
-        </div>
-      )}
-      {param.id !== "0" && <PatientPaymentCard payment={payment} />}
+              <PatientPaymentCard payment={payment} />
+            </div>
+          ) : (
+            ""
+          )}
+        </Card>
+      </div>
     </div>
   );
 };

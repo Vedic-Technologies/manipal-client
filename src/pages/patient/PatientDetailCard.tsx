@@ -1,6 +1,11 @@
-import { CardTitle, CardHeader, CardContent, Card } from "../../components/ui/card"
+import {
+  CardTitle,
+  CardHeader,
+  CardContent,
+  Card,
+} from "../../components/ui/card";
 
-export default function PatientDetailCard({patient}) {
+export default function PatientDetailCard({ patient }) {
   return (
     <Card className="w-full  bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex">
@@ -9,7 +14,7 @@ export default function PatientDetailCard({patient}) {
             alt="Profile"
             className="rounded-lg shadow-md  "
             // height="320"
-            src={patient.image}
+            src={patient?.image}
             style={{
               aspectRatio: "320/320",
               objectFit: "cover",
@@ -79,5 +84,5 @@ export default function PatientDetailCard({patient}) {
         </div>
       </div>
     </Card>
-  )
+  );
 }
