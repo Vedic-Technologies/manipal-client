@@ -25,53 +25,53 @@ export default function PatientDetailCard({patient}) {
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-1">
                 <p>
-                  <strong>Name:</strong> {patient.patientName}
+                  <strong>Name:</strong> {patient?.patientName}
                 </p>
                 <p>
-                  <strong>Sex:</strong> {patient.patientName}
+                  <strong>Sex:</strong> {patient?.gender}
                 </p>
                 <p>
-                  <strong>Height:</strong> {patient.patientName}
-                </p>
-              </div>
-              <div className="col-span-1">
-                <p>
-                  <strong>Email:</strong> {patient.patientName}
-                </p>
-                <p>
-                  <strong>State:</strong> {patient.patientName}
+                  <strong>Height:</strong> {patient?.height}
                 </p>
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Village:</strong> {patient.patientName}
+                  <strong>Email:</strong> {patient?.email}
                 </p>
                 <p>
-                  <strong>Pin-code:</strong> {patient.patientName}
-                </p>
-              </div>
-              <div className="col-span-1">
-                <p>
-                  <strong>Country:</strong> {patient.patientName}
-                </p>
-                <p>
-                  <strong>Blood Group:</strong> {patient.patientName}
+                  <strong>State:</strong> {patient?.address?.state}
                 </p>
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Weight:</strong> {patient.patientName}
+                  <strong>Village:</strong> {patient?.address?.village}
                 </p>
                 <p>
-                  <strong>Age:</strong> {patient.patientName}
+                  <strong>Pin-code:</strong> {patient?.address?.pin_code}
                 </p>
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Referred To:</strong> {patient.patientName}
+                  <strong>Country:</strong> {patient?.address?.country}
                 </p>
                 <p>
-                  <strong>Dob:</strong> {patient.patientName}
+                  <strong>Blood Group:</strong> {patient?.bloodGroup}
+                </p>
+              </div>
+              <div className="col-span-1">
+                <p>
+                  <strong>Weight:</strong> {patient?.weight}
+                </p>
+                <p>
+                  <strong>Age:</strong> {patient?.age}
+                </p>
+              </div>
+              <div className="col-span-1">
+                <p>
+                  <strong>Referred To:</strong> {patient?.referredTo}
+                </p>
+                <p>
+                  <strong>Dob:</strong> {patient?.dob}
                 </p>
               </div>
             </div>

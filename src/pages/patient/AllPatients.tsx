@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { useNavigate } from 'react-router-dom';
+import JobDoneAlert from "../../custom_components/JobDoneAlert"
 
 const AllPatients = () => {
   const [patients, setPatients] = useState([]);
@@ -28,7 +29,17 @@ const AllPatients = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
 
+  // jodDone alert message 
+  const [jobDoneMessage, setJobDoneMessage] = useState("")
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
 
+const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
+const [idCopied, setIdCopied] = useState("")
+
+
+const handleCancelAlert=()=>{
+setOpenJobDoneAlert(false)
+}
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -52,12 +63,13 @@ const AllPatients = () => {
 
   // search functionality 
   const searchPatient = () => {
-  
+
     const trimmedSearchInput = searchInput.trim();
     if (trimmedSearchInput === "") {
       // Reset search results and hide details
       setSearchResults([]);
       setShowDetails(false);
+      setOpenJobDoneAlert(false)
       return;
     }
     const results = patients?.filter((patient) =>
@@ -65,50 +77,59 @@ const AllPatients = () => {
       patient?.patientName?.toLowerCase() === trimmedSearchInput.toLowerCase() ||
       patient?.contact === trimmedSearchInput ||
       patient?.email?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
-      patient?.age === parseInt(trimmedSearchInput) || 
+      patient?.age === parseInt(trimmedSearchInput) ||
       patient?._id === trimmedSearchInput ||
       patient?.patientName.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      
+
       patient?.email?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
       patient?.age === parseInt(trimmedSearchInput) ||
       patient?._id?.includes(trimmedSearchInput)
-    
+
     );
 
     if (results.length > 0) {
       setSearchResults(results);
       setShowDetails(true);
+      setJobDoneMessage("")
+      setOpenJobDoneAlert(false)
     } else {
       setSearchResults([]);
       setShowDetails(false);
-      alert("Patient not found, make sure spelling is correct");
+      setJobDoneMessage("Sorry, no patient found. Double-check spelling !!");
+      setOpenJobDoneAlert(true)
+
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
     }
   };
 
-  const displaySearchResult = searchResults.filter((result, idx)=> idx=== displaySearch)
+  const displaySearchResult = searchResults.filter((result, idx) => idx === displaySearch)
 
   const nextSearchResult = () => {
-   
-    if(displaySearch < searchResults.length -1){
-      setDisplaySearch(displaySearch + 1)
-    }else{
-      setDisplaySearch(0)
-    }
-    }
- 
-  const prevSearchResult=()=>{
-    if(displaySearch>0){
-      setDisplaySearch(displaySearch - 1)
-    }else{
-      setDisplaySearch(searchResults.length-1)
-    }
-    }
 
-    const handleCancelShowDetail=()=>{
-      setShowDetails(false)
+    if (displaySearch < searchResults.length - 1) {
+      setDisplaySearch(displaySearch + 1)
+    } else {
       setDisplaySearch(0)
-      setSearchInput("")
     }
+  }
+
+  const prevSearchResult = () => {
+    if (displaySearch > 0) {
+      setDisplaySearch(displaySearch - 1)
+    } else {
+      setDisplaySearch(searchResults.length - 1)
+    }
+  }
+
+  const handleCancelShowDetail = () => {
+    setShowDetails(false)
+    setDisplaySearch(0)
+    setSearchInput("")
+    setJobDoneMessage("")
+  }
 
 
   // //Patient details on click 
@@ -151,9 +172,9 @@ const AllPatients = () => {
 
 
 
-
   const handleCancelDelete = () => {
     setOpenConfirm(false)
+    console.log("no clicked")
   }
 
   //pagination
@@ -227,11 +248,22 @@ const handleShowDetail=(id)=>
   const handleCopyPatientId = (id) => {
     navigator.clipboard.writeText(id)
       .then(() => {
-        alert("Patient ID copied to clipboard")
+        setOpenIdCopiedAlert(true)
+        setIdCopied("ID Copied.")
+        
+        setTimeout(() => {
+          setOpenIdCopiedAlert(false)
+        }, 300);
 
       })
       .catch(err => {
-        console.error("Failed to copy id ", err)
+        setOpenIdCopiedAlert(true)
+        setIdCopied("Error, no ID")
+
+        setTimeout(() => {
+          setOpenIdCopiedAlert(false)
+        }, 300);
+
       })
   }
 
@@ -264,29 +296,29 @@ const handleShowDetail=(id)=>
                         <div className='center w-full '>
                           <div>
                             <div className='p-1 px-10 w-full center'>
-                              <img src={patient?.image} alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
+                              <img src={patient?.image} alt="profile picture" className=' opacity-100 h-32 w-32 hover:scale-[1.01] hover: transition-all duration-300 rounded' />
                             </div>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-80 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {patient?.gender}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-80 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {patient?.age}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-80 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {patient?.contact}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-80 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Problem: {patient?.complaint
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {patient?.gender}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {patient?.age}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {patient?.contact}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Problem: {patient?.complaint
 }</p>
-                            <p className={`mt-1 p-1 px-10 rounded-md animate w-80 bg-blue-300 font-medium  hover:text-white ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
+                            <p className={`mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 font-medium  hover:text-white ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
                           </div>
                         </div>
                         <div className='absolute bottom-0 mt-5 w-full  flex justify-between'>
-                        <div className='flex gap-4 ml-2 '>
-                          <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
-                          <i onClick={() => handleDelete(patient?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
+                          <div className='flex gap-4 ml-2 '>
+                            <i className="fa-regular fa-pen-to-square edit hover:text-blue-900 text-blue-400"></i>
+                            <i onClick={() => handleDelete(patient?._id)} className="fa-solid fa-trash-can text-red-600 delete hover:text-red-900"></i>
+                          </div>
+                          <div className='text-sm flex gap-2'>
+                            Showing {displaySearch + 1}th of {searchResults.length} found
+                            <button onClick={prevSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-left"></i></button>
+                            <span className='size-5 rounded bg-blue-200 hover:bg-blue-300 center'>{displaySearch + 1}</span>
+                            <button onClick={nextSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-right"></i></button>
+                          </div>
                         </div>
-                        <div className='text-sm flex gap-2'>
-                         Showing {displaySearch + 1}th of {searchResults.length} found
-                         <button onClick={prevSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-left"></i></button>
-                         <span  className='size-5 rounded bg-blue-200 hover:bg-blue-300 center'>{displaySearch + 1}</span>
-                         <button onClick={nextSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-right"></i></button>
-                        </div>
-                        </div>
-                     
+
                       </div>
                     )
                   })}
@@ -322,7 +354,7 @@ const handleShowDetail=(id)=>
 
                     <div className='w-full flex  justify-between ml-4'>
                       <div className=" ">{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
-                    
+
                     </div>
 
                   </div>
@@ -343,19 +375,22 @@ const handleShowDetail=(id)=>
                   >
                     <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
                   </button> */}
-                  <div className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
-                  <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className='pr-8' onClick={() => { handleCopyPatientId(patient._id) }}> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                  </div>
+                  <div className='center'>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                        <div  onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
 
+                          <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  
+                  </div>
 
                   <button
                     className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
@@ -377,11 +412,44 @@ const handleShowDetail=(id)=>
             </div>
           </div>
         </div>
-        <ConfirmationModal
-          isOpen={openConfirm}
-          onCancel={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-        />
+        <div>
+          <ConfirmationModal
+            isOpen={openConfirm}
+            question="Are you sure you want to delete this patient?"
+            onCancel={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+          />
+
+        </div>
+        <div>
+          <JobDoneAlert
+            height="h-24"
+            width="w-52"
+            textColor="text-white"
+            bgColor="bg-red-400"
+            boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+            message={jobDoneMessage}
+            isOpen={openJobDoneAlert}
+            OnCancel={handleCancelAlert}
+            isCancelButton="block"
+          />
+        </div>
+
+        <div>
+        <JobDoneAlert
+            height="h-12"
+            width="w-24"
+            textColor="text-black"
+            bgColor="bg-gray-300"
+            boxShadow={null}
+            message={idCopied}
+            isOpen={openIdCopiedAlert}
+            OnCancel={null}
+            isCancelButton="hidden"
+          />
+        </div>
+
+
       </div>
     </div>
   );
