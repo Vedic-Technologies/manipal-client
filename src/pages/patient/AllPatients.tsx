@@ -9,7 +9,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip"
+} from "@radix-ui/react-tooltip";
+import { useNavigate } from 'react-router-dom';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 
 const AllPatients = () => {
@@ -22,6 +23,7 @@ const AllPatients = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
+  const navigate=useNavigate();
 
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -222,7 +224,10 @@ setOpenJobDoneAlert(false)
   };
 
 
-
+const handleShowDetail=(id)=>
+  {
+    navigate(`/home/patient_details/${id}`)
+  }
 
   const handleUpdateActive = async (id) => {
     try {
@@ -296,7 +301,8 @@ setOpenJobDoneAlert(false)
                             <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {patient?.gender}</p>
                             <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {patient?.age}</p>
                             <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {patient?.contact}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Email: {patient?.email}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Problem: {patient?.complaint
+}</p>
                             <p className={`mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 font-medium  hover:text-white ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
                           </div>
                         </div>
@@ -332,14 +338,17 @@ setOpenJobDoneAlert(false)
             <div className="w-[12%]">Gender <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
             <div className="w-[12%]">Age <i className={`fa-solid fa-arrow-up text-xs text-gray-300 `}></i> <i className={`fa-solid fa-arrow-down  text-xs text-gray-300`}></i></div>
             <div className="w-1/6 ">Contact</div>
-            <div className="w-[27%] hidden sm:block">Email</div>
+            <div className="w-[27%] hidden sm:block">Problem</div>
             <div className="w-[12%] hidden sm:block">Status</div>
             <div className="w-1/6 text-center">Actions</div>
           </div>
           <div className='pt-5'>
             {currentPatients?.map((patient) => (
               <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-                <div className=' w-[86%] flex justify-between items-center'>
+               
+                <div  className=' w-[86%] flex justify-between items-center '
+                onClick={() => handleShowDetail(patient?._id)}
+                >
                   <div className='w-[30%] flex gap-1 items-center '>
                     <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
 
@@ -352,10 +361,13 @@ setOpenJobDoneAlert(false)
                   <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
                   <div className="w-[12%]">{patient?.age}</div>
                   <div className="w-1/6">{patient?.contact}</div>
-                  <div className="w-[27%]  hidden sm:block">{patient?.email}</div>
+                  <div className="w-[27%]  hidden sm:block">{patient?.complaint
+}</div>
                   <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
-                </div> <div className="w-[13%] flex justify-center items-center space-x-2">
+                </div> 
+                
+                <div className="w-[13%] flex justify-center items-center space-x-2">
 
                   {/* <button
                     className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"

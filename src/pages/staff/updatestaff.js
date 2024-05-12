@@ -27,8 +27,28 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from "../../components/ui/dropdown-menu";
+import { CiMenuKebab } from "react-icons/ci";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function UpdateStaff() {
+
+useEffect(()=>{
+ getStaffs();
+},[])
+
+const [Staffs, setStaffs] = useState()
+
+ const getStaffs = () => {
+    // axios.get('https://worldtestapi.azurewebsites.net/api/User')
+      // .then((response) => {
+      //   setStaffs(response.data.filter(item => item.userType === "staff"));
+      // })
+      // .catch((error) => {
+      //   console.error("Error fetching staffs: ", error);
+      // });
+  };
+
   return (
     <div className="border rounded-lg shadow-sm mx-20 mt-10">
       <div className="flex items-center justify-between px-4 py-3 border-b">
@@ -57,8 +77,8 @@ export default function UpdateStaff() {
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="ghost">
-                      <MoveHorizontalIcon className="w-4 h-4" />
+                    <Button size="icon" variant="outline">
+                      <CiMenuKebab className="w-4 h-4" />
                       <span className="sr-only">Actions</span>
                     </Button>
                   </DropdownMenuTrigger>
@@ -78,8 +98,8 @@ export default function UpdateStaff() {
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="ghost">
-                      <MoveHorizontalIcon className="w-4 h-4" />
+                    <Button size="icon" variant="outline">
+                      <CiMenuKebab className="w-4 h-4" />
                       <span className="sr-only">Actions</span>
                     </Button>
                   </DropdownMenuTrigger>
@@ -99,8 +119,8 @@ export default function UpdateStaff() {
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="ghost">
-                      <MoveHorizontalIcon className="w-4 h-4" />
+                    <Button size="icon" variant="outline">
+                      <CiMenuKebab className="w-4 h-4" />
                       <span className="sr-only">Actions</span>
                     </Button>
                   </DropdownMenuTrigger>
@@ -120,8 +140,8 @@ export default function UpdateStaff() {
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="ghost">
-                      <MoveHorizontalIcon className="w-4 h-4" />
+                    <Button size="icon" variant="outline">
+                      <CiMenuKebab className="w-4 h-4" />
                       <span className="sr-only">Actions</span>
                     </Button>
                   </DropdownMenuTrigger>
