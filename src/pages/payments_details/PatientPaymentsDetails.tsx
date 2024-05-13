@@ -11,8 +11,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../components/ui/tooltip"
+import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
-
+import {motion} from "framer-motion"
 const PatientPaymentsDetails = () => {
   const [payments, setPayments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -266,7 +267,10 @@ const PatientPaymentsDetails = () => {
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
-                <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] h-[500px] z-10 rounded-md ">
+                <motion.div 
+                initial={{opacity:0, y:200}}
+                animate={{opacity:1, y:0}}
+                className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] h-[500px] z-10 rounded-md ">
                   {displaySearchResult?.map((item) => {
                     return (
                       <div key={item?.patient?._id} className='h-full relative'>
@@ -304,7 +308,7 @@ const PatientPaymentsDetails = () => {
                       </div>
                     )
                   })}
-                </div>
+                </motion.div>
               )}
             </div>
             <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/payment_entry"><i className="fa-solid fa-plus"></i></Link></div>
@@ -387,7 +391,14 @@ const PatientPaymentsDetails = () => {
           />
 
         </div>
+     
         <div>
+        
+        <AlertWrapper isOpen={openJobDoneAlert}>
+        <motion.div
+        initial={{ opacity: 0 , y:50}}
+        animate={openJobDoneAlert ? {  opacity: 1 , y:0} : {}}
+        >
           <JobDoneAlert
             height="h-24"
             width="w-52"
@@ -399,9 +410,16 @@ const PatientPaymentsDetails = () => {
             OnCancel={handleCancelAlert}
             isCancelButton="block"
           />
+        </motion.div>
+        </AlertWrapper>
+         
         </div>
-
         <div>
+        <AlertWrapper isOpen={openIdCopiedAlert}>
+        <motion.div
+        initial={{ opacity: 0 , y:20}}
+        animate={openIdCopiedAlert ? {  opacity: 1 , y:0} : {}}
+        >
         <JobDoneAlert
             height="h-12"
             width="w-24"
@@ -413,6 +431,10 @@ const PatientPaymentsDetails = () => {
             OnCancel={null}
             isCancelButton="hidden"
           />
+        </motion.div>
+
+        </AlertWrapper>
+         
         </div>
 
       </div>
