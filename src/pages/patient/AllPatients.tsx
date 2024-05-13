@@ -11,8 +11,9 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { useNavigate } from 'react-router-dom';
+import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
-
+import {motion} from "framer-motion"
 const AllPatients = () => {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,11 +81,12 @@ setOpenJobDoneAlert(false)
       patient?.age === parseInt(trimmedSearchInput) ||
       patient?._id === trimmedSearchInput ||
       patient?.patientName.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-
       patient?.email?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      patient?.age === parseInt(trimmedSearchInput) ||
-      patient?._id?.includes(trimmedSearchInput)
-
+      patient?._id?.includes(trimmedSearchInput) ||
+      patient?.gender?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
+      patient?.contact === parseInt(trimmedSearchInput) ||
+      patient?.complaint?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
+      patient?.complaint?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase())
     );
 
     if (results.length > 0) {
@@ -285,7 +287,10 @@ const handleShowDetail=(id)=>
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
-                <div className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
+                <motion.div
+                initial={{opacity:0, y:200}}
+                animate={{opacity:1, y:0}}
+                className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
                   {displaySearchResult?.map((patient) => {
                     return (
                       <div key={patient?._id} className='h-full relative'>
@@ -324,7 +329,7 @@ const handleShowDetail=(id)=>
                   })}
 
 
-                </div>
+                </motion.div>
               )}
             </div>
             <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
@@ -422,6 +427,12 @@ const handleShowDetail=(id)=>
 
         </div>
         <div>
+        
+        <AlertWrapper isOpen={openJobDoneAlert}>
+        <motion.div
+        initial={{ opacity: 0 , y:50}}
+        animate={openJobDoneAlert ? {  opacity: 1 , y:0} : {}}
+        >
           <JobDoneAlert
             height="h-24"
             width="w-52"
@@ -433,9 +444,16 @@ const handleShowDetail=(id)=>
             OnCancel={handleCancelAlert}
             isCancelButton="block"
           />
+        </motion.div>
+        </AlertWrapper>
+         
         </div>
-
         <div>
+        <AlertWrapper isOpen={openIdCopiedAlert}>
+        <motion.div
+        initial={{ opacity: 0 , y:20}}
+        animate={openIdCopiedAlert ? {  opacity: 1 , y:0} : {}}
+        >
         <JobDoneAlert
             height="h-12"
             width="w-24"
@@ -447,8 +465,11 @@ const handleShowDetail=(id)=>
             OnCancel={null}
             isCancelButton="hidden"
           />
-        </div>
+        </motion.div>
 
+        </AlertWrapper>
+         
+        </div>
 
       </div>
     </div>
