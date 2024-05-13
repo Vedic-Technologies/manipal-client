@@ -31,11 +31,14 @@ const PaymentEntry = () => {
   };
 
   const handleFindButtonClick = () => {
-    // Find patient by ID when "Find" button is clicked
     setSelectedPatient('');
     const foundPatient = data.find(user => user._id === patientId);
     if (foundPatient) {
       setSelectedPatient(foundPatient._id);
+    } else {
+      // Handle case where patient with entered ID is not found
+      setSelectedPatient('');
+      alert('Patient not found');
     }
   };
 

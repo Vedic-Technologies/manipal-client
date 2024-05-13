@@ -1,7 +1,7 @@
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import physio from "../../../assets/images/image.png";
 import Profile from "../../../assets/images/Profile.png";
-
 
 export const recentDoctorReferences = [
   {
@@ -60,34 +60,69 @@ export const recentDoctorReferences = [
     profileImg: <img className="h-20 w-20" src={Profile} alt="" />
   },
 ];
+
+
 export const DoctorReferenceCard = () => {
 
+  const [patientData, setPatientData] = useState([]);
+
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+        const response = await fetch(
+          "https://manipal-server.onrender.com/api/patient/all_patients"
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setPatientData(data); // Set the fetched patient data to state
+        } else {
+          throw new Error("Failed to fetch patient data");
+        }
+      } catch (error) {
+        console.error("Error fetching patient data:", error);
+      }
+    };
+
+    fetchPatientData();
+  }, []); // Fetch patient data on component mount
+
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-auto grow w-full ">
-      <div className="px-6 py-5 ">
+    <div className="bg-white shadow-md rounded-lg overflow-auto grow w-full">
+      <div className="px-6 py-5">
         <div className="font-bold text-xl mb-2">Recent Doctor Reference</div>
         <div className="overflow-x-auto">
           <div className="w-full">
-           
             <div className="flex w-full">
-              <div className="  py-2 font-bold max-w-[10%] grow">S.N.</div>
-              <div className="  py-2 font-bold max-w-[30%] grow">Doctor Name</div>
-              <div className="  py-2 font-bold max-w-[30%] grow">Patient Name</div>
-              <div className="  py-2 font-bold max-w-[30%] grow">Date</div>             
+              <div className="py-2 font-bold max-w-[10%] grow">S.N.</div>
+              <div className="py-2 font-bold max-w-[30%] grow">Referred By</div>
+              <div className="py-2 font-bold max-w-[30%] grow">Patient Name</div>
+              <div className="py-2 font-bold max-w-[30%] grow">Date</div>
             </div>
 
-            {recentDoctorReferences.map((reference, index) => (
+            {/* {recentDoctorReferences.map((reference, index) => (
               <div key={index} className="flex divide-y w-full justify-start">
-                <div className=" py-2 max-w-[10%] grow  ">{index + 1}</div>
-                <div className=" py-2 max-w-[30%] grow text-left">{reference.doctorName}</div>
-                <div className=" py-2 max-w-[30%] grow text-left">{reference.patientName}</div>
-                <div className=" py-2  grow">{reference.date}</div>               
+                <div className="py-2 max-w-[10%] grow">{index + 1}</div>
+                <div className="py-2 max-w-[30%] grow text-left">{reference.doctorName}</div>
+                <div className="py-2 max-w-[30%] grow text-left">{reference.patientName}</div>
+                <div className="py-2 grow">{reference.date}</div>
+              </div>
+            ))} */}
+
+            {patientData.slice(0, 5).map((patient, index) => (
+              <div key={index} className="flex divide-y w-full justify-start">
+                <div className="py-2 max-w-[10%] grow">{index + 1}</div>
+                <div className="py-2 max-w-[30%] grow text-left">{patient.doctorName ? patient.doctorName : 'Self'}</div>
+                <div className="py-2 max-w-[30%] grow text-left">{patient.patientName}</div>
+                <div className="py-2 grow"> {patient.date ? patient.date : 'NA'}</div>
               </div>
             ))}
+
             <div className="w-full flex justify-end">
-              <Link to='doctor_reference'><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-                See All References
-              </button></Link>
+              <Link to="doctor_reference">
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                  See All References
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -95,4 +130,3 @@ export const DoctorReferenceCard = () => {
     </div>
   );
 };
-
