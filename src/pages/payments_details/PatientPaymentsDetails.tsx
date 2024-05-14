@@ -24,6 +24,9 @@ const PatientPaymentsDetails = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
+  const [loggedInUserType,setloggedInUserType]=useState({})
+
+
 
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -36,6 +39,13 @@ const PatientPaymentsDetails = () => {
   const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
   const [idCopied, setIdCopied] = useState("")
 
+  useEffect(() => {
+    const currentUserString = localStorage.getItem('currentUser');
+    if (currentUserString) {
+      const currentUserData = JSON.parse(currentUserString);
+      setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
+    }
+  }, []);
 
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
@@ -371,12 +381,14 @@ const PatientPaymentsDetails = () => {
                     </TooltipProvider>
 
                   </div>
+{loggedInUserType ==="admin" && 
+                  
                   <button
                     className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
                     onClick={() => handleDelete(item?._id)}>
                     <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                   </button>
-
+                } 
                 </div>
               </div>
             ))}

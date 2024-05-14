@@ -15,6 +15,7 @@ import PatientPaymentsDetails from "../payments_details/PatientPaymentsDetails";
 import PatientDetails from "../patient/PatientDetails";
 import StaffSignup from "../staff/StaffSignup";
 import UpdateStaff from "../staff/updatestaff";
+import DoctorPrescription from "../prescription/DoctorPrescription";
 
 const Home = () => {
   return (
@@ -27,6 +28,7 @@ const Home = () => {
         <Route path="/patient_details/:id" element={<PatientDetails />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
         <Route path="/prescription" element={<PresCriptionSadcn />} />
+        <Route path="/doctor_prescription" element={<DoctorPrescription />} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
         <Route path="/createstaff" element={<StaffSignup/>} />
         <Route path="/editstaffs" element={<UpdateStaff/>} />
