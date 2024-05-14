@@ -13,7 +13,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
 const AllPatients = () => {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +24,7 @@ const AllPatients = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -34,13 +34,13 @@ const AllPatients = () => {
   const [jobDoneMessage, setJobDoneMessage] = useState("")
   const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
 
-const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
-const [idCopied, setIdCopied] = useState("")
+  const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
+  const [idCopied, setIdCopied] = useState("")
 
 
-const handleCancelAlert=()=>{
-setOpenJobDoneAlert(false)
-}
+  const handleCancelAlert = () => {
+    setOpenJobDoneAlert(false)
+  }
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -226,8 +226,7 @@ setOpenJobDoneAlert(false)
   };
 
 
-const handleShowDetail=(id)=>
-  {
+  const handleShowDetail = (id) => {
     navigate(`/home/patient_details/${id}`)
   }
 
@@ -252,7 +251,7 @@ const handleShowDetail=(id)=>
       .then(() => {
         setOpenIdCopiedAlert(true)
         setIdCopied("ID Copied.")
-        
+
         setTimeout(() => {
           setOpenIdCopiedAlert(false)
         }, 300);
@@ -288,12 +287,20 @@ const handleShowDetail=(id)=>
               <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
                 <motion.div
-                initial={{opacity:0, y:200}}
-                animate={{opacity:1, y:0}}
-                className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 size-[450px] z-10 rounded-md ">
+                  initial={{ opacity: 0, y: 200 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  drag
+                  dragConstraints={{
+                    top: 0,
+                    left:0,
+                    right: 0,
+                    bottom: 0
+                  }}
+                  dragElastic={0.5}
+                  className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 min-h-[450px] w-[450px] z-10 rounded-md ">
                   {displaySearchResult?.map((patient) => {
                     return (
-                      <div key={patient?._id} className='h-full relative'>
+                      <div key={patient?._id} className='min-h-[450px]  relative pb-12 '>
                         <div className='flex justify-between'>
                           <h2 className="text-xl font-semibold p-2">{patient?.patientName[0].toUpperCase() + patient?.patientName.slice(1)}</h2>
                           <div onClick={handleCancelShowDetail} className="cut"><i className="fa-solid fa-xmark  text-2xl text-red-600"></i></div>
@@ -301,14 +308,17 @@ const handleShowDetail=(id)=>
                         <div className='center w-full '>
                           <div>
                             <div className='p-1 px-10 w-full center'>
-                              <img src={patient?.image} alt="profile picture" className=' opacity-100 h-32 w-32 hover:scale-[1.01] hover: transition-all duration-300 rounded' />
+                              <img src={patient?.image} alt="profile picture" className=' h-32 w-32 hover:scale-[1.01] hover: transition-all duration-300 rounded' />
                             </div>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {patient?.gender}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {patient?.age}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {patient?.contact}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Problem: {patient?.complaint
-}</p>
-                            <p className={`mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 font-medium  hover:text-white ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
+
+
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Gender:</div> <div>{patient?.gender[0]?.toUpperCase() + patient?.gender?.slice(1)?.toLowerCase()}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Age:</div> <div>{patient?.age}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Contact: </div><div> {patient?.contact}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Problem:</div> <div>{patient?.complaint }</div></p>
+                            <p className={`mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 font-medium  hover:text-white flex gap-8 ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}> <div className='w-14'>Status:</div> <div>{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div></p>
+
+
                           </div>
                         </div>
                         <div className='absolute bottom-0 mt-5 w-full  flex justify-between'>
@@ -350,9 +360,9 @@ const handleShowDetail=(id)=>
           <div className='pt-5'>
             {currentPatients?.map((patient) => (
               <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-               
-                <div  className=' w-[86%] flex justify-between items-center '
-                onClick={() => handleShowDetail(patient?._id)}
+
+                <div className=' w-[86%] flex justify-between items-center '
+                  onClick={() => handleShowDetail(patient?._id)}
                 >
                   <div className='w-[30%] flex gap-1 items-center '>
                     <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
@@ -367,11 +377,11 @@ const handleShowDetail=(id)=>
                   <div className="w-[12%]">{patient?.age}</div>
                   <div className="w-1/6">{patient?.contact}</div>
                   <div className="w-[27%]  hidden sm:block">{patient?.complaint
-}</div>
+                  }</div>
                   <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
 
-                </div> 
-                
+                </div>
+
                 <div className="w-[13%] flex justify-center items-center space-x-2">
 
                   {/* <button
@@ -384,9 +394,9 @@ const handleShowDetail=(id)=>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                        <div  onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+                          <div onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
 
-                          <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                            <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>
@@ -394,7 +404,7 @@ const handleShowDetail=(id)=>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                  
+
                   </div>
 
                   <button
@@ -427,48 +437,48 @@ const handleShowDetail=(id)=>
 
         </div>
         <div>
-        
-        <AlertWrapper isOpen={openJobDoneAlert}>
-        <motion.div
-        initial={{ opacity: 0 , y:50}}
-        animate={openJobDoneAlert ? {  opacity: 1 , y:0} : {}}
-        >
-          <JobDoneAlert
-            height="h-24"
-            width="w-52"
-            textColor="text-white"
-            bgColor="bg-red-400"
-            boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
-            message={jobDoneMessage}
-            isOpen={openJobDoneAlert}
-            OnCancel={handleCancelAlert}
-            isCancelButton="block"
-          />
-        </motion.div>
-        </AlertWrapper>
-         
+
+          <AlertWrapper isOpen={openJobDoneAlert}>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+            >
+              <JobDoneAlert
+                height="h-24"
+                width="w-52"
+                textColor="text-white"
+                bgColor="bg-red-400"
+                boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+                message={jobDoneMessage}
+                isOpen={openJobDoneAlert}
+                OnCancel={handleCancelAlert}
+                isCancelButton="block"
+              />
+            </motion.div>
+          </AlertWrapper>
+
         </div>
         <div>
-        <AlertWrapper isOpen={openIdCopiedAlert}>
-        <motion.div
-        initial={{ opacity: 0 , y:20}}
-        animate={openIdCopiedAlert ? {  opacity: 1 , y:0} : {}}
-        >
-        <JobDoneAlert
-            height="h-12"
-            width="w-24"
-            textColor="text-black"
-            bgColor="bg-gray-300"
-            boxShadow={null}
-            message={idCopied}
-            isOpen={openIdCopiedAlert}
-            OnCancel={null}
-            isCancelButton="hidden"
-          />
-        </motion.div>
+          <AlertWrapper isOpen={openIdCopiedAlert}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={openIdCopiedAlert ? { opacity: 1, y: 0 } : {}}
+            >
+              <JobDoneAlert
+                height="h-12"
+                width="w-24"
+                textColor="text-black"
+                bgColor="bg-gray-300"
+                boxShadow={null}
+                message={idCopied}
+                isOpen={openIdCopiedAlert}
+                OnCancel={null}
+                isCancelButton="hidden"
+              />
+            </motion.div>
 
-        </AlertWrapper>
-         
+          </AlertWrapper>
+
         </div>
 
       </div>

@@ -24,6 +24,9 @@ const PatientPaymentsDetails = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
+  const [loggedInUserType,setloggedInUserType]=useState({})
+
+
 
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -36,6 +39,13 @@ const PatientPaymentsDetails = () => {
   const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
   const [idCopied, setIdCopied] = useState("")
 
+  useEffect(() => {
+    const currentUserString = localStorage.getItem('currentUser');
+    if (currentUserString) {
+      const currentUserData = JSON.parse(currentUserString);
+      setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
+    }
+  }, []);
 
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
@@ -270,10 +280,18 @@ const PatientPaymentsDetails = () => {
                 <motion.div 
                 initial={{opacity:0, y:200}}
                 animate={{opacity:1, y:0}}
-                className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] h-[500px] z-10 rounded-md ">
+                drag
+                dragConstraints={{
+                  top: 0,
+                  left:0,
+                  right: 0,
+                  bottom: 0
+                }}
+                dragElastic={0.5}
+                className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] min-h-[500px] z-10 rounded-md ">
                   {displaySearchResult?.map((item) => {
                     return (
-                      <div key={item?.patient?._id} className='h-full relative'>
+                      <div key={item?.patient?._id} className='min-h-[500px] relative pb-12'>
 
                         <div className='flex justify-between'>
                           <h2 className="text-xl font-semibold p-2">{item?.patient?.name[0]?.toUpperCase() + item?.patient?.name?.slice(1)}</h2>
@@ -281,16 +299,16 @@ const PatientPaymentsDetails = () => {
                         </div>
                         <div className='center w-full '>
                           <div>
-                            <div className='p-1 px-10'>
-                              <img src={item?.patient?.image} alt="profile picture" className=' opacity-100 h-28 w-28 hover:scale-[1.01] hover: transition-all duration-300 rounded-full' />
+                            <div className='p-1 px-10 w-full center'>
+                              <img src={item?.patient?.image} alt="profile picture" className='  h-32 w-32  hover:scale-[1.01] hover: transition-all duration-300 rounded' />
                             </div>
-                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate  bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Gender: {item?.patient?.gender}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Age: {item?.patient?.age}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Contact: {item?.patient?.contact}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Payment Type: {item?.paymentType}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Amount: {item?.amount}</p>
-                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'>Date: {formatDate(item?.paymentDate)}</p>
-                            <p className={`mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 font-medium  hover:text-white ${item?.patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}>Status: {item?.patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate  bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white'> <div className='w-14'>Gender:</div><div>{item?.patient?.gender}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Age:</div> <div>{item?.patient?.age}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Contact: </div><div>{item?.patient?.contact}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-2'><div className='w-28'>Payment Type: </div><div>{item?.paymentType}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Amount:</div> <div>{item?.amount}</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Date:</div> <div>{formatDate(item?.paymentDate)}</div></p>
+                            <p className={`mt-1 p-1 px-10 rounded-md w-80 animate bg-blue-300 font-medium  hover:text-white flex gap-8 ${item?.patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}> <div className='w-14'>Status:</div> <div>{item?.patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div></p>
                           </div>
                         </div>
                         <div className='absolute bottom-0 mt-5 w-full  flex justify-between'>
@@ -363,12 +381,14 @@ const PatientPaymentsDetails = () => {
                     </TooltipProvider>
 
                   </div>
+{loggedInUserType ==="admin" && 
+                  
                   <button
                     className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
                     onClick={() => handleDelete(item?._id)}>
                     <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
                   </button>
-
+                } 
                 </div>
               </div>
             ))}
@@ -417,7 +437,7 @@ const PatientPaymentsDetails = () => {
         <div>
         <AlertWrapper isOpen={openIdCopiedAlert}>
         <motion.div
-        initial={{ opacity: 0 , y:20}}
+        initial={{ opacity: 0 , y:15}}
         animate={openIdCopiedAlert ? {  opacity: 1 , y:0} : {}}
         >
         <JobDoneAlert

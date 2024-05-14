@@ -18,13 +18,17 @@ import useWindowSize from "@rooks/use-window-size";
 import { motion } from "framer-motion";
 
 const Leftbar = ({ children }) => {
-const [userType,setUserType]=useState({})
-  useEffect(()=>
-  {
-setUserType(localStorage.getItem('currentUser'))
-console.log(localStorage.getItem('currentUser'));
-  },[])
+const [loggedInUserType,setloggedInUserType]=useState({})
 
+useEffect(() => {
+  const currentUserString = localStorage.getItem('currentUser');
+  if (currentUserString) {
+    const currentUserData = JSON.parse(currentUserString);
+    setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
+  console.log(currentUserData.user.userType)
+  
+  }
+}, []);
   const navigate = useNavigate();
   const [Open, setOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("default");
@@ -111,6 +115,9 @@ console.log(localStorage.getItem('currentUser'));
           </div>
 
           <ul className="mt-2">
+
+{loggedInUserType === "admin" && 
+
             <NavLink
               to="."
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${activeLink === "." ? "active-link  text-white  " : "hover: hover:border-blue-600"}  ${
@@ -124,6 +131,11 @@ console.log(localStorage.getItem('currentUser'));
                 </div>
               </li>
             </NavLink>
+          }
+
+           {/* ......... staff Prescription......... */}
+           
+           {loggedInUserType === "staff" && 
             <NavLink
               to="prescription"
               className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
@@ -139,7 +151,26 @@ console.log(localStorage.getItem('currentUser'));
                 </div>
               </li>
             </NavLink>
+}
 
+            {/* ..........Doctor presCription......... */}
+            {loggedInUserType === "admin" && 
+            <NavLink
+              to="doctor_prescription"
+              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                activeLink === "doctor_prescription" ? "active-link  text-white  " : "hover:border-blue-600"
+              }`}
+              onClick={() => handleLinkClick("doctor_prescription")}>
+              <li className="">
+                <BsPrescription2 className="text-2xl" />
+                <div className={hidden}>
+                  <span className=" font-roboto  text-lg ml-3">
+                    Prescription
+                  </span>
+                </div>
+              </li>
+              </NavLink>
+              }
             {/* ----------------payment drop down---------- */}
 
             <li style={{ padding: 0 }}>
@@ -330,7 +361,7 @@ console.log(localStorage.getItem('currentUser'));
               </li>
             </NavLink>
 
-            {"admin" === "admin" && (
+            {loggedInUserType === "admin" && (
               <>
                 <NavLink
                   to="createstaff"
