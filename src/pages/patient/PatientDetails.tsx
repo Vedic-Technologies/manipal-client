@@ -11,11 +11,13 @@ import PatientPaymentCard from "./PatientPaymentCard";
 
 const Patient = () => {
   const [data, setData] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState("");
+  const [selectedPatient, setSelectedPatient] = useState(false);
   const [patient, setPatient] = useState();
   const [payment, setPayment] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const param = useParams();
+
+  console.log(param.id);
 
   const getData = async () => {
     try {
@@ -30,6 +32,7 @@ const Patient = () => {
   useEffect(() => {
     if (param.id !== "0") {
       // alert(param.id)
+    setSelectedPatient(true)
       fetchPatientDetails(param.id);
     }
 

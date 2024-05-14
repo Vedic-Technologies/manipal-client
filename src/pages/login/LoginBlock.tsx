@@ -56,7 +56,7 @@ const LoginBlock = () => {
     } else {
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/users/login",
+          "https://manipal-server.onrender.com/api/users/login",
           user_body
         );
 

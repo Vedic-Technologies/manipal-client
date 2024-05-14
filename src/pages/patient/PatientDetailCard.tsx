@@ -6,6 +6,7 @@ import {
 } from "../../components/ui/card";
 
 export default function PatientDetailCard({ patient }) {
+  console.log(patient)
   return (
     <Card className="w-full  bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex">
