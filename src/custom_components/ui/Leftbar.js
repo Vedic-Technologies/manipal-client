@@ -18,6 +18,13 @@ import useWindowSize from "@rooks/use-window-size";
 import { motion } from "framer-motion";
 
 const Leftbar = ({ children }) => {
+const [userType,setUserType]=useState({})
+  useEffect(()=>
+  {
+setUserType(localStorage.getItem('currentUser'))
+console.log(localStorage.getItem('currentUser'));
+  },[])
+
   const navigate = useNavigate();
   const [Open, setOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("default");
