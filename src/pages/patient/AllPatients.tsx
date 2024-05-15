@@ -59,11 +59,10 @@ const AllPatients = () => {
 
     fetchData();
   }, []);
-
-
+  
 
   // search functionality 
-  const searchPatient = () => {
+  const searchPatient = (inputValue) => {
 
     const trimmedSearchInput = searchInput.trim();
     if (trimmedSearchInput === "") {
@@ -91,24 +90,19 @@ const AllPatients = () => {
 
     if (results.length > 0) {
       setSearchResults(results);
-      setShowDetails(true);
       setJobDoneMessage("")
       setOpenJobDoneAlert(false)
+   
     } else {
       setSearchResults([]);
       setShowDetails(false);
       setJobDoneMessage("Sorry, no patient found. Double-check spelling !!");
-      setOpenJobDoneAlert(true)
 
-      // removing result not found alert automatically
-      setTimeout(() => {
-        setOpenJobDoneAlert(false)
-      }, 3000);
+
     }
   };
 
   const displaySearchResult = searchResults.filter((result, idx) => idx === displaySearch)
-
   const nextSearchResult = () => {
 
     if (displaySearch < searchResults.length - 1) {
@@ -129,10 +123,50 @@ const AllPatients = () => {
   const handleCancelShowDetail = () => {
     setShowDetails(false)
     setDisplaySearch(0)
-    setSearchInput("")
     setJobDoneMessage("")
   }
 
+  const handleSearchInputChange =(e)=>{
+    const inputValue = e.target.value; // Get the current input value
+    setSearchInput(inputValue); // Update the search input state
+    searchPatient(inputValue);
+  }
+
+  // Function to handle search action
+const handleSearch = () => {
+  searchPatient(searchInput); // Call searchPatient function with current search input value
+};
+
+const handleEnterKey=(e)=>{
+  if(e.key ==="Enter" && searchInput !== "" && searchResults.length > 0){
+    handleSearch()
+    setShowDetails(true);
+  }
+  else if(e.key ==="Enter" && searchResults.length === 0){
+    setShowDetails(false);
+    setOpenJobDoneAlert(true)
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
+  }
+}
+
+const handleSeachIconClick =()=>{
+  if(searchInput !== "" && searchResults.length > 0){
+    handleSearch();
+    setShowDetails(true);
+  }
+  else if(searchResults.length === 0){
+    setShowDetails(false);
+    setOpenJobDoneAlert(true)
+          // removing result not found alert automatically
+          setTimeout(() => {
+            setOpenJobDoneAlert(false)
+          }, 3000);
+
+  }
+}
 
   // //Patient details on click 
   // const handleDetails = (patientId) => {
@@ -267,7 +301,7 @@ const AllPatients = () => {
 
       })
   }
-
+const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchResults : currentPatients;
   return (
     <div className="patient-list px-4 pl-8 py-2 ">
       <div className='  '><span>Patient &gt; </span>
@@ -279,12 +313,12 @@ const AllPatients = () => {
           <div className='flex gap-5 items-center'>
             <div className=' font-bold text-xl'>Patient List</div>
             <div className="search relative">
-              <input onKeyDown={(e) => {
-                if (e.key === "Enter") searchPatient();
-              }}
-                onChange={(e) => setSearchInput(e.target.value)}
+              <input onKeyDown={handleEnterKey}
+                onChange={handleSearchInputChange}
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
-              <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
+             
+              <i onClick={handleSeachIconClick} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
+            
               {showDetails && (
                 <motion.div
                   initial={{ opacity: 0, y: 200 }}
@@ -357,8 +391,8 @@ const AllPatients = () => {
             <div className="w-[12%] hidden sm:block">Status</div>
             <div className="w-1/6 text-center">Actions</div>
           </div>
-          <div className='pt-5'>
-            {currentPatients?.map((patient) => (
+          <div className='pt-5 h-[430px]  overflow-y-auto'>
+            {patientsToRender?.map((patient) => (
               <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
 
                 <div className=' w-[86%] flex justify-between items-center '
