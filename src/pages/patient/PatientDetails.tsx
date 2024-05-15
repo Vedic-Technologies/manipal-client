@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import PatientDetailCard from "./PatientDetailCard";
 import PatientPaymentCard from "./PatientPaymentCard";
 
+
 const Patient = () => {
   const [data, setData] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(false);
