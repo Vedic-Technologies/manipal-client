@@ -14,8 +14,6 @@ const UserDetails = ({ user } :PatientType) => {
       <p className="text-lg font-semibold">Sex : {user.gender}</p>
       <p className="text-lg font-semibold">Email : {user.email!=='NA' ? user.email : "abhinavbgp@gmail.com"}</p>
       <p className="text-lg font-semibold"> Problem : {user.complaint}</p>
-     
-  
     </div>
   </div>
   )
