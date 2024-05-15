@@ -476,7 +476,6 @@ const AllPatients = () => {
                 isCancelButton="hidden"
               />
             </motion.div>
-
           </AlertWrapper>
 
         </div>

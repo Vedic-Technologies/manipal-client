@@ -5,12 +5,20 @@ import axios from 'axios';
 import UserDetails from './UserDetails';
 import DefaultUserDetails from './DefaultUserDetails';
 import PaymentDetails from './PaymentDetails';
-
+import AlertWrapper from '../../custom_components/AlertWrapper';
+import JobDoneAlert from "../../custom_components/JobDoneAlert"
+import { motion } from "framer-motion"
 const PaymentEntry = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [data, setData] = useState([]);
   const [patientId, setPatientId] = useState('');
+ // jodDone alert message 
+ const [jobDoneMessage, setJobDoneMessage] = useState("")
+ const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
 
+ const handleCancelAlert = () => {
+  setOpenJobDoneAlert(false)
+}
   const getData = async () => {
     const response = await axios.get('https://manipal-server.onrender.com/api/patient/all_patients');
     setData(response.data);
@@ -38,7 +46,14 @@ const PaymentEntry = () => {
     } else {
       // Handle case where patient with entered ID is not found
       setSelectedPatient('');
-      alert('Patient not found');
+      setJobDoneMessage("Can not find Patient. Double-check ID !!")
+      setOpenJobDoneAlert(true)
+
+    // removing result not found alert automatically
+    setTimeout(() => {
+      setOpenJobDoneAlert(false)
+    }, 3000);
+
     }
   };
 
@@ -109,6 +124,24 @@ const PaymentEntry = () => {
         </div>
       </div>
       {selectedUser && <PaymentDetails patientId={selectedUser._id} />}
+      <AlertWrapper isOpen={openJobDoneAlert}>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+            >
+              <JobDoneAlert
+                height="h-24"
+                width="w-52"
+                textColor="text-white"
+                bgColor="bg-red-400"
+                boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+                message={jobDoneMessage}
+                isOpen={openJobDoneAlert}
+                OnCancel={handleCancelAlert}
+                isCancelButton="block"
+              />
+            </motion.div>
+          </AlertWrapper>
     </>
   );
 };
