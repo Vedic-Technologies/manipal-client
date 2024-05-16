@@ -11,8 +11,8 @@ const Login = () => {
         <img className="  w-60" src={manipal_logo} alt="" />
        <div className="w-[1100px] mt-8 flex gap-12 items-center  ">
         <div className="">
-          <div className="bg-gradient-to-r from-slate-50 to-sky-200 bg-clip-text text-transparent font-Quicksand text-5xl font-semibold tracking-[20px]">MANIPAL</div>
-          <div className="text-white font-Quicksand text-xl tracking-wider mt-2">Physiotherapy Center Application</div>
+          <div className="bg-gradient-to-r from-slate-50 to-gray-100 bg-clip-text text-transparent font-Quicksand text-5xl font-semibold tracking-[20px]">MANIPAL</div>
+          <div className="text-white  font-Quicksand text-xl font-medium tracking-wider mt-2">Physiotherapy Center Application</div>
         </div>
         <div className=""><LoginBlock /></div>
        </div>
