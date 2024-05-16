@@ -8,7 +8,9 @@ import { RiUserSearchLine } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import PatientDetailCard from "./PatientDetailCard";
 import PatientPaymentCard from "./PatientPaymentCard";
-
+import AlertWrapper from '../../custom_components/AlertWrapper';
+import JobDoneAlert from "../../custom_components/JobDoneAlert"
+import { motion } from "framer-motion"
 
 const Patient = () => {
   const [data, setData] = useState([]);
@@ -17,7 +19,13 @@ const Patient = () => {
   const [payment, setPayment] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const param = useParams();
+  // jodDone alert message 
+  const [jobDoneMessage, setJobDoneMessage] = useState("")
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
 
+  const handleCancelAlert = () => {
+    setOpenJobDoneAlert(false)
+  }
   console.log(param.id);
 
   const getData = async () => {
@@ -70,8 +78,17 @@ const Patient = () => {
         setSelectedPatient(searchInput);
         setPatient(response.data);
         setPayment(response.data.payments);
+        setJobDoneMessage("")
+      setOpenJobDoneAlert(false)
       } catch (error) {
         console.error("Error fetching patient details:", error);
+        setJobDoneMessage("Can not find Patient. Double-check ID !!")
+        setOpenJobDoneAlert(true)
+
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
       }
     } else {
       // Handle case where search input is empty
@@ -131,6 +148,28 @@ const Patient = () => {
           )}
         </Card>
       </div>
+      <div>
+
+<AlertWrapper isOpen={openJobDoneAlert}>
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+  >
+    <JobDoneAlert
+      height="h-24"
+      width="w-52"
+      textColor="text-white"
+      bgColor="bg-red-400"
+      boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+      message={jobDoneMessage}
+      isOpen={openJobDoneAlert}
+      OnCancel={handleCancelAlert}
+      isCancelButton="block"
+    />
+  </motion.div>
+</AlertWrapper>
+
+</div>
     </div>
   );
 };

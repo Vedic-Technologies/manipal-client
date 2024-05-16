@@ -8,11 +8,21 @@ import { ChangeEvent, useState } from "react";
 import { initialData } from "../../initial_values/InitialValues";
 import Webcam from "../webcam/Camera";
 import axios from "axios";
+import AlertWrapper from '../../custom_components/AlertWrapper';
+import JobDoneAlert from "../../custom_components/JobDoneAlert"
+import { motion } from "framer-motion"
+
 const PresCriptionSadcn=()=> {
 
 const [patientData, setPatientData] = useState<PatientType>(initialData)
 const [imageFile, setImageFile]=useState("");
-
+  // jodDone alert message 
+  const [jobDoneMessage, setJobDoneMessage] = useState("")
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
+  const [alertColor, setAlertColor] = useState("")
+  const handleCancelAlert = () => {
+    setOpenJobDoneAlert(false)
+  }
 const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();  
     console.log(patientData)
@@ -22,10 +32,24 @@ const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
         {...patientData,image:imageFile}
       );
       console.log(response.data);
-      alert("Patient registration successful!");
+      setJobDoneMessage("Patient registration successful!")
+      setAlertColor("green")
+      setOpenJobDoneAlert(true)
+
+      // removing success alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to register patient.");
+         setJobDoneMessage("Failed to register Patient!!")
+         setAlertColor("red")
+        setOpenJobDoneAlert(true)
+
+      // removing failed alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
     }
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {  
@@ -332,6 +356,24 @@ const handleBloodGroupSelectChange=(value)=>
           <Button type="submit">Submit</Button>
         </div>
       </form>     
+      <AlertWrapper isOpen={openJobDoneAlert}>
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+  >
+    <JobDoneAlert
+      height="h-24"
+      width="w-52"
+      textColor="text-white"
+      bgColor={`${alertColor === "red" ? "bg-red-400" :  "bg-green-400"}`}
+      boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" :  "shadow-[0px_0px_42px_2px_#48BB78]"}`}
+      message={jobDoneMessage}
+      isOpen={openJobDoneAlert}
+      OnCancel={handleCancelAlert}
+      isCancelButton="block"
+    />
+  </motion.div>
+</AlertWrapper>
     </div>
   );
 }
