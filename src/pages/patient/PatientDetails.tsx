@@ -11,6 +11,7 @@ import PatientPaymentCard from "./PatientPaymentCard";
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
+
 const Patient = () => {
   const [data, setData] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(false);

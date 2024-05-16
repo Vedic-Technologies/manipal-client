@@ -30,25 +30,35 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Cell } from "recharts";
 
 export default function UpdateStaff() {
+  useEffect(() => {
+    getStaffs();
+  }, []);
 
-useEffect(()=>{
- getStaffs();
-},[])
+  const [Staffs, setStaffs] = useState();
 
-const [Staffs, setStaffs] = useState()
+  const getStaffs = async () => {
+    axios
+      .get("https://manipal-server.onrender.com/api/users")
+      .then((response) => {
+        setStaffs(response.data.filter((item) => item.userType !== "admin"));
+        // setStaffs(response.data)
+        console.log(response.data.filter((item) => item.userType !== "admin"));
+        // console.log(response.data.filter(item => item.userType === "staff"))
+      })
 
- const getStaffs = () => {
-    // axios.get('https://worldtestapi.azurewebsites.net/api/User')
-      // .then((response) => {
-      //   setStaffs(response.data.filter(item => item.userType === "staff"));
-      // })
-      // .catch((error) => {
-      //   console.error("Error fetching staffs: ", error);
-      // });
+      .catch((error) => {
+        console.error("Error fetching staffs: ", error);
+      });
   };
-
+  const handeldelete= async(id)=>{
+    const result =await axios.delete(`https://manipal-server.onrender.com/api/users/${id}`)               
+    
+    getStaffs()
+    
+      }
   return (
     <div className="border rounded-lg shadow-sm mx-20 mt-10">
       <div className="flex items-center justify-between px-4 py-3 border-b">
@@ -69,28 +79,35 @@ const [Staffs, setStaffs] = useState()
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>John Doe</TableCell>
-              <TableCell>john@example.com</TableCell>
-              <TableCell>+1 (555) 555-5555</TableCell>
-              <TableCell>Male</TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="outline">
-                      <CiMenuKebab className="w-4 h-4" />
-                      <span className="sr-only">Actions</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>View Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-            <TableRow>
+            {Staffs?.map((item) => {
+              return (
+             
+                  <TableRow key={item?._id}  >
+                    <TableCell>{item?.firstName}</TableCell>
+                    <TableCell>{item?.email}</TableCell>
+                    <TableCell>{item?.contact}</TableCell>
+                    <TableCell>{item?.gender}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button size="icon" variant="outline">
+                            <CiMenuKebab className="w-4 h-4" />
+                            <span className="sr-only">Actions</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>View Profile</DropdownMenuItem>
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem  onClick={()=>handeldelete(item._id)}>Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+               
+              );
+            })}
+
+            {/* <TableRow>
               <TableCell>Jane Smith</TableCell>
               <TableCell>jane@example.com</TableCell>
               <TableCell>+1 (555) 555-5556</TableCell>
@@ -110,8 +127,9 @@ const [Staffs, setStaffs] = useState()
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
-            </TableRow>
-            <TableRow>
+             </TableRow> */}
+
+            {/* <TableRow>
               <TableCell>Michael Johnson</TableCell>
               <TableCell>michael@example.com</TableCell>
               <TableCell>+1 (555) 555-5557</TableCell>
@@ -131,8 +149,9 @@ const [Staffs, setStaffs] = useState()
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
-            </TableRow>
-            <TableRow>
+            </TableRow> */}
+
+            {/* <TableRow>
               <TableCell>Sarah Lee</TableCell>
               <TableCell>sarah@example.com</TableCell>
               <TableCell>+1 (555) 555-5558</TableCell>
@@ -152,7 +171,7 @@ const [Staffs, setStaffs] = useState()
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
-            </TableRow>
+            </TableRow> */}
           </TableBody>
         </Table>
       </div>
