@@ -85,3 +85,24 @@
   transition: all .3s ease-in-out;
 
 }
+
+.animated-background{
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #3394d4, #6dd5fa, #4fa6e8, #6dd5fa, #32aaea);
+  background-size: 400% 400%;
+  animation: gradientAnimation 25s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
