@@ -5,15 +5,18 @@ import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
-    <div className="bg-gradient-to-r from-gray-300 to-gray-300 h-screen flex  items-center justify-center">
-  <Link to='/home'><Button>Home</Button></Link> 
-      <div className="w-[60%] h-5/6 justify-start items-center rounded-2xl flex flex-col bg-login-image bg-cover relative shadow-basic">
-        <img className="  w-60 ml-6 mt-4" src={manipal_logo} alt="" />{" "}
-        <LoginBlock />
-        <div className=" w-full p-20">
-          <div className="text-[#C34167] text-5xl font-semibold tracking-[30px]">MANIPAL</div>
-          <div className="text-[#1F7480] text-2xl tracking-wider mt-2">Physiotherapy Center Application</div>
+    <div className="bg-gradient-to-r from-sky-500 to-gray-50 h-screen flex  items-center justify-center">
+  <Link to='/home'><Button className="fixed top-16">Home</Button></Link> 
+      <div className="w-[80%]  h-5/6 rounded-2xl flex flex-col justify-start items-center  bg-login-image bg-cover relative shadow-basic">
+        <img className="  w-60" src={manipal_logo} alt="" />
+       <div className="w-[1100px] mt-8 flex gap-12 items-center  ">
+        <div className="">
+          <div className="bg-gradient-to-r from-slate-50 to-gray-100 bg-clip-text text-transparent font-Quicksand text-5xl font-semibold tracking-[20px]">MANIPAL</div>
+          <div className="text-white  font-Quicksand text-xl font-medium tracking-wider mt-2">Physiotherapy Center Application</div>
         </div>
+        <div className=""><LoginBlock /></div>
+       </div>
+       
         </div>
        
       </div>

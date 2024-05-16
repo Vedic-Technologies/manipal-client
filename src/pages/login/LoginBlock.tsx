@@ -101,7 +101,7 @@ const LoginBlock = () => {
   return (
     <>
       <div
-        className="shadow-basic backdrop-blur-sm border-2 border-r-white border-b-white box h-[350px] w-[290px] rounded-lg  mt-16"
+        className="animated-background animated-border shadow-basic backdrop-blur-sm border-2 border-r-white border-b-white box h-[400px] w-[320px] rounded-lg relative shadow-[rgba(0,_0,_0,_0.2)_0px_60px_40px_-7px]"
       >
         <div className="mt-8 ">
           <div className="mb-6 w-[90%] m-auto">
@@ -114,7 +114,7 @@ const LoginBlock = () => {
             <input
               type="email"
               id="email"
-              className=" border-2 border-black  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[225px] ml-5 p-2.5 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
+              className=" border-2 border-black  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[85%] ml-5 mt-3 p-2.5 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
               placeholder="Enter email address"
               required
               value={email}
@@ -147,20 +147,20 @@ const LoginBlock = () => {
                   setError(null);
                   setError(null)
                 }}
-                className="border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[225px] ml-5 p-2.5 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
+                className="border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[85%] ml-5 mt-3 p-2.5 pr-7 dark:border-gray-600 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3 px-3 py-[6px] bg-white"
                 placeholder="Enter your password"
                 required
               />
               {passVisibility ? (
                 <div
-                  className="absolute top-[50%] translate-y-[-50%] right-3 cursor-pointer scale-[1.5]"
+                  className="absolute top-[50%] right-5 translate-y-[-50%] cursor-pointer text-gray-400 text-sm scale-[1.5]"
                   onClick={nonVisiblePassword}
                 >
                 < IoMdEye className=" mr-2 " />
                 </div>
               ) : (
                 <div
-                  className="absolute top-[50%] translate-y-[-50%] right-3 cursor-pointer scale-[1.5]"
+                  className="absolute top-[50%] translate-y-[-50%] right-5 cursor-pointer text-gray-400 text-sm scale-[1.5]"
                   onClick={visiblePassword}
                 >
                  <BiSolidHide className=" mr-2 " />
@@ -176,11 +176,11 @@ const LoginBlock = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full absolute bottom-8">
           {!loader ? (
             <button
               onClick={() => verifyLogin()}
-              className="bg-gray-700 pt-1 pb-2 px-20 text-white font-sans tracking-tight mb-3 rounded text-lg"
+              className="bg-gray-700 pt-1 pb-2 px-16 text-white font-sans tracking-tight mb-3 rounded text-lg"
               style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
             >
               Log in
