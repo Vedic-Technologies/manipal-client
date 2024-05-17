@@ -12,8 +12,6 @@ useEffect(()=>
 {
   startApi();
 },[])
-
-
   return (
    <>
   
