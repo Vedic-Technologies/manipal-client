@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
 import ConfirmationModal from "../../custom_components/ConfirmationModal"
 import { LiaCopySolid } from 'react-icons/lia';
+import { useGetAllPatientsQuery, useDeletePatientMutation, useUpdateActiveStatusMutation } from '../../API/API';
 import {
   Tooltip,
   TooltipContent,
@@ -14,10 +14,12 @@ import { useNavigate } from 'react-router-dom';
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
+import {ThreeDots} from 'react-loader-spinner';
+
 const AllPatients = () => {
-  const [patients, setPatients] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [patients, setPatients] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [displaySearch, setDisplaySearch] = useState(0)
@@ -41,26 +43,11 @@ const AllPatients = () => {
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
   }
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
 
-      try {
-        const response = await axios.get('https://manipal-server.onrender.com/api/patient/all_patients');
-        setPatients(response.data);
-        console.log(response.data)
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-  
-
+  //from API.tsx
+  const { data: patients = [], error, isLoading, refetch } = useGetAllPatientsQuery("");
+  const [deletePatient] = useDeletePatientMutation();
+  const [updateActiveStatus] = useUpdateActiveStatusMutation()
   // search functionality 
   const searchPatient = (inputValue) => {
 
@@ -92,7 +79,7 @@ const AllPatients = () => {
       setSearchResults(results);
       setJobDoneMessage("")
       setOpenJobDoneAlert(false)
-   
+
     } else {
       setSearchResults([]);
       setShowDetails(false);
@@ -126,62 +113,47 @@ const AllPatients = () => {
     setJobDoneMessage("")
   }
 
-  const handleSearchInputChange =(e)=>{
+  const handleSearchInputChange = (e) => {
     const inputValue = e.target.value; // Get the current input value
     setSearchInput(inputValue); // Update the search input state
     searchPatient(inputValue);
   }
 
   // Function to handle search action
-const handleSearch = () => {
-  searchPatient(searchInput); // Call searchPatient function with current search input value
-};
+  const handleSearch = () => {
+    searchPatient(searchInput); // Call searchPatient function with current search input value
+  };
 
-const handleEnterKey=(e)=>{
-  if(e.key ==="Enter" && searchInput !== "" && searchResults.length > 0){
-    handleSearch()
-    setShowDetails(true);
-  }
-  else if(e.key ==="Enter" && searchResults.length === 0){
-    setShowDetails(false);
-    setOpenJobDoneAlert(true)
+  const handleEnterKey = (e) => {
+    if (e.key === "Enter" && searchInput !== "" && searchResults.length > 0) {
+      handleSearch()
+      setShowDetails(true);
+    }
+    else if (e.key === "Enter" && searchResults.length === 0) {
+      setShowDetails(false);
+      setOpenJobDoneAlert(true)
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
       }, 3000);
+    }
   }
-}
 
-const handleSeachIconClick =()=>{
-  if(searchInput !== "" && searchResults.length > 0){
-    handleSearch();
-    setShowDetails(true);
+  const handleSeachIconClick = () => {
+    if (searchInput !== "" && searchResults.length > 0) {
+      handleSearch();
+      setShowDetails(true);
+    }
+    else if (searchResults.length === 0) {
+      setShowDetails(false);
+      setOpenJobDoneAlert(true)
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
+
+    }
   }
-  else if(searchResults.length === 0){
-    setShowDetails(false);
-    setOpenJobDoneAlert(true)
-          // removing result not found alert automatically
-          setTimeout(() => {
-            setOpenJobDoneAlert(false)
-          }, 3000);
-
-  }
-}
-
-  // //Patient details on click 
-  // const handleDetails = (patientId) => {
-  //   const selectedPatient = patients.find((patient) => patient._id === patientId);
-  //   if (selectedPatient) {
-  //     setSearchResults([selectedPatient]);
-  //     setShowDetails(true);
-  //   } else {
-  //     setSearchResults([]);
-  //     setShowDetails(false);
-  //     alert("Patient not found.");
-  //   }
-  // };
-
-  // const displaySearchResult = searchResults.filter((result,idx)=> result._id=== displaySearch)
 
   const handleEdit = (patientId) => {
     console.log('Edit patient:', patientId);
@@ -194,15 +166,16 @@ const handleSeachIconClick =()=>{
   }
   const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete(`https://manipal-server.onrender.com/api/patient/${selectedPatientId}`);
-      setPatients(patients.filter((patient) => patient._id !== selectedPatientId));
-
+      await deletePatient(selectedPatientId).unwrap();
+      refetch();
       setSearchResults([]);
       setShowDetails(false);
+      console.log("patient deleted, id:" + selectedPatientId)
     } catch (error) {
       console.error('Error deleting patient:', error);
     } finally {
       setOpenConfirm(false)
+      setSelectedPatientId(null);
     }
   };
 
@@ -224,7 +197,21 @@ const handleSeachIconClick =()=>{
 
 
   if (isLoading) {
-    return <div className="text-center p-4">Loading patients...</div>;
+    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+     <div> Loading patients...</div>
+     <div>
+      <ThreeDots
+    height="50"
+    width="50"
+    color="black"
+    ariaLabel="Loading..."
+    radius="1"
+    wrapperStyle={{}}
+    wrapperClass=""
+    visible={true}
+/>
+        </div>
+    </div>;
   }
 
   if (error) {
@@ -268,9 +255,9 @@ const handleSeachIconClick =()=>{
     try {
       const patientToUpdate = patients.find(patient => patient._id === id);
       if (patientToUpdate) {
-        const updateActiveStatus = { ...patientToUpdate, active: !patientToUpdate.active }
-        const response = await axios.patch(`https://manipal-server.onrender.com/api/patient/${id}`, updateActiveStatus);
-        setPatients(patients.map(patient => (patient._id === id ? updateActiveStatus : patient)));
+        const updatedStatus = { ...patientToUpdate, active: !patientToUpdate.active }
+        const result = await updateActiveStatus({ id, ...updatedStatus }).unwrap()
+        refetch()
       }
     }
     catch (error) {
@@ -301,13 +288,12 @@ const handleSeachIconClick =()=>{
 
       })
   }
-const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchResults : currentPatients;
+  const patientsToRender = searchResults.length > 0 && searchInput !== "" ? searchResults : currentPatients;
   return (
     <div className="patient-list px-4 pl-8 py-2 ">
       <div className='  '><span>Patient &gt; </span>
         <span className='text-gray-400 text-sm'>All Patients</span>
       </div>
-
       <div className='h-[600px] mt-4  py-2 px-4 rounded-md bg-white relative'>
         <div className='flex justify-between  px-2 py-1 pr-10'>
           <div className='flex gap-5 items-center'>
@@ -316,9 +302,7 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
               <input onKeyDown={handleEnterKey}
                 onChange={handleSearchInputChange}
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
-             
               <i onClick={handleSeachIconClick} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
-            
               {showDetails && (
                 <motion.div
                   initial={{ opacity: 0, y: 200 }}
@@ -326,7 +310,7 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
                   drag
                   dragConstraints={{
                     top: 0,
-                    left:0,
+                    left: 0,
                     right: 0,
                     bottom: 0
                   }}
@@ -344,15 +328,11 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
                             <div className='p-1 px-10 w-full center'>
                               <img src={patient?.image} alt="profile picture" className=' h-32 w-32 hover:scale-[1.01] hover: transition-all duration-300 rounded' />
                             </div>
-
-
                             <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Gender:</div> <div>{patient?.gender[0]?.toUpperCase() + patient?.gender?.slice(1)?.toLowerCase()}</div></p>
                             <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Age:</div> <div>{patient?.age}</div></p>
                             <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Contact: </div><div> {patient?.contact}</div></p>
-                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Problem:</div> <div>{patient?.complaint }</div></p>
+                            <p className='mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 hover:bg-gray-400 font-medium  hover:text-white flex gap-8'><div className='w-14'>Problem:</div> <div>{patient?.complaint}</div></p>
                             <p className={`mt-1 p-1 px-10 rounded-md animate w-96 bg-blue-300 font-medium  hover:text-white flex gap-8 ${patient?.active === false ? "hover:bg-red-400 " : "hover:bg-green-400 "}`}> <div className='w-14'>Status:</div> <div>{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div></p>
-
-
                           </div>
                         </div>
                         <div className='absolute bottom-0 mt-5 w-full  flex justify-between'>
@@ -367,12 +347,9 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
                             <button onClick={nextSearchResult} className='size-5 rounded bg-blue-200 hover:bg-blue-300 '><i className="fa-solid fa-chevron-right"></i></button>
                           </div>
                         </div>
-
                       </div>
                     )
                   })}
-
-
                 </motion.div>
               )}
             </div>
@@ -391,21 +368,17 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
             <div className="w-[12%] hidden sm:block">Status</div>
             <div className="w-1/6 text-center">Actions</div>
           </div>
-          <div className='pt-5 h-[430px]  overflow-y-auto'>
+          <div className='pt-5 h-[430px]  overflow-y-auto overflow-x-hidden'>
             {patientsToRender?.map((patient) => (
               <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-
                 <div className=' w-[86%] flex justify-between items-center '
                   onClick={() => handleShowDetail(patient?._id)}
                 >
                   <div className='w-[30%] flex gap-1 items-center '>
                     <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
-
                     <div className='w-full flex  justify-between ml-4'>
                       <div className=" ">{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
-
                     </div>
-
                   </div>
                   <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
                   <div className="w-[12%]">{patient?.age}</div>
@@ -413,23 +386,13 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
                   <div className="w-[27%]  hidden sm:block">{patient?.complaint
                   }</div>
                   <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
-
                 </div>
-
                 <div className="w-[13%] flex justify-center items-center space-x-2">
-
-                  {/* <button
-                    className="edit px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate"
-                    onClick={() => handleEdit(patient?._id)}
-                  >
-                    <i className="fa-regular fa-pen-to-square hover:text-blue-900 text-blue-400"></i>
-                  </button> */}
                   <div className='center'>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <div onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
-
                             <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
                           </div>
                         </TooltipTrigger>
@@ -438,9 +401,7 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-
                   </div>
-
                   <button
                     className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
                     onClick={() => handleDelete(patient?._id)}
@@ -468,10 +429,8 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
             onCancel={handleCancelDelete}
             onConfirm={handleConfirmDelete}
           />
-
         </div>
         <div>
-
           <AlertWrapper isOpen={openJobDoneAlert}>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -490,7 +449,6 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
               />
             </motion.div>
           </AlertWrapper>
-
         </div>
         <div>
           <AlertWrapper isOpen={openIdCopiedAlert}>
@@ -511,10 +469,9 @@ const patientsToRender = searchResults.length> 0 && searchInput !== "" ? searchR
               />
             </motion.div>
           </AlertWrapper>
-
         </div>
-
       </div>
+   
     </div>
   );
 };
