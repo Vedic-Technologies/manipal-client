@@ -48,6 +48,7 @@ const AllPatients = () => {
 
   //from API.tsx
   const { data: patients = [], error, isLoading, refetch } = useGetAllPatientsQuery("");
+
   const [deletePatient] = useDeletePatientMutation();
   const [updateActiveStatus] = useUpdateActiveStatusMutation()
 

@@ -43,40 +43,29 @@ const TotalRevenue = () => {
 
     const percentageChange = calculatePercentageChange();
     return (
-        <div className='bg-white min-h-[50%]  flex-grow p-2  flex justify-around  gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
+        <div className=' h-[200px]  p-2  flex justify-around bg-white gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
             <div className=' '>
-                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Revenue</div>
-                <div className='text-3xl font-bold p-2'>₹ {totalRevenue.toLocaleString('en-IN')}</div>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Income Till Today</div>
+                <div className='text-3xl font-bold p-2'>₹ 6,23,00,000</div>
                 <div className='text-sm pt-3'>
-                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up fa-beat-fade text-green-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down fa-beat-fade text-red-600 text-2xl px-1"></i>}
-                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'green' : 'red' }}>{percentageChange} %</span> from last year</div>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }}>{percentageChange} %</span> from last year</div>
             </div>
-            <div className='m-2 ' >
-                <Bar
-                    data={revenueData}
-                    options={{
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            },
-                            y: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        },
-
-
-                    }}
-                />
+            <div className=' '>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Income This Year</div>
+                <div className='text-3xl font-bold p-2'>₹ 60,00,000</div>
+                <div className='text-sm pt-3'>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }}>{percentageChange} %</span> from last year</div>
             </div>
+            <div className=' '>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Income This Month</div>
+                <div className='text-3xl font-bold p-2'>₹ 3,40,000</div>
+                <div className='text-sm pt-3'>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down fa-beat-fade text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }}>{percentageChange} %</span> from last year</div>
+            </div>
+           
         </div>
     )
 }

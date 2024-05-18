@@ -16,19 +16,22 @@ import { BiBarChart } from "react-icons/bi";
 import { LiaUserEditSolid } from "react-icons/lia";
 import useWindowSize from "@rooks/use-window-size";
 import { motion } from "framer-motion";
+import { GiMoneyStack } from "react-icons/gi";
+import { GrMoney } from "react-icons/gr";
+import { PiWheelchair } from "react-icons/pi";
+import { MdOutlineElderlyWoman } from "react-icons/md";
 
 const Leftbar = ({ children }) => {
-const [loggedInUserType,setloggedInUserType]=useState({})
+  const [loggedInUserType, setloggedInUserType] = useState({});
 
-useEffect(() => {
-  const currentUserString = localStorage.getItem('currentUser');
-  if (currentUserString) {
-    const currentUserData = JSON.parse(currentUserString);
-    setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
-  console.log(currentUserData.user.userType)
-  
-  }
-}, []);
+  useEffect(() => {
+    const currentUserString = localStorage.getItem("currentUser");
+    if (currentUserString) {
+      const currentUserData = JSON.parse(currentUserString);
+      setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
+      console.log(currentUserData.user.userType);
+    }
+  }, []);
   const navigate = useNavigate();
   const [Open, setOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("default");
@@ -93,9 +96,11 @@ useEffect(() => {
       <div
         className={` px-10 ${Open ? "hideSidebar" : "showSidebar "} ${
           innerWidth < 800 ? "hideSidebar" : "showSidebar"
-        } `}></div>
+        } `}
+      ></div>
       <div
-        className={`leftbar fixed  bg-gradient-to-l from-neutral-50 to-blue-100`}>
+        className={`leftbar fixed  bg-gradient-to-l from-neutral-100 to-blue-100`}
+      >
         <div className=" m-2 relative overflow-hidden h-20 bg-lue-700">
           <div className="  w-full overflow-hidden absolute pl-1 text-5xl text-nowrap font-bold bg-gradient-to-r  from-blue-600 to-indigo-900 bg-clip-text text-transparent">
             <span className="">M</span>anipal
@@ -103,74 +108,78 @@ useEffect(() => {
         </div>
 
         <nav>
-          <div
-            className="center drawer bg-red-400 z-50"
-            onClick={() => handleDrawerClick()}>
-            {isSidebarCollapsed ? (
-              // <RxDoubleArrowRight />
-              <VscThreeBars />
-            ) : (
-              <RxDoubleArrowLeft />
-            )}
-          </div>
+        <div className="center drawer z-50" onClick={handleDrawerClick}>
+      {isSidebarCollapsed ? (
+        <i className="fa-solid fa-circle-chevron-right select-none icon-transition rotate-right"></i>
+      ) : (
+        <i className="fa-solid fa-circle-chevron-right select-none icon-transition rotate-left"></i>
+      )}
+    </div>
 
           <ul className="mt-2">
+            {loggedInUserType === "admin" && (
+              <NavLink
+                to="."
+                className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                  activeLink === "."
+                    ? "active-link  text-black  "
+                    : "hover: hover:bg-gray-200"
+                }  ${activeLink === "default" && "active-link  text-white "}`}
+                onClick={() => handleLinkClick(".")}
+              >
+                <li className="">
+                  <RxDashboard className="text-2xl" />
+                  <div className={` ${hidden}  `}>
+                    <span className="font-roboto text-lg  ml-3">Dashboard</span>
+                  </div>
+                </li>
+              </NavLink>
+            )}
 
-{loggedInUserType === "admin" && 
+            {/* ......... staff Prescription......... */}
 
-            <NavLink
-              to="."
-              className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${activeLink === "." ? "active-link  text-white  " : "hover: hover:border-blue-600"}  ${
-                activeLink === "default" && "active-link  text-white "
-              }`}
-              onClick={() => handleLinkClick(".")}>
-              <li className="">
-                <RxDashboard className="text-2xl" />
-                <div className={` ${hidden}  `}>
-                  <span className="font-roboto text-lg  ml-3">Dashboard</span>
-                </div>
-              </li>
-            </NavLink>
-          }
-
-           {/* ......... staff Prescription......... */}
-           
-           {loggedInUserType === "staff" && 
-            <NavLink
-              to="prescription"
-              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
-                activeLink === "prescription" ? "active-link  text-white  " : "hover:border-blue-600"
-              }`}
-              onClick={() => handleLinkClick("prescription")}>
-              <li className="">
-                <BsPrescription2 className="text-2xl" />
-                <div className={hidden}>
-                  <span className=" font-roboto  text-lg ml-3">
-                    Prescription
-                  </span>
-                </div>
-              </li>
-            </NavLink>
-}
+            {loggedInUserType === "staff" && (
+              <NavLink
+                to="prescription"
+                className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                  activeLink === "prescription"
+                    ? "active-link  text-black  "
+                    : "hover:bg-gray-200"
+                }`}
+                onClick={() => handleLinkClick("prescription")}
+              >
+                <li className="">
+                  <BsPrescription2 className="text-2xl" />
+                  <div className={hidden}>
+                    <span className=" font-roboto  text-lg ml-3">
+                      Prescription
+                    </span>
+                  </div>
+                </li>
+              </NavLink>
+            )}
 
             {/* ..........Doctor presCription......... */}
-            {loggedInUserType === "admin" && 
-            <NavLink
-              to="doctor_prescription"
-              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
-                activeLink === "doctor_prescription" ? "active-link  text-white  " : "hover:border-blue-600"
-              }`}
-              onClick={() => handleLinkClick("doctor_prescription")}>
-              <li className="">
-                <BsPrescription2 className="text-2xl" />
-                <div className={hidden}>
-                  <span className=" font-roboto  text-lg ml-3">
-                    Prescription
-                  </span>
-                </div>
-              </li>
+            {loggedInUserType === "admin" && (
+              <NavLink
+                to="doctor_prescription"
+                className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                  activeLink === "doctor_prescription"
+                    ? "active-link  text-black  "
+                    : "hover:bg-gray-200"
+                }`}
+                onClick={() => handleLinkClick("doctor_prescription")}
+              >
+                <li className="">
+                  <BsPrescription2 className="text-2xl" />
+                  <div className={hidden}>
+                    <span className=" font-roboto  text-lg ml-3">
+                      Prescription
+                    </span>
+                  </div>
+                </li>
               </NavLink>
-              }
+            )}
             {/* ----------------payment drop down---------- */}
 
             <li style={{ padding: 0 }}>
@@ -180,10 +189,11 @@ useEffect(() => {
                     activeLink === "payment" ||
                     activeLink === "payment_entry" ||
                     activeLink === "payment_detail"
-                      ? "active-link  text-white  "
-                      : "hover:border-blue-600"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
                   }`}
-                  onClick={handleIsPayment}>
+                  onClick={handleIsPayment}
+                >
                   <div className="center  px-[20px] py-[10px] ">
                     <MdOutlinePayment className="text-2xl" />
                     <div className={`${hidden} relative`}>
@@ -209,18 +219,22 @@ useEffect(() => {
                         type: "keyframes",
                         ease: "easeInOut",
                       }}
-                      className="overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col items-end ">
+                      className="overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col items-end "
+                    >
                       <NavLink
                         to="payment_entry "
                         className={`drop-down flex w-4/5 rounded border border-transparent ${
                           activeLink === "payment_entry"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down  text-black"
+                            : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("payment_entry")}>
+                        onClick={() => handleLinkClick("payment_entry")}
+                      >
                         <div className="w-full flex items-center px-[20px] py-[10px]">
-                          <MdOutlinePayment className="text-base" />
-                          <div className={` ${hidden} h-full flex items-center `}>
+                          <GiMoneyStack className="text-3xl" />
+                          <div
+                            className={` ${hidden} h-full flex items-center `}
+                          >
                             <span className=" font-roboto  text-base ml-1  ">
                               Payment Entry
                             </span>
@@ -231,13 +245,17 @@ useEffect(() => {
                         to="payment_detail"
                         className={`drop-down mt-1  flex w-4/5 rounded border border-transparent ${
                           activeLink === "payment_detail"
-                            ? "active-link-drop-down    text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down    text-black"
+                            : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("payment_detail")}>
+                        onClick={() => handleLinkClick("payment_detail")}
+                      >
                         <div className="w-full flex items-center  px-[20px] py-[10px]">
-                          <i className="fa-solid fa-indian-rupee-sign text-sm  "></i>
-                          <div className={`${hidden} h-full flex items-center  `}>
+                          <GrMoney/>
+                          {/* <i className="fa-solid fa-indian-rupee-sign text-xl  "></i> */}
+                          <div
+                            className={`${hidden} h-full flex items-center  `}
+                          >
                             <span className=" font-roboto  text-base ml-1 ">
                               Payment Detail
                             </span>
@@ -256,11 +274,14 @@ useEffect(() => {
               <div className="">
                 <div
                   className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent   ${
-                    activeLink === "patient" || activeLink === "patient_details" || activeLink === "all_patients"
-                      ? "active-link  text-white  "
-                      : "hover:border-blue-600"
+                    activeLink === "patient" ||
+                    activeLink === "patient_details" ||
+                    activeLink === "all_patients"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
                   }`}
-                  onClick={handleIsPatient}>
+                  onClick={handleIsPatient}
+                >
                   <div className="center  px-[20px] py-[10px] ">
                     <FaBed className="text-2xl" />
                     <div className={`${hidden} relative`}>
@@ -286,18 +307,22 @@ useEffect(() => {
                         type: "keyframes",
                         ease: "easeInOut",
                       }}
-                      className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end">
-                        <NavLink
+                      className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end"
+                    >
+                      <NavLink
                         to="patient_details/0"
                         className={`drop-down flex w-4/5  rounded border border-transparent  ${
                           activeLink === "patient_details"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down  text-black"
+                            : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("patient_details")}>
+                        onClick={() => handleLinkClick("patient_details")}
+                      >
                         <div className="w-full flex items-center  px-[20px] py-[10px]">
-                          <FaBed className="text-base" />
-                          <div className={` ${hidden} h-full flex items-center`}>
+                          <PiWheelchair className="text-3xl" />
+                          <div
+                            className={` ${hidden} h-full flex items-center`}
+                          >
                             <span className=" font-roboto  text-base ml-1">
                               Patient Details
                             </span>
@@ -308,21 +333,22 @@ useEffect(() => {
                         to="all_patients"
                         className={`drop-down  mt-1  flex w-4/5  rounded  border border-transparent ${
                           activeLink === "all_patients"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down  text-black"
+                            : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("all_patients")}>
+                        onClick={() => handleLinkClick("all_patients")}
+                      >
                         <div className="w-full flex items-center  px-[20px] py-[10px]">
-                          <FaBed className="text-base " />
-                          <div className={` ${hidden} h-full flex items-center`}>
+                          <MdOutlineElderlyWoman className="text-3xl " />
+                          <div
+                            className={` ${hidden} h-full flex items-center`}
+                          >
                             <span className=" font-roboto  text-base ml-1 ">
                               All Patients
                             </span>
                           </div>
                         </div>
                       </NavLink>
-
-                      
                     </motion.div>
                   </div>
                 )}
@@ -332,9 +358,12 @@ useEffect(() => {
             <NavLink
               to="doctor_reference"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
-                activeLink === "doctor_reference" ? "active-link  text-white  " : "hover:border-blue-600"
+                activeLink === "doctor_reference"
+                  ? "active-link  text-black  "
+                  : "hover:bg-gray-200"
               }`}
-              onClick={() => handleLinkClick("doctor_reference")}>
+              onClick={() => handleLinkClick("doctor_reference")}
+            >
               <li className="">
                 <GoCrossReference className="text-2xl" />
                 <div className={hidden}>
@@ -348,9 +377,12 @@ useEffect(() => {
             <NavLink
               to="MonthlyIncExp"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
-                activeLink === "MonthlyIncExp" ? "active-link text-white" : "hover:border-blue-600"
+                activeLink === "MonthlyIncExp"
+                  ? "active-link text-black"
+                  : "hover:bg-gray-200"
               }`}
-              onClick={() => handleLinkClick("MonthlyIncExp")}>
+              onClick={() => handleLinkClick("MonthlyIncExp")}
+            >
               <li className="">
                 <BiBarChart className="text-2xl" />
                 <div className={hidden}>
@@ -366,9 +398,12 @@ useEffect(() => {
                 <NavLink
                   to="createstaff"
                   className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
-                    activeLink === "createstaff" ? "active-link text-white after: " : "hover:border-blue-600"
+                    activeLink === "createstaff"
+                      ? "active-link text-black after: "
+                      : "hover:bg-gray-200"
                   }`}
-                  onClick={() => handleLinkClick("createstaff")}>
+                  onClick={() => handleLinkClick("createstaff")}
+                >
                   <li className="">
                     <VscPersonAdd className="text-2xl" />
                     <div className={hidden}>
@@ -382,9 +417,12 @@ useEffect(() => {
                 <NavLink
                   to="editstaffs"
                   className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent ${
-                    activeLink === "editstaffs" ? "active-link  text-white  " : "hover:border-blue-600"
+                    activeLink === "editstaffs"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
                   }`}
-                  onClick={() => handleLinkClick("editstaffs")}>
+                  onClick={() => handleLinkClick("editstaffs")}
+                >
                   <li className="">
                     <LiaUserEditSolid className="text-2xl" />
                     <div className={hidden}>
@@ -398,8 +436,13 @@ useEffect(() => {
             )}
 
             <div
-              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${activeLink === "logout" ? "active-link  text-white  " : "hover:border-red-600"}`}
-              onClick={() => logout()}>
+              className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                activeLink === "logout"
+                  ? "active-link  text-black  "
+                  : "hover:bg-gray-200"
+              }`}
+              onClick={() => logout()}
+            >
               <li className="">
                 <ImExit className="text-2xl " />
                 <div className={hidden}>
