@@ -14,7 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
-import {ThreeDots} from 'react-loader-spinner';
+import  Player from 'lottie-react';
+import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
+import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 
 const AllPatients = () => {
   // const [patients, setPatients] = useState([]);
@@ -48,6 +50,7 @@ const AllPatients = () => {
   const { data: patients = [], error, isLoading, refetch } = useGetAllPatientsQuery("");
   const [deletePatient] = useDeletePatientMutation();
   const [updateActiveStatus] = useUpdateActiveStatusMutation()
+
   // search functionality 
   const searchPatient = (inputValue) => {
 
@@ -195,21 +198,17 @@ const AllPatients = () => {
   const currentPatients = patients.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
 
 
-
+  
   if (isLoading) {
     return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
      <div> Loading patients...</div>
      <div>
-      <ThreeDots
-    height="50"
-    width="50"
-    color="black"
-    ariaLabel="Loading..."
-    radius="1"
-    wrapperStyle={{}}
-    wrapperClass=""
-    visible={true}
-/>
+     <Player
+          autoplay
+          loop
+          src={LoadingAnimation}
+          style={{ height: '300px', width: '300px' }}
+        />
         </div>
     </div>;
   }
