@@ -16,6 +16,10 @@ import { BiBarChart } from "react-icons/bi";
 import { LiaUserEditSolid } from "react-icons/lia";
 import useWindowSize from "@rooks/use-window-size";
 import { motion } from "framer-motion";
+import { GiMoneyStack } from "react-icons/gi";
+import { GrMoney } from "react-icons/gr";
+import { PiWheelchair } from "react-icons/pi";
+import { MdOutlineElderlyWoman } from "react-icons/md";
 
 const Leftbar = ({ children }) => {
   const [loggedInUserType, setloggedInUserType] = useState({});
@@ -118,8 +122,8 @@ const Leftbar = ({ children }) => {
                 to="."
                 className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                   activeLink === "."
-                    ? "active-link  text-white  "
-                    : "hover: hover:border-blue-600"
+                    ? "active-link  text-black  "
+                    : "hover: hover:bg-gray-200"
                 }  ${activeLink === "default" && "active-link  text-white "}`}
                 onClick={() => handleLinkClick(".")}
               >
@@ -139,8 +143,8 @@ const Leftbar = ({ children }) => {
                 to="prescription"
                 className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                   activeLink === "prescription"
-                    ? "active-link  text-white  "
-                    : "hover:border-blue-600"
+                    ? "active-link  text-black  "
+                    : "hover:bg-gray-200"
                 }`}
                 onClick={() => handleLinkClick("prescription")}
               >
@@ -161,8 +165,8 @@ const Leftbar = ({ children }) => {
                 to="doctor_prescription"
                 className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                   activeLink === "doctor_prescription"
-                    ? "active-link  text-white  "
-                    : "hover:border-blue-600"
+                    ? "active-link  text-black  "
+                    : "hover:bg-gray-200"
                 }`}
                 onClick={() => handleLinkClick("doctor_prescription")}
               >
@@ -185,8 +189,8 @@ const Leftbar = ({ children }) => {
                     activeLink === "payment" ||
                     activeLink === "payment_entry" ||
                     activeLink === "payment_detail"
-                      ? "active-link  text-white  "
-                      : "hover:border-blue-600"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
                   }`}
                   onClick={handleIsPayment}
                 >
@@ -221,13 +225,13 @@ const Leftbar = ({ children }) => {
                         to="payment_entry "
                         className={`drop-down flex w-4/5 rounded border border-transparent ${
                           activeLink === "payment_entry"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down  text-black"
+                            : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("payment_entry")}
                       >
                         <div className="w-full flex items-center px-[20px] py-[10px]">
-                          <MdOutlinePayment className="text-base" />
+                          <GiMoneyStack className="text-3xl" />
                           <div
                             className={` ${hidden} h-full flex items-center `}
                           >
@@ -241,13 +245,14 @@ const Leftbar = ({ children }) => {
                         to="payment_detail"
                         className={`drop-down mt-1  flex w-4/5 rounded border border-transparent ${
                           activeLink === "payment_detail"
-                            ? "active-link-drop-down    text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down    text-black"
+                            : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("payment_detail")}
                       >
                         <div className="w-full flex items-center  px-[20px] py-[10px]">
-                          <i className="fa-solid fa-indian-rupee-sign text-sm  "></i>
+                          <GrMoney/>
+                          {/* <i className="fa-solid fa-indian-rupee-sign text-xl  "></i> */}
                           <div
                             className={`${hidden} h-full flex items-center  `}
                           >
@@ -272,8 +277,8 @@ const Leftbar = ({ children }) => {
                     activeLink === "patient" ||
                     activeLink === "patient_details" ||
                     activeLink === "all_patients"
-                      ? "active-link  text-white  "
-                      : "hover:border-blue-600"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
                   }`}
                   onClick={handleIsPatient}
                 >
@@ -308,13 +313,13 @@ const Leftbar = ({ children }) => {
                         to="patient_details/0"
                         className={`drop-down flex w-4/5  rounded border border-transparent  ${
                           activeLink === "patient_details"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down  text-black"
+                            : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("patient_details")}
                       >
                         <div className="w-full flex items-center  px-[20px] py-[10px]">
-                          <FaBed className="text-base" />
+                          <PiWheelchair className="text-3xl" />
                           <div
                             className={` ${hidden} h-full flex items-center`}
                           >
@@ -328,13 +333,13 @@ const Leftbar = ({ children }) => {
                         to="all_patients"
                         className={`drop-down  mt-1  flex w-4/5  rounded  border border-transparent ${
                           activeLink === "all_patients"
-                            ? "active-link-drop-down  text-white"
-                            : "hover:border-blue-500"
+                            ? "active-link-drop-down  text-black"
+                            : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("all_patients")}
                       >
                         <div className="w-full flex items-center  px-[20px] py-[10px]">
-                          <FaBed className="text-base " />
+                          <MdOutlineElderlyWoman className="text-3xl " />
                           <div
                             className={` ${hidden} h-full flex items-center`}
                           >
@@ -354,8 +359,8 @@ const Leftbar = ({ children }) => {
               to="doctor_reference"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                 activeLink === "doctor_reference"
-                  ? "active-link  text-white  "
-                  : "hover:border-blue-600"
+                  ? "active-link  text-black  "
+                  : "hover:bg-gray-200"
               }`}
               onClick={() => handleLinkClick("doctor_reference")}
             >
@@ -373,8 +378,8 @@ const Leftbar = ({ children }) => {
               to="MonthlyIncExp"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                 activeLink === "MonthlyIncExp"
-                  ? "active-link text-white"
-                  : "hover:border-blue-600"
+                  ? "active-link text-black"
+                  : "hover:bg-gray-200"
               }`}
               onClick={() => handleLinkClick("MonthlyIncExp")}
             >
@@ -394,8 +399,8 @@ const Leftbar = ({ children }) => {
                   to="createstaff"
                   className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                     activeLink === "createstaff"
-                      ? "active-link text-white after: "
-                      : "hover:border-blue-600"
+                      ? "active-link text-black after: "
+                      : "hover:bg-gray-200"
                   }`}
                   onClick={() => handleLinkClick("createstaff")}
                 >
@@ -413,8 +418,8 @@ const Leftbar = ({ children }) => {
                   to="editstaffs"
                   className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent ${
                     activeLink === "editstaffs"
-                      ? "active-link  text-white  "
-                      : "hover:border-blue-600"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
                   }`}
                   onClick={() => handleLinkClick("editstaffs")}
                 >
@@ -433,8 +438,8 @@ const Leftbar = ({ children }) => {
             <div
               className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                 activeLink === "logout"
-                  ? "active-link  text-white  "
-                  : "hover:border-red-600"
+                  ? "active-link  text-black  "
+                  : "hover:bg-gray-200"
               }`}
               onClick={() => logout()}
             >

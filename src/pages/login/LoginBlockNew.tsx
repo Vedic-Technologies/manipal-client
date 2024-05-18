@@ -11,7 +11,7 @@ const LoginBlockNew = () => {
               </div>
               <div className="w-1/2 p-5 ">
                 <div className="text-center">
-                  <h2 className=" text-zinc-900 text-5xl font-bold mt-10" style={{fontFamily:"Edu VIC WA NT Beginner"}}>Sign In</h2>
+                  <h2 className=" text-zinc-600 text-6xl font-bold mt-10" style={{fontFamily:"Edu VIC WA NT Beginner"}}>Sign In</h2>
                 </div>
                 <div className=" center">
                 <form className="space-y-6 mt-14  w-[70%]">

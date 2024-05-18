@@ -53,12 +53,12 @@
   font-size: 12px !important;
 } */
 .active-link {
-background-color: #1a3a98;
+background-color: #c7c7c7;
 transition: all .3s ease-in-out;
 }
 
 .active-link-drop-down {
-background-color: #3553af;
+background-color: #c7c7c7;
 transition: all .3s ease-in-out;
 }
 
