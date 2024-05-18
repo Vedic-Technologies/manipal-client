@@ -21,7 +21,7 @@ import InfoCard from "./infocard/InfoCard";
 
 const LandingPage = () => {
   return (
-    <div className="h-auto mb-10 w-[100%] m-auto flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
+    <div className=" mb-10 w-[100%]  flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
      
 
       <div className=" flex  mt-10 w-full gap-5 lg- ">
@@ -30,10 +30,10 @@ const LandingPage = () => {
         })}
       </div>
 
-      <div className=" w-[100%] flex flex-col  justify-center items-center  m-auto">
-        <div id="top" className="w-full pt-5 flex gap-5 h-full ">
+      <div className=" w-full flex flex-col  m-auto mt-5 h-full">
+        <div  className="w-full h-full flex gap-5  ">
           <DailyIncomeCard />
-          <div className=" w-1/2 h-[100%] flex flex-col justify-around gap-y-5  m-auto">
+          <div className=" w-1/2 h-full  flex flex-col justify-around gap-5  ">
             <TotalRevenue />
             <TotalPatient />
           </div>

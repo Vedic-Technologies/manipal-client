@@ -17,7 +17,7 @@ const InfoCard : React.FC<{item:InfoData}> = ({item }) => {
             <div className="absolute right-7 top-5 w-3 h-3 bg-red-300 rounded-full"></div>
             <div className="absolute right-1 top-7 w-4 h-4 bg-blue-400 rounded-full"></div>
             <div className="absolute -right-1 -top-2 w-8 h-8 bg-blue-300 rounded-full"></div> */}
-            <Link to={item.cardUrl}><div className="absolute right-4 bottom-2 bg-red-200 px-5 py-1 rounded-full text-sm hover:bg-blue-200">Details</div></Link>
+            <Link to={item.cardUrl}><div className="absolute right-4 bottom-2 bg-blue-200 px-5 py-1 rounded-full text-sm hover:bg-blue-300">Details</div></Link>
         </div>
           {/* <div className=" min-w-[24%] h-24 bg-white  rounded-2xl p-4  shadow-basic relative overflow-hidden">
           <div className="text-sm font-bold"> New Patients</div>

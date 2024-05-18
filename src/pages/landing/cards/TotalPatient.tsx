@@ -35,23 +35,29 @@ const TotalPatient = () => {
     const percentageChange = calculatePatientPercentageChange();
 
     return (
-        <div className=' bg-white h-44  w-auto p-2 min-h-[50%] flex justify-around gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
+        <div className=' bg-white h-[200px]  w-auto p-2 min-h-[50%] flex justify-around gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
             <div className=' '>
-                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient</div>
-                <div className='text-3xl font-bold p-2'>{totalPatients}</div>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient Till Today</div>
+                <div className='text-3xl font-bold p-2'>7250</div>
                 <div className='text-sm pt-3 '>
-                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up fa-beat-fade text-green-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down fa-beat-fade text-red-600 text-2xl px-1"></i>}
-                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'green' : 'red' }} >{percentageChange} %</span> from last year</div>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }} >{percentageChange} %</span> from last year</div>
             </div>
-            <div className='m-2'>
-                <AreaChart width={300} height={150} data={data} >
-                    <CartesianGrid stroke="none" strokeWidth={0} />
-                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#FF5BAE" fillOpacity={0.4} />
-                </AreaChart>
+            <div className=' '>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient This Year</div>
+                <div className='text-3xl font-bold p-2'>380</div>
+                <div className='text-sm pt-3 '>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }} >{percentageChange} %</span> from last year</div>
             </div>
+            <div className=' '>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient This Month</div>
+                <div className='text-3xl font-bold p-2'>35</div>
+                <div className='text-sm pt-3 '>
+                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
+                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }} >{percentageChange} %</span> from last year</div>
+            </div>
+           
         </div>
 
     );

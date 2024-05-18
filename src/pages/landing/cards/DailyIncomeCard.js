@@ -52,14 +52,14 @@ export const data = {
     {
       label: "Day wise Income",
       data: labels.map(() => faker.datatype.number({ min: 100, max: 10000 })),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      backgroundColor: "lightblue",
     },
   ],
 };
 
 const DailyIncomeCard = () => {
   return (
-    <div className=" rounded-3xl bg-white shadow-lg min-h-full p-10 w-1/2 ">
+    <div className=" rounded-xl bg-white shadow-lg min-h-full p-10 w-1/2 ">
     <Bar options={options} data={data} />
   </div>
   )
