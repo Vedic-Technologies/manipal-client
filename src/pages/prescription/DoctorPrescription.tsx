@@ -1,65 +1,59 @@
-import React, { useState } from 'react';
-
+import { trimText } from '../../util/General';
+import { motion } from 'framer-motion';
+import { useGetAllPatientsQuery, useDeletePatientMutation, useUpdateActiveStatusMutation } from '../../API/API';
+import { useState } from 'react';
+import axios from 'axios';
+import PatientDetailCardDoctor from '../patient/PatientDetailCardDoctor';
+import DoctorsForm from './DoctorsForm';
 const DoctorPrescription = () => {
-    const [notifications, setNotifications] = useState([
-        // Sample notification data
-        { name: "John Doe", sex: "Male", email: "john.doe@example.com" }
-    ]);
+    const [showPatientForm,setShowPatientForm]=useState(false);
+    const [patient, setPatient] = useState();
+//    ok first find patient whose status is false
+const { data: patients = [], error, isLoading, refetch } = useGetAllPatientsQuery("");
+console.log(patients);
+const inactivePatients = patients.filter(patient => !patient.active);
+const showPatientInfo=async(id)=>
+    {
 
-    const [showDetails, setShowDetails] = useState(false);
-    const [selectedPatient, setSelectedPatient] = useState(null);
-
-    const handleNotificationClick = (notification) => {
-        setSelectedPatient(notification);
-        setShowDetails(true);
-    };
-
-    const handleButtonClick = () => {
-        if (notifications.length > 0) {
-            setSelectedPatient(notifications[0]);
-            setShowDetails(true);
-        }
-    };
-
+        try {
+            const response = await axios.get(
+              `https://manipal-server.onrender.com/api/patient/${id}`
+            );
+            setPatient(response.data);
+            setShowPatientForm(true)
+          } catch (error) {
+            console.error("Error fetching patient details:", error);
+          }
+       
+        console.log(id)
+    }
     return (
-        <div className='w-fit ml-20 mt-5 flex gap-5'>
-            <div className="relative inline-block">
-                <span className="absolute -top-2.5 -right-2.5 bg-red-600 text-white rounded-full px-2 py-1 text-xs">
-                    {notifications.length}
-                </span>
-                <button
-                    onClick={() => setShowDetails(!showDetails)}
-                    className="text-2xl border-none bg-none"
+        <div className=" w-full mt-10 ">
+        <div className='flex gap-5 overflow-x-auto  m-auto max-w-screen-2xl'>
+           {inactivePatients.map((item)=>
+        {
+            return(
+                <div className='cursor-pointer shadow-md min-w-72 items-center flex gap-5 p-2 border border-gray-300 rounded-xl '
+                onClick={()=>showPatientInfo(item._id)}
                 >
-                    🛎️
-                </button>
-            </div>
-
-            {showDetails && (
-                <div>
-                    <button
-                        onClick={handleButtonClick}
-                        className="text-sm font-semibold bg-blue-200 rounded-sm cursor-pointer p-2"
-                    >
-                        There's A New Patient <p>Click To Open</p>
-                    </button>
-                </div>
-            )}
-
-            {selectedPatient && (
-                <div className='ml-4 w-2/3 border p-4 bg-gray-100 rounded'>
-                    <h2 className="text-lg font-semibold">Name: {selectedPatient.name}</h2>
-                    <p className="text-lg font-semibold">Sex: {selectedPatient.sex}</p>
-                    <p className="text-lg font-semibold">Email: {selectedPatient.email}</p>
-                    <div className='mt-4 '>
-                        <input
-                            type="text"
-                            placeholder='Describe The Issues'
-                            className='w-full p-2 border rounded h-[400px] w-[200px]'
-                        />
+                    <div className="">
+                        <img src={item.image} alt="" className='w-20 h-20 rounded-lg' />
+                    </div>
+                    <div className="">
+                    <div className='text-lg font-semibold'>{item.patientName}</div>
+                 
                     </div>
                 </div>
-            )}
+            )
+        })}
+        </div>
+        {/* Patient ka Info  */}
+        {showPatientForm && (<div className=" m-auto max-w-screen-2xl">
+            <PatientDetailCardDoctor patient={patient}/>
+           <DoctorsForm/>
+        </div>)}
+
+
         </div>
     );
 };

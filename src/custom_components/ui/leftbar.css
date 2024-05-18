@@ -6,29 +6,20 @@
   position: relative;
 }
 
-.blob {
-  position: absolute;
-  left: 100px;
-  top: 0;
-  /* border: 1px solid black; */
-  object-fit: contain;
-  height: 600px;
-  /* width: 500px; */
-  background-color: #9e1028;
-}
 .leftbar .drawer {
-  color: white;
+  color: rgb(83, 117, 227);
+  
   font-size: 2em;
   position: absolute;
-  right: -60px;
+  right: -15px;
   top: 20px;
-  padding: 5px 10px;
-  background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e);
-  border-radius: 5px;
+  /* padding: 5px 10px; */
+  /* background-image: linear-gradient(to right top, #1b56af, #1c4b9e, #1c418e, #1a377e, #172d6e); */
+  /* border-radius: 5px; */
   cursor: pointer;
 }
 .drawer:active {
-  background-color: rgb(128, 145, 145);
+  background-color: rgb(255, 255, 255);
 }
 
 .leftbar {
@@ -173,4 +164,17 @@ a {
   100% {
     width: 20px;
   }
+}
+
+
+.icon-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotate-right {
+  transform: rotate(0deg);
+}
+
+.rotate-left {
+  transform: rotate(180deg);
 }
