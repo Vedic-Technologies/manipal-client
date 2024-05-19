@@ -22,7 +22,7 @@ import {
             />
           </div>
           <div className="w-[80%] p-4 ">
-      <div className="text-xl font-bold mb-4">User Details</div>
+      <div className="text-xl font-bold mb-4">Patient Initial Details</div>
       <div className="grid grid-cols-3 gap-4 text-lg">
         <div className="col-span-1">
           <p>

@@ -2,7 +2,7 @@ export const initialData={
     patientName: "",
     gender: "male",
     age: "",
-    dob: "2018-07-22",
+    dob: "",
     contact: "",
     email: "",
     idProof: "",
