@@ -20,6 +20,7 @@ const [imageFile, setImageFile]=useState("");
   const [jobDoneMessage, setJobDoneMessage] = useState("")
   const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
   const [alertColor, setAlertColor] = useState("")
+  
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
   }

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
@@ -11,107 +10,142 @@ import PatientPaymentCard from "./PatientPaymentCard";
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
+import { useGetAllPatientsQuery, useGetPatientByIdQuery } from '../../API/API'; 
+import { Player } from '@lottiefiles/react-lottie-player';
+import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
+import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
+import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 
 const Patient = () => {
-  const [data, setData] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState(false);
-  const [patient, setPatient] = useState();
-  const [payment, setPayment] = useState([]);
+  const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const param = useParams();
-  // jodDone alert message 
-  const [jobDoneMessage, setJobDoneMessage] = useState("")
-  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
+ // jodDone alert message 
+ const [jobDoneMessage, setJobDoneMessage] = useState("")
+ const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
+ const [patientError, setPatientError] = useState(false); // Additional state for managing patientByIdError
 
-  const handleCancelAlert = () => {
-    setOpenJobDoneAlert(false)
-  }
-  console.log(param.id);
+  const { data: allPatients = [], error: allPatientsError, isLoading: isLoadingAllPatients, refetch: refetchAllPatients } = useGetAllPatientsQuery("");
+  const { data: patientById = {}, error: patientByIdError, isLoading: isLoadingPatientById, refetch: refetchPatientById } = useGetPatientByIdQuery(selectedPatientId, {
+    skip: !selectedPatientId,
+  });
 
-  const getData = async () => {
-    try {
-      const response = await axios.get(
-        "https://manipal-server.onrender.com/api/patient/all_patients"
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-    }
-  };
   useEffect(() => {
     if (param.id !== "0") {
-      // alert(param.id)
-    setSelectedPatient(true)
-      fetchPatientDetails(param.id);
+      setSelectedPatientId(param.id);
+      setPatientError(false); 
     }
+  }, [param.id]);
 
-    getData();
-  }, []);
-  const handleSelectChange = async (e) => {
+  useEffect(() => {
+    if (selectedPatientId) {
+      refetchPatientById();
+      setPatientError(false); 
+    }
+  }, [selectedPatientId, refetchPatientById]);
+
+  useEffect(() => {
+    if (patientByIdError) {
+      setPatientError(true);
+      setJobDoneMessage("Cannot find patient. Double-check ID!");
+      setOpenJobDoneAlert(true);
+  
+
+      // Automatically hide the alert after 3 seconds
+      setTimeout(() => {
+        setOpenJobDoneAlert(false);
+        setPatientError(false); 
+        setSelectedPatientId(null)
+        
+      }, 3000);
+    }
+  }, [patientByIdError]);
+
+  const handleSelectChange = (e) => {
     const id = e.target.value;
-    setSelectedPatient(id);
-    fetchPatientDetails(id);
-  };
-
-  const fetchPatientDetails = async (id) => {
-    try {
-      const response = await axios.get(
-        `https://manipal-server.onrender.com/api/patient/${id}`
-      );
-      setPatient(response.data);
-      setPayment(response.data.payments);
-    } catch (error) {
-      console.error("Error fetching patient details:", error);
-    }
+    setSelectedPatientId(id);
+    setSearchInput("");
+     setPatientError(false); 
   };
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (searchInput) {
-      try {
-        const response = await axios.get(
-          `https://manipal-server.onrender.com/api/patient/${searchInput}`
-        );
-        setSelectedPatient(searchInput);
-        setPatient(response.data);
-        setPayment(response.data.payments);
+        setSelectedPatientId(searchInput);
+        setPatientError(false);
         setJobDoneMessage("")
       setOpenJobDoneAlert(false)
-      } catch (error) {
-        console.error("Error fetching patient details:", error);
-        setJobDoneMessage("Can not find Patient. Double-check ID !!")
-        setOpenJobDoneAlert(true)
+      }  else{
+      console.error("Error fetching patient details:", error);
+      setJobDoneMessage("Can not find Patient. Double-check ID !!")
+      setOpenJobDoneAlert(true)
 
-      // removing result not found alert automatically
-      setTimeout(() => {
-        setOpenJobDoneAlert(false)
-      }, 3000);
-      }
-    } else {
-      // Handle case where search input is empty
-      // Optionally display a message or prompt user to enter a patient ID
+    // removing result not found alert automatically
+    setTimeout(() => {
+      setOpenJobDoneAlert(false)
+    }, 3000);
     }
   };
+  
 
-  useEffect(() => {
-    getData();
-  }, []);
+  if (isLoadingAllPatients) {
+    return (
+      <div className="center flex-col gap-24 h-3/4 w-[90%]">
+        <div>Loading patients...</div>
+        <div>
+          <Player autoplay loop src={LoadingAnimation} style={{ height: '200px', width: '200px' }} />
+        </div>
+      </div>
+    );
+  }
 
+  if (allPatientsError) {
+    return (
+      <div className="center flex-col gap-24 h-3/4 w-[90%]">
+        <div className='text-red'>Error</div>
+        <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+          <div>
+            <Player autoplay loop src={ErrorAnimation} style={{ height: '200px', width: '200px' }} />
+          </div>
+          <div className="retry">
+            <button onClick={() => refetchAllPatients()} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!allPatients.length) {
+    return (
+      <div className="center flex-col gap-24 h-3/4 w-[90%]">
+        <div>No patients found.</div>
+        <div>
+          <Player autoplay loop src={NotFoundAnimation} style={{ height: '200px', width: '200px' }} />
+        </div>
+      </div>
+    );
+  }
+
+  const handleAlert=()=>{
+    setOpenJobDoneAlert(false)
+    setPatientError(false); 
+    setSelectedPatientId(null)
+  }
   return (
     <div className="flex flex-col w-3/5 m-auto m-5">
       <div className="flex items-center justify-between gap-4 p-4 border-b">
         <div className="flex items-center gap-4">
           <label className="mr-2 font-medium">Search by name</label>
           <select
-            value={selectedPatient}
+            value={selectedPatientId || ""}
             onChange={handleSelectChange}
             className="border border-gray-300 rounded px-3 py-2 w-60 mt-1"
           >
             <option value="">Select a patient</option>
-            {data.map((user) => (
+            {allPatients.map((user) => (
               <option key={user._id} value={user._id}>
                 {user.patientName}
               </option>
@@ -133,43 +167,51 @@ const Patient = () => {
             </div>
           </div>
         </div>
-        <Button variant="outline">View All</Button>
+        <Button variant="outline" onClick={() => setSelectedPatientId(null)}>View All</Button>
       </div>
 
       <div className="flex justify-center m-auto w-full mt-10">
         <Card className="w-full shadow-lg">
-          {selectedPatient ? (
-            <div>
-              <PatientDetailCard patient={patient} />
-              <PatientPaymentCard payment={payment} />
-            </div>
+          {selectedPatientId ? (
+            isLoadingPatientById ? (
+              <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                <div>Loading patient details...</div>
+                <div>
+                  <Player autoplay loop src={LoadingAnimation} style={{ height: '200px', width: '200px' }} />
+                </div>
+              </div>
+            ) : patientError ? (
+              <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                <AlertWrapper isOpen={openJobDoneAlert}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+                  >
+                    <JobDoneAlert
+                      height="h-24"
+                      width="w-52"
+                      textColor="text-white"
+                      bgColor="bg-red-400"
+                      boxShadow="shadow-[0px_0px_42px_2px_#c53030]"
+                      message={jobDoneMessage}
+                      isOpen={openJobDoneAlert}
+                      OnCancel={handleAlert}
+                      isCancelButton="block"
+                    />
+                  </motion.div>
+                </AlertWrapper>
+              </div>
+            ) : (
+              <div>
+                <PatientDetailCard patient={patientById} />
+                <PatientPaymentCard payment={patientById.payments || []} />
+              </div>
+            )
           ) : (
             ""
           )}
         </Card>
       </div>
-      <div>
-
-<AlertWrapper isOpen={openJobDoneAlert}>
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
-  >
-    <JobDoneAlert
-      height="h-24"
-      width="w-52"
-      textColor="text-white"
-      bgColor="bg-red-400"
-      boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
-      message={jobDoneMessage}
-      isOpen={openJobDoneAlert}
-      OnCancel={handleCancelAlert}
-      isCancelButton="block"
-    />
-  </motion.div>
-</AlertWrapper>
-
-</div>
     </div>
   );
 };
