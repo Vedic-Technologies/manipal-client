@@ -16,7 +16,7 @@ const LoginBlock = () => {
   const [emailerror, setEmailerror] = useState<String | null>(null);
   const navigate = useNavigate();
   const [apiData, setApiData] = useState([]);
-  const [passVisibility, setPassVisibility] = useState(false); 
+  const [passVisibility, setPassVisibility] = useState(false);
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [loader, setLoader] = useState(false);
@@ -76,7 +76,7 @@ const LoginBlock = () => {
         } else if (response.data.userType === "admin") {
           // Handle admin login
         }
-      } catch (error:any) {
+      } catch (error: any) {
         setError("username password error . Please check again")
         setLoader(false);
         console.log(error);
@@ -93,10 +93,10 @@ const LoginBlock = () => {
           setServerError("An unexpected error occurred. Please try again later.");
           return;
         }
-      
-    }
-  };
-}
+
+      }
+    };
+  }
 
   return (
     <>
@@ -122,6 +122,7 @@ const LoginBlock = () => {
                 setEmail(e.target.value);
                 setEmailerror(null);
                 setError(null);
+
               }}
             />
             <div className="error flex justify-between">
@@ -156,14 +157,14 @@ const LoginBlock = () => {
                   className="absolute top-[50%] right-5 translate-y-[-50%] cursor-pointer text-gray-400 text-sm scale-[1.5]"
                   onClick={nonVisiblePassword}
                 >
-                < IoMdEye className=" mr-2 " />
+                  < IoMdEye className=" mr-2 " />
                 </div>
               ) : (
                 <div
                   className="absolute top-[50%] translate-y-[-50%] right-5 cursor-pointer text-gray-400 text-sm scale-[1.5]"
                   onClick={visiblePassword}
                 >
-                 <BiSolidHide className=" mr-2 " />
+                  <BiSolidHide className=" mr-2 " />
                 </div>
               )}
             </div>
@@ -212,8 +213,8 @@ const LoginBlock = () => {
           )}
         </div>
       </div>
-      {serverError && ( <ErrorPrompt message={serverError} setServerError={setServerError} />)}
-     
+      {serverError && (<ErrorPrompt message={serverError} setServerError={setServerError} />)}
+
     </>
   );
 };
