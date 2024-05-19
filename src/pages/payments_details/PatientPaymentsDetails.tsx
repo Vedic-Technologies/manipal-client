@@ -14,10 +14,14 @@ import {
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import {motion} from "framer-motion"
+import { useGetAllPaymentsQuery } from '../../API/API';
+import { useDeletePaymentMutation } from '../../API/API';
+import { Player } from '@lottiefiles/react-lottie-player';
+import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
+import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
+import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
+
 const PatientPaymentsDetails = () => {
-  const [payments, setPayments] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [displaySearch, setDisplaySearch] = useState(0)
@@ -39,6 +43,9 @@ const PatientPaymentsDetails = () => {
   const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
   const [idCopied, setIdCopied] = useState("")
 
+  //from API
+  const {data: payments = [], error, isLoading, refetch}= useGetAllPaymentsQuery("")
+  const [deletePayment] = useDeletePaymentMutation()
   useEffect(() => {
     const currentUserString = localStorage.getItem('currentUser');
     if (currentUserString) {
@@ -51,28 +58,9 @@ const PatientPaymentsDetails = () => {
     setOpenJobDoneAlert(false)
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.get('https://manipal-server.onrender.com/api/payment/all_payments');
-        setPayments(response.data);
-        console.log(response.data)
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
 
   // search functionality 
-  const searchPatient = () => {
+  const searchPayment = (inputValue) => {
     const trimmedSearchInput = searchInput.trim()
     if (trimmedSearchInput === "") {
       // Reset search results and hide details
@@ -102,15 +90,12 @@ const PatientPaymentsDetails = () => {
     )
     if (results.length > 0) {
       setSearchResults(results);
-      setShowDetails(true);
       setJobDoneMessage("")
       setOpenJobDoneAlert(false)
     } else {
       setSearchResults([]);
       setShowDetails(false);
       setJobDoneMessage("Sorry, no payment found. Double-check input !!");
-      setOpenJobDoneAlert(true)
-
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -148,7 +133,45 @@ const PatientPaymentsDetails = () => {
   const handleEdit = (patientId) => {
     console.log('Edit patient:', patientId);
   };
+  const handleSearchInputChange = (e) => {
+    const inputValue = e.target.value;
+    setSearchInput(inputValue); // Update the search input state
+    searchPayment(inputValue);
+  }
+  // Function to handle search action
+  const handleSearch = () => {
+    searchPayment(searchInput); // Call searchPatient function with current search input value
+  };
+  const handleEnterKey = (e) => {
+    if (e.key === "Enter" && searchInput !== "" && searchResults.length > 0) {
+      handleSearch()
+      setShowDetails(true);
+    }
+    else if (e.key === "Enter" && searchResults.length === 0) {
+      setShowDetails(false);
+      setOpenJobDoneAlert(true)
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
+    }
+  }
 
+  const handleSeachIconClick = () => {
+    if (searchInput !== "" && searchResults.length > 0) {
+      handleSearch();
+      setShowDetails(true);
+    }
+    else if (searchResults.length === 0) {
+      setShowDetails(false);
+      setOpenJobDoneAlert(true)
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
+
+    }
+  }
   // logics to delete patients
   const handleDelete = (patientId) => {
     setSelectedPatientId(patientId);
@@ -156,15 +179,18 @@ const PatientPaymentsDetails = () => {
   }
   const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete(`https://manipal-server.onrender.com/api/payment/${selectedPatientId}`);
-      setPayments(payments.filter((item) => item?.patient?._id !== selectedPatientId));
-
+      // const response = await axios.delete(`https://manipal-server.onrender.com/api/payment/${selectedPatientId}`);
+      // setPayments(payments.filter((item) => item?.patient?._id !== selectedPatientId));
+await deletePayment(selectedPatientId).unwrap()
+refetch()
       setSearchResults([]);
       setShowDetails(false);
+      console.log("patinet deleted")
     } catch (error) {
       console.error('Error deleting patient:', error);
     } finally {
       setOpenConfirm(false)
+      setSelectedPatientId(null);
     }
   };
 
@@ -182,15 +208,63 @@ const PatientPaymentsDetails = () => {
   const currentPatients = payments?.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
 
   if (isLoading) {
-    return <div className="text-center p-4">Loading payments...</div>;
+    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+     <div> Loading patients...</div>
+     <div>
+     <Player
+          autoplay
+          loop
+          src={LoadingAnimation}
+          style={{ height: '200px', width: '200px' }}
+        />
+        </div>
+    </div>;
   }
 
   if (error) {
-    return <div className="text-center p-4 text-red-500">Error: {error.message}</div>;
+    // let errorMessage = 'An unknown error occurred';
+    // // Accessing error message based on the typical structure of an error object
+    // if (error.data && error.data.message) {
+    //   errorMessage = error.data.message;
+    //   console.log("1"+errorMessage )
+    // } else if (error.error) {
+    //   errorMessage = error.error;
+    //   console.log("2"+errorMessage )
+    // } else if (error.message) {
+    //   errorMessage = error.message;
+    //   console.log("3"+errorMessage )
+    // }
+    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+    <div className='text-red '> Error</div>
+    <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+      <div>
+      <Player
+         autoplay
+         loop
+         src={ErrorAnimation}
+         style={{ height: '200px', width: '200px' }}
+       />
+      </div>
+      <div className="retry">
+        <button onClick={()=> refetch()} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+       </div>
+       </div>
+       
+   </div>;
   }
 
   if (!currentPatients.length) {
-    return <div className="text-center p-4">No payments found.</div>;
+    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+    <div> No patients found.</div>
+    <div>
+    <Player
+         autoplay
+         loop
+         src={NotFoundAnimation}
+         style={{ height: '200px', width: '200px' }}
+       />
+       </div>
+   </div>;
   }
 
   const downloadExcel = () => {
@@ -220,22 +294,6 @@ const PatientPaymentsDetails = () => {
     window.location.reload();
   };
 
-  // //Patient details on click 
-  // const handleDetails = (patientId) => {
-  //   const selectedPatient = patients.find((patient) => patient._id === patientId);
-  //   if (selectedPatient) {
-  //     setSearchResults(selectedPatient);
-  //     setShowDetails(true);
-  //   } else {
-  //     setSearchResults(null);
-  //     setShowDetails(false);
-  //     alert("Patient not found.");
-  //   }
-  // };
-
-
-
-  // enable user to copy patient id
   const handleCopyPatientId = (id) => {
     navigator.clipboard.writeText(id)
       .then(() => {
@@ -258,7 +316,7 @@ const PatientPaymentsDetails = () => {
 
       })
   }
-
+  const patientsToRender = searchResults.length > 0 && searchInput !== "" ? searchResults : currentPatients;
   return (
     <div className="patient-list px-4 pl-8 py-2 ">
       <div className='  '><span>Payments &gt; </span>
@@ -270,12 +328,10 @@ const PatientPaymentsDetails = () => {
           <div className='flex gap-5 items-center'>
             <div className=' font-bold text-xl'>Payment Detail</div>
             <div className="search relative">
-              <input onKeyDown={(e) => {
-                if (e.key === "Enter") searchPatient();
-              }}
-                onChange={(e) => setSearchInput(e.target.value)}
+              <input onKeyDown={handleEnterKey}
+                onChange={handleSearchInputChange}
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
-              <i onClick={() => { searchPatient() }} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
+              <i onClick={handleSeachIconClick} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
                 <motion.div 
                 initial={{opacity:0, y:200}}
@@ -344,20 +400,20 @@ const PatientPaymentsDetails = () => {
             <div className="w-[12%] hidden sm:block">Status</div>
             <div className="w-1/6 text-center">Actions</div>
           </div>
-          <div>
-            {currentPatients?.map((item) => (
+          <div className='pt-5 h-[430px]  overflow-y-auto overflow-x-hidden'>
+            {patientsToRender?.map((item) => (
               <div key={item?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
                 <div className=' w-[86%] flex justify-between items-center'>
                   <div className='w-[30%] flex gap-1 items-center '>
-                    <img src={item.patient.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
+                    <img src={item?.patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
 
                     <div className='w-full flex  justify-between ml-4'>
-                      <div className=" ">{item.patient.name?.[0]?.toUpperCase() + item.patient.name?.slice(1)}</div>
+                      <div className=" ">{item?.patient?.name?.[0]?.toUpperCase() + item?.patient?.name?.slice(1)}</div>
 
                     </div>
 
                   </div>
-                  <div className="w-[12%]">{item?.patient.contact}</div>
+                  <div className="w-[12%]">{item?.patient?.contact}</div>
                   <div className="w-[12%]">{item?.amount}</div>
                   <div className="w-1/6">{formatDate(item?.paymentDate)}</div>
                   <div className="w-1/6 hidden sm:block">{item?.paymentType}</div>

@@ -14,14 +14,12 @@ import { useNavigate } from 'react-router-dom';
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
-import  Player from 'lottie-react';
+import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
+import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 
 const AllPatients = () => {
-  // const [patients, setPatients] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [displaySearch, setDisplaySearch] = useState(0)
@@ -208,18 +206,56 @@ const AllPatients = () => {
           autoplay
           loop
           src={LoadingAnimation}
-          style={{ height: '300px', width: '300px' }}
+          style={{ height: '200px', width: '200px' }}
         />
         </div>
     </div>;
   }
 
   if (error) {
-    return <div className="text-center p-4 text-red-500">Error: {error.message}</div>;
+    // let errorMessage = 'An unknown error occurred';
+    // // Accessing error message based on the typical structure of an error object
+    // if (error.data && error.data.message) {
+    //   errorMessage = error.data.message;
+    //   console.log("1"+errorMessage )
+    // } else if (error.error) {
+    //   errorMessage = error.error;
+    //   console.log("2"+errorMessage )
+    // } else if (error.message) {
+    //   errorMessage = error.message;
+    //   console.log("3"+errorMessage )
+    // }
+    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+    <div className='text-red '> Error</div>
+    <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+      <div>
+      <Player
+         autoplay
+         loop
+         src={ErrorAnimation}
+         style={{ height: '200px', width: '200px' }}
+       />
+      </div>
+      <div className="retry">
+        <button onClick={()=> refetch()} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+       </div>
+       </div>
+       
+   </div>;
   }
 
   if (!currentPatients.length) {
-    return <div className="text-center p-4">No patients found.</div>;
+    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+    <div> No patients found.</div>
+    <div>
+    <Player
+         autoplay
+         loop
+         src={NotFoundAnimation}
+         style={{ height: '200px', width: '200px' }}
+       />
+       </div>
+   </div>;
   }
 
   const downloadExcel = () => {
@@ -418,7 +454,7 @@ const AllPatients = () => {
             <div className='flex gap-2 bg-gray-200 rounded-md'>
               <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
               <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-              <button disabled={indexOfLastPatient >= patients.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+              <button disabled={indexOfLastPatient >= patients.length}  onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
             </div>
           </div>
         </div>
@@ -471,7 +507,6 @@ const AllPatients = () => {
           </AlertWrapper>
         </div>
       </div>
-   
     </div>
   );
 };

@@ -1,6 +1,5 @@
 
 import React, { useState,useEffect } from 'react';
-import axios from 'axios';
 // import profile from '../../assets/images/profile.jpg'
 import UserDetails from './UserDetails';
 import DefaultUserDetails from './DefaultUserDetails';
@@ -8,9 +7,9 @@ import PaymentDetails from './PaymentDetails';
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
+import { useGetAllPatientsQuery } from '../../API/API';
 const PaymentEntry = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
-  const [data, setData] = useState([]);
   const [patientId, setPatientId] = useState('');
  // jodDone alert message 
  const [jobDoneMessage, setJobDoneMessage] = useState("")
@@ -19,16 +18,8 @@ const PaymentEntry = () => {
  const handleCancelAlert = () => {
   setOpenJobDoneAlert(false)
 }
-  const getData = async () => {
-    const response = await axios.get('https://manipal-server.onrender.com/api/patient/all_patients');
-    setData(response.data);
-  };
 
- useEffect (()=>{    
-    getData();
- },[]);
-
-  
+const {data =[]} = useGetAllPatientsQuery("");
 
   const handleSelectChange = (e) => {
     setSelectedPatient(e.target.value);
@@ -118,7 +109,6 @@ const PaymentEntry = () => {
      (
             <div className="bg-white shadow-lg rounded-lg p-6 w-1/2 border boder-gray-200">
               <h2 className="text-lg font-semibold mb-4">User Details</h2>
-              <DefaultUserDetails />
             </div>
           )}
         </div>

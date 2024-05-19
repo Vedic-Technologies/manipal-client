@@ -30,36 +30,65 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Cell } from "recharts";
+import {useGetAllUsersQuery, useDeleteUserByIdMutation} from "../../API/API"
+import { Player } from '@lottiefiles/react-lottie-player';
+import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
+import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 
 export default function UpdateStaff() {
-  useEffect(() => {
-    getStaffs();
-  }, []);
+  
+const { data, error, isLoading, refetch } = useGetAllUsersQuery()
+const [deleteUserById]= useDeleteUserByIdMutation()
+useEffect(() => {
+  if (data) {
+    const staffsData = data.filter((item) => item.userType !== "admin");
+    setStaffs(staffsData);
+    console.log(staffsData);
+  }
+}, [data]);
 
-  const [Staffs, setStaffs] = useState();
+const [staffs, setStaffs] = useState([]);
 
-  const getStaffs = async () => {
-    axios
-      .get("https://manipal-server.onrender.com/api/users")
-      .then((response) => {
-        setStaffs(response.data.filter((item) => item.userType !== "admin"));
-        // setStaffs(response.data)
-        console.log(response.data.filter((item) => item.userType !== "admin"));
-        // console.log(response.data.filter(item => item.userType === "staff"))
-      })
-
-      .catch((error) => {
-        console.error("Error fetching staffs: ", error);
-      });
-  };
   const handeldelete= async(id)=>{
-    const result =await axios.delete(`https://manipal-server.onrender.com/api/users/${id}`)               
-    
-    getStaffs()
-    
-      }
-  return (
+    await deleteUserById(id).unwrap();
+      refetch();     
+    }
+  
+    if (isLoading) {
+      return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+       <div> Loading patients...</div>
+       <div>
+       <Player
+            autoplay
+            loop
+            src={LoadingAnimation}
+            style={{ height: '200px', width: '200px' }}
+          />
+          </div>
+      </div>;
+    }
+  
+    if (error) {
+      return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+      <div className='text-red '> Error</div>
+      <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+        <div>
+        <Player
+           autoplay
+           loop
+           src={ErrorAnimation}
+           style={{ height: '200px', width: '200px' }}
+         />
+        </div>
+        <div className="retry">
+          <button onClick={()=> refetch()} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+         </div>
+         </div>
+         
+     </div>;
+    }
+  
+    return (
     <div className="border rounded-lg shadow-sm mx-20 mt-10">
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <h2 className="text-lg font-semibold">All Users</h2>
@@ -79,7 +108,7 @@ export default function UpdateStaff() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Staffs?.map((item) => {
+            {staffs?.map((item) => {
               return (
              
                   <TableRow key={item?._id}  >

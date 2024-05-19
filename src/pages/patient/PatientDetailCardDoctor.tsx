@@ -79,7 +79,7 @@ import {
       </div>
       <div className="mt-3 text-lg w-full">
         <span className="font-bold">Problem : </span>
-        <span>{patient.complaint}</span>
+        <span>{patient?.complaint}</span>
         </div>
     </div>
         </div>

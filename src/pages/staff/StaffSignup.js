@@ -15,28 +15,51 @@ import {
 // import { Button } from "../../components/ui/button";
 import { Button } from "../../components/ui/button";
 import { useState } from "react";
-import axios from "axios";
+import { useStaffSignupMutation } from "../../API/API";
+import AlertWrapper from '../../custom_components/AlertWrapper';
+import JobDoneAlert from "../../custom_components/JobDoneAlert"
+import { motion } from "framer-motion"
 
 export default function StaffSignup() {
 
-
-
   const [user, setUser] = useState()
+    // jodDone alert message 
+    const [jobDoneMessage, setJobDoneMessage] = useState("")
+    const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
+    const [alertColor, setAlertColor] = useState("")
+    
+    const handleCancelAlert = () => {
+      setOpenJobDoneAlert(false)
+      setOpenJobDoneAlert("")
+      setAlertColor("")
+    }
 
-
+  const [staffSignup] = useStaffSignupMutation(); 
   const handelsubmit = async (e) => {
 
     e.preventDefault();
     console.log(user)
     try {
-      const response = await axios.post("https://manipal-server.onrender.com/api/users/signup", user);
+     staffSignup(user)
+      setJobDoneMessage("New Staff Create Successfully!")
+      setAlertColor("green")
+      setOpenJobDoneAlert(true)
 
-      console.log(response.data);
-      alert("New Staff Create Successfully");
-
+      // removing success alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
     } catch (error) {
       console.error("Error:", error)
       alert("Failed to Create New Staff");
+      setJobDoneMessage("Failed to Create New Staff!!")
+      setAlertColor("red")
+     setOpenJobDoneAlert(true)
+
+   // removing failed alert automatically
+   setTimeout(() => {
+     setOpenJobDoneAlert(false)
+   }, 3000);
     }
   };
   const handleChange = (e) => {
@@ -157,6 +180,24 @@ export default function StaffSignup() {
           </Button>
         </form>
       </div>
+      <AlertWrapper isOpen={openJobDoneAlert}>
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+  >
+    <JobDoneAlert
+      height="h-24"
+      width="w-52"
+      textColor="text-white"
+      bgColor={`${alertColor === "red" ? "bg-red-400" :  "bg-green-400"}`}
+      boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" :  "shadow-[0px_0px_42px_2px_#48BB78]"}`}
+      message={jobDoneMessage}
+      isOpen={openJobDoneAlert}
+      OnCancel={handleCancelAlert}
+      isCancelButton="block"
+    />
+  </motion.div>
+</AlertWrapper>
     </div>
   );
 }
