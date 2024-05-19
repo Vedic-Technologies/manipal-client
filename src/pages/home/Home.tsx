@@ -9,7 +9,7 @@ import EditStaff from "../staff/EditStaff";
 import CreateStaff from "../staff/CreateStaff";
 import PaymentEntry from "../payment/PaymentEntry";
 import PresCriptionNew from "../prescription/PresCriptionNew";
-import PresCriptionSadcn from "../prescription/PresCriptionSadcn";
+import PresCriptionSadcn from "../prescription/PatientFormStaff";
 import PaymentDetails from "../payment/PaymentDetails";
 import PatientPaymentsDetails from "../payments_details/PatientPaymentsDetails";
 import PatientDetails from "../patient/PatientDetails";

@@ -170,14 +170,14 @@ const handleBloodGroupSelectChange=(value)=>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
-            <Label htmlFor="dob">Date of Birth</Label>
+            <Label htmlFor="dob">Occupation</Label>
             <Input
               id="dob"
               
-              type="date"
+              type="text"
               name="dob"
               value={patientData.dob}
-              placeholder="Enter DOB"
+              placeholder="Enter Occupation"
               onChange={handleChange}
             />
           </div>
@@ -209,18 +209,7 @@ const handleBloodGroupSelectChange=(value)=>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="space-y-2">
-            <Label htmlFor="id-proof">Adhar Number</Label>
-            <Input
-              id="id-proof"
-              placeholder="Enter ID proof details"
-              
-              name="idProof"
-              value={patientData.idProof}
-              onChange={handleChange}
-            />
-          </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">          
 
           <div className="space-y-2">
             <Label htmlFor="weight">Weight</Label>
