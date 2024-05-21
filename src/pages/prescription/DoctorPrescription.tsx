@@ -51,7 +51,7 @@ const DoctorPrescription = () => {
 
             <div className="w-full pr-4 center">
                 <div className="flex  gap-5 overflow-x-auto md:w-[600px] lg:w-[900px] xl:w-[1050px] 2xl:min-w-[1200px]">
-                    {patients.map((item) => (
+                    {inactivePatients.map((item) => (
                         <div
                             key={item._id}
                             className="cursor-pointer shadow-md min-w-72 flex gap-5 p-2 border border-gray-300 rounded-xl"
