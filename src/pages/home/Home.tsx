@@ -16,22 +16,38 @@ import PatientDetails from "../patient/PatientDetails";
 import StaffSignup from "../staff/StaffSignup";
 import UpdateStaff from "../staff/updatestaff";
 import DoctorPrescription from "../prescription/DoctorPrescription";
+import { useEffect, useState } from "react";
 
 const Home = () => {
+  const [loggedInUserType, setloggedInUserType] = useState({});
+
+  useEffect(() => {
+    const currentUserString = localStorage.getItem("currentUser");
+    if (currentUserString) {
+      const currentUserData = JSON.parse(currentUserString);
+      setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
+      console.log(currentUserData.user.userType);
+    }
+  }, []);
   return (
     <div className="">
       <Leftbar>
        
      <Routes>
+      {loggedInUserType=== "admin" &&(
+        <>
         <Route path='/' element={<LandingPage />} />
+        <Route path="/doctor_prescription" element={<DoctorPrescription />} />
+        <Route path="/createstaff" element={<StaffSignup/>} />
+        <Route path="/editstaffs" element={<UpdateStaff/>} />
+        </>)}
         <Route path="/all_patients" element={<AllPatients />} />
         <Route path="/patient_details/:id" element={<PatientDetails />} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
+        {loggedInUserType==="staff" &&(
         <Route path="/prescription" element={<PresCriptionSadcn />} />
-        <Route path="/doctor_prescription" element={<DoctorPrescription />} />
+      )}
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
-        <Route path="/createstaff" element={<StaffSignup/>} />
-        <Route path="/editstaffs" element={<UpdateStaff/>} />
         <Route path="/payment_entry" element={<PaymentEntry/>} />
         <Route path="/payment_detail" element={<PatientPaymentsDetails/>} />
 
