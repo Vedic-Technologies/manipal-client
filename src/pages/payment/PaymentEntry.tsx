@@ -64,7 +64,7 @@ const {data =[]} = useGetAllPatientsQuery("");
     <>
       <div className="w-4/5 m-auto flex flex-col items-start justify-start  ">
         <div className="text-xl font-semibold mb-2 mt-3">Select Patient</div>
-        <div className={`container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 ${selectedUser ? 'w-full' : 'w-1/2'} transition-width duration-1000`}>
+        <div className={`container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 ${selectedUser ? 'w-full' : 'w-1/2'} transition-width duration-500`}>
           <div className="w-1/2 flex flex-col items-center justify-center">
             <div className="flex flex-col gap-3">
               <div className="flex items-start mb-4 flex-col">

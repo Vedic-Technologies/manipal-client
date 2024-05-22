@@ -11,18 +11,14 @@ import { GrStatusGood } from "react-icons/gr";
 const DailyPayment = ({patientId}) => {
 
   useEffect(() => {
-    // Get the current date
-    const today = new Date();
-    // Format the date as yyyy-mm-dd
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+       const today = new Date();
+        const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); 
     const dd = String(today.getDate()).padStart(2, '0');
 
     const formattedDate = `${yyyy}-${mm}-${dd}`;
-
-    // Set the current date in state
     setCurrentDate(formattedDate);
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []); 
  
   type paymentType={
     amount:number,
@@ -41,7 +37,6 @@ const DailyPayment = ({patientId}) => {
   const [showPrintCard,setShowPrintCard]=useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [addPayment] = useAddPaymentMutation();
-    // jodDone alert message 
     const [jobDoneMessage, setJobDoneMessage] = useState("")
     const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
     const [alertColor, setAlertColor] = useState("")
@@ -113,7 +108,7 @@ const DailyPayment = ({patientId}) => {
   
   
   return (
-    <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-dashed border-gray-300  flex">
+    <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-gray-300  flex">
       <div className=" w-1/2 center">
         <div className=" w-1/2">
           <form onSubmit={handleSubmit} className="">
@@ -178,13 +173,14 @@ const DailyPayment = ({patientId}) => {
       </div>
       {showPrintCard && <PaymentCard/>}     
       {/* <div className="bg-green-400 w-1/2">right</div> */}
-      <div>
+      <div >
           <AlertWrapper isOpen={openJobDoneAlert}>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
               <JobDoneAlert
+              
                 height="h-32"
                 width="w-[20rem]"
                textColor='black'
