@@ -22,7 +22,7 @@ const PaymentDetails = ({patientId}) => {
       <div className="w-4/5 m-auto mt-5">
         <div className="flex w-1/2 ">
         <div className="text-xl font-semibold mb-6">Enter Payment Method</div>
-        <div className="ml-3 w-1/5">
+        <div className="ml-3 ">
             <Select id="gender"
              required
             value={paymentType}
