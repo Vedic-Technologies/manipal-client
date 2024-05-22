@@ -21,7 +21,7 @@ const DoctorPrescription = () => {
     const showPatientInfo = async (id) => {
         try {
             const response = await axios.get(
-                "https://manipal-server.onrender.com/api/patient/${id}"
+                `https://manipal-server.onrender.com/api/patient/${id}`
             );
             setPatient(response.data);
             setShowPatientForm(true);
