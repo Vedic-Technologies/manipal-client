@@ -2,7 +2,7 @@ import React from 'react'
 
 const KidsForm = () => {
   return (
-    <div> <form className="p-4 bg-gray-200 rounded">
+    <div> <form className="p-4 w-screen-4/5 px-3 py-2 bg-gray-200 rounded">
     <h2 className="text-lg font-bold mb-4">Kids Form</h2>
     <div className="mb-4">
       <label className="block">Field 1:</label>

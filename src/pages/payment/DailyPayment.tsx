@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Label } from "../../components/ui/label";
 import pay from "../../assets/images/payment.jpg";
 import { useAddPaymentMutation } from "../../API/API";
@@ -7,8 +7,19 @@ import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion" 
 import {ThreeDots} from 'react-loader-spinner';
-
+import { GrStatusGood } from "react-icons/gr";
 const DailyPayment = ({patientId}) => {
+
+  useEffect(() => {
+       const today = new Date();
+        const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    const formattedDate = `${yyyy}-${mm}-${dd}`;
+    setCurrentDate(formattedDate);
+  }, []); 
+ 
   type paymentType={
     amount:number,
     paymentDate:string,
@@ -21,19 +32,20 @@ const DailyPayment = ({patientId}) => {
     paymentType:"daily",
     patientId:patientId
   }
-
+  const [currentDate, setCurrentDate] = useState('');
   const [paymentData, setPaymentData] = useState<paymentType>(initialData)
   const [showPrintCard,setShowPrintCard]=useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [addPayment] = useAddPaymentMutation();
-    // jodDone alert message 
     const [jobDoneMessage, setJobDoneMessage] = useState("")
     const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
     const [alertColor, setAlertColor] = useState("")
-  
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    
     // Handle form submission here, you can send the data to the server or handle it as needed
     // console.log({ paymentType, amount, paymentDate });
   };
@@ -55,6 +67,7 @@ const DailyPayment = ({patientId}) => {
     </div>;
   }
 
+  
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPaymentData({
@@ -71,6 +84,7 @@ const DailyPayment = ({patientId}) => {
       setShowPrintCard(true);
       setJobDoneMessage("Payment added successfully.")
       setOpenJobDoneAlert(true)
+      
       setAlertColor("green")
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -81,7 +95,7 @@ const DailyPayment = ({patientId}) => {
       console.error("Error:", error);
       setJobDoneMessage("Failed to add payment!")
       setAlertColor("red")
-      setOpenJobDoneAlert(true)
+          setOpenJobDoneAlert(true)
       setTimeout(() => {
         setOpenJobDoneAlert(false)
         setAlertColor("")
@@ -91,8 +105,10 @@ const DailyPayment = ({patientId}) => {
     setIsLoading(false)
   };
 
+  
+  
   return (
-    <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-dashed border-gray-300  flex">
+    <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-gray-300  flex">
       <div className=" w-1/2 center">
         <div className=" w-1/2">
           <form onSubmit={handleSubmit} className="">
@@ -135,7 +151,7 @@ const DailyPayment = ({patientId}) => {
                     id="paymentDate"
                     type="date"
                     name="paymentDate"
-                    value={paymentData.paymentDate}
+                    value={currentDate} onChange={(e) => setCurrentDate(e.target.value)}
                     onChange={handleChange}
                     required
                   />
@@ -157,22 +173,26 @@ const DailyPayment = ({patientId}) => {
       </div>
       {showPrintCard && <PaymentCard/>}     
       {/* <div className="bg-green-400 w-1/2">right</div> */}
-      <div>
+      <div >
           <AlertWrapper isOpen={openJobDoneAlert}>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
               <JobDoneAlert
-                height="h-24"
-                width="w-52"
-                textColor="text-white"
-                bgColor={`${alertColor === "red" ? "bg-red-400" :  "bg-green-400"}`}
-                boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" :  "shadow-[0px_0px_42px_2px_#48BB78]"}`}
+              
+                height="h-32"
+                width="w-[20rem]"
+               textColor='black'
+            
+                bgColor={`${alertColor === "red" ? "bg-red-400" :  "bg-white"}`}
+                boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" :  "shadow-[0px_0px_22px_2px_#48BB78]"}`}
+                icon={<GrStatusGood />}
                 message={jobDoneMessage}
                 isOpen={openJobDoneAlert}
                 OnCancel={()=>setOpenJobDoneAlert(false)}
                 isCancelButton="block"
+                
               />
             </motion.div>
           </AlertWrapper>

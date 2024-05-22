@@ -62,9 +62,9 @@ const {data =[]} = useGetAllPatientsQuery("");
 
   return (
     <>
-      <div className="w-4/5 m-auto flex flex-col items-start justify-start">
+      <div className="w-4/5 m-auto flex flex-col items-start justify-start  ">
         <div className="text-xl font-semibold mb-2 mt-3">Select Patient</div>
-        <div className="container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 border-dashed w-full">
+        <div className={`container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 ${selectedUser ? 'w-full' : 'w-1/2'} transition-width duration-500`}>
           <div className="w-1/2 flex flex-col items-center justify-center">
             <div className="flex flex-col gap-3">
               <div className="flex items-start mb-4 flex-col">
@@ -100,23 +100,21 @@ const {data =[]} = useGetAllPatientsQuery("");
             </div>
           </div>
           {selectedUser ? (
-            <div className="bg-white shadow-lg rounded-lg p-6 w-1/2 border boder-gray-200">
+            <div className="bg-sky-50 shadow-lg rounded-lg p-6 w-1/2 border boder-gray-200">
               <h2 className="text-lg font-semibold mb-4">User Details</h2>
-              <UserDetails user={selectedUser} />
+              <UserDetails user={selectedUser}  />
             </div>
           ) : 
       
      (
-            <div className="bg-white shadow-lg rounded-lg p-6 w-1/2 border boder-gray-200">
-              <h2 className="text-lg font-semibold mb-4">User Details</h2>
-            </div>
+        null
           )}
         </div>
       </div>
       {selectedUser && <PaymentDetails patientId={selectedUser._id} />}
       <AlertWrapper isOpen={openJobDoneAlert}>
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
               <JobDoneAlert

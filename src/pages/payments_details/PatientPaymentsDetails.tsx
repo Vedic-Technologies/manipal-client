@@ -20,6 +20,8 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
+import { useNavigate } from 'react-router-dom';
+import { Item } from '@radix-ui/react-select';
 
 const PatientPaymentsDetails = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -29,7 +31,7 @@ const PatientPaymentsDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
   const [loggedInUserType,setloggedInUserType]=useState({})
-
+  const navigate = useNavigate();
 
 
   // confirmation dialogue box
@@ -172,6 +174,11 @@ const PatientPaymentsDetails = () => {
 
     }
   }
+
+  const handleShowDetail = (id) => {
+    navigate(`/home/patient_details/${id}`)
+  }
+
   // logics to delete patients
   const handleDelete = (patientId) => {
     setSelectedPatientId(patientId);
@@ -403,11 +410,11 @@ refetch()
           <div className='pt-5 h-[430px]  overflow-y-auto overflow-x-hidden'>
             {patientsToRender?.map((item) => (
               <div key={item?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-                <div className=' w-[86%] flex justify-between items-center'>
+                <div onClick={() => handleShowDetail(item?.patientId)}  className=' w-[86%] flex justify-between items-center'>
                   <div className='w-[30%] flex gap-1 items-center '>
-                    <img src={item?.patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
+                    <img  src={item?.patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
 
-                    <div className='w-full flex  justify-between ml-4'>
+                    <div  className='w-full flex  justify-between ml-4'>
                       <div className=" ">{item?.patient?.name?.[0]?.toUpperCase() + item?.patient?.name?.slice(1)}</div>
 
                     </div>
