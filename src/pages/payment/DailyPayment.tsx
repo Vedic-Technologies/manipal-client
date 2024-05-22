@@ -7,7 +7,7 @@ import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion" 
 import {ThreeDots} from 'react-loader-spinner';
-import { GrStatusGood } from "react-icons/gr";
+import { ImSpinner2 } from "react-icons/im";
 const DailyPayment = ({patientId}) => {
 
   useEffect(() => {
@@ -37,10 +37,13 @@ const DailyPayment = ({patientId}) => {
   const [showPrintCard,setShowPrintCard]=useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [addPayment] = useAddPaymentMutation();
-    const [jobDoneMessage, setJobDoneMessage] = useState("")
-    const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
-    const [alertColor, setAlertColor] = useState("")
+    // const [jobDoneMessage, setJobDoneMessage] = useState("")
+    // const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
+    // const [alertColor, setAlertColor] = useState("")
 
+    // const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,23 +52,23 @@ const DailyPayment = ({patientId}) => {
     // Handle form submission here, you can send the data to the server or handle it as needed
     // console.log({ paymentType, amount, paymentDate });
   };
-  if (isLoading) {
-    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
-     <div>Submitting details..</div>
-     <div>
-      <ThreeDots
-    height="50"
-    width="50"
-    color="black"
-    ariaLabel="Loading..."
-    radius="1"
-    wrapperStyle={{}}
-    wrapperClass=""
-    visible={true}
-/>
-        </div>
-    </div>;
-  }
+//   if (isLoading) {
+//     return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
+//      <div>Submitting details..</div>
+//      <div>
+//       <ThreeDots
+//     height="50"
+//     width="50"
+//     color="black"
+//     ariaLabel="Loading..."
+//     radius="1"
+//     wrapperStyle={{}}
+//     wrapperClass=""
+//     visible={true}
+// />
+//         </div>
+//     </div>;
+//   }
 
   
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -77,32 +80,36 @@ const DailyPayment = ({patientId}) => {
   };
 
   const addDailyPayment = async() => {
+
+
+
     console.log(paymentData);
     try {
       const result = await addPayment(paymentData).unwrap();
       console.log(result);
       setShowPrintCard(true);
-      setJobDoneMessage("Payment added successfully.")
-      setOpenJobDoneAlert(true)
+      // setJobDoneMessage("Payment added successfully.")
+      // setOpenJobDoneAlert(true)
       
-      setAlertColor("green")
+      // setAlertColor("green")
       setTimeout(() => {
-        setOpenJobDoneAlert(false)
-        setAlertColor("")
-        setJobDoneMessage("")
+        // setOpenJobDoneAlert(false)
+        // setAlertColor("")
+        // setJobDoneMessage("")
       }, 3000);
     } catch (error) {
       console.error("Error:", error);
-      setJobDoneMessage("Failed to add payment!")
-      setAlertColor("red")
-          setOpenJobDoneAlert(true)
+      // setJobDoneMessage("Failed to add payment!")
+      // setAlertColor("red")
+          // setOpenJobDoneAlert(true)
       setTimeout(() => {
-        setOpenJobDoneAlert(false)
-        setAlertColor("")
-        setJobDoneMessage("")
+        // setOpenJobDoneAlert(false)
+        // setAlertColor("")
+        // setJobDoneMessage("")
       }, 3000);
     }
     setIsLoading(false)
+
   };
 
   
@@ -158,13 +165,20 @@ const DailyPayment = ({patientId}) => {
                 </div>
 
                 <div className="flex items-center justify-end">
-                  <button
+                  {/* <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
                     type="submit"
                     onClick={addDailyPayment}
                   >
                     Submit
-                  </button>
+                  </button> */}
+
+                  <button onClick={addDailyPayment} disabled={isLoading}  
+                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
+                     type="submit"
+                  >
+      {isLoading ? 'Loading...' : isSuccess ? 'Success!' : 'Submit'}
+    </button>
                 </div>
               </div>
             </div>
@@ -174,7 +188,7 @@ const DailyPayment = ({patientId}) => {
       {showPrintCard && <PaymentCard/>}     
       {/* <div className="bg-green-400 w-1/2">right</div> */}
       <div >
-          <AlertWrapper isOpen={openJobDoneAlert}>
+          {/* <AlertWrapper isOpen={openJobDoneAlert}>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
@@ -195,7 +209,8 @@ const DailyPayment = ({patientId}) => {
                 
               />
             </motion.div>
-          </AlertWrapper>
+          </AlertWrapper> */}
+        
         </div>
     </div>
   );
