@@ -20,6 +20,9 @@ import { GiMoneyStack } from "react-icons/gi";
 import { GrMoney } from "react-icons/gr";
 import { PiWheelchair } from "react-icons/pi";
 import { MdOutlineElderlyWoman } from "react-icons/md";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+import { FaUserDoctor } from "react-icons/fa6";
+import { FaUserPlus } from "react-icons/fa";
 
 const Leftbar = ({ children }) => {
   const [loggedInUserType, setloggedInUserType] = useState({});
@@ -365,7 +368,7 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("doctor_reference")}
             >
               <li className="">
-                <GoCrossReference className="text-2xl" />
+                <FaUserDoctor className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">
                     Dr Reference
@@ -384,10 +387,10 @@ const Leftbar = ({ children }) => {
               onClick={() => handleLinkClick("MonthlyIncExp")}
             >
               <li className="">
-                <BiBarChart className="text-2xl" />
+                <MdOutlineAccountBalanceWallet className="text-2xl" />
                 <div className={hidden}>
                   <span className=" font-roboto  text-lg ml-3 ">
-                    Monthly Income
+                    PassBook
                   </span>
                 </div>
               </li>
@@ -405,7 +408,7 @@ const Leftbar = ({ children }) => {
                   onClick={() => handleLinkClick("createstaff")}
                 >
                   <li className="">
-                    <VscPersonAdd className="text-2xl" />
+                    <FaUserPlus className="text-2xl" />
                     <div className={hidden}>
                       <span className=" font-roboto  text-lg  ml-3">
                         Create Staff
