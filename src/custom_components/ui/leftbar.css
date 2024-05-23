@@ -37,21 +37,6 @@
   transition: all .1s ease-in-out;
 }
 
-
-/* .link:hover {  
-  color: white;
-  background: rgb(49, 49, 182);
-} */
-
-
-/* .link_text:hover {
-  color: white;
-} */
-
-/* .drop-down{
-  width: 90% !important;
-  font-size: 12px !important;
-} */
 .active-link {
 background-color: #c7c7c7;
 transition: all .3s ease-in-out;
@@ -61,12 +46,6 @@ transition: all .3s ease-in-out;
 background-color: #c7c7c7;
 transition: all .3s ease-in-out;
 }
-
-
-
-/* .active-link:hover {
-  background-color: rgb(45, 118, 201);
-} */
 
 ul .hide {
   font-size: 20px;
