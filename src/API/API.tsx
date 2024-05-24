@@ -74,12 +74,22 @@ export const API = createApi({
      getAllUsers: builder.query({
       query: () => "users",
      }),
+
+
      deleteUserById: builder.mutation({
       query:(userId)=>({
         url:`users/${userId}`,
         method: "DELETE"
       })
-     })
+     }),
+
+     submitShoulderProblemInDoctorPrescription: builder.mutation({
+      query:(formdata)=>({
+        url: `patient/shoulder/register_problem`,
+        method: "POST",
+        body:formdata
+      })
+     }),
 
   }),
 
@@ -99,4 +109,5 @@ export const {
     useStaffSignupMutation,
     useGetAllUsersQuery,
     useDeleteUserByIdMutation,
+    useSubmitShoulderProblemInDoctorPrescriptionMutation,
 } = API
