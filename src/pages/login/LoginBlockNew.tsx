@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import login_image from '../../assets/images/login/freepik-export-202405172136036rtf.png';
+import login_image from '../../assets/images/login/login_image.png';
 import { useNavigate } from "react-router-dom";
 import { BiSolidHide } from "react-icons/bi";
 import { IoMdEye } from "react-icons/io";
