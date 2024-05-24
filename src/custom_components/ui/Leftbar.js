@@ -26,6 +26,7 @@ import { FaUserPlus } from "react-icons/fa";
 
 const Leftbar = ({ children }) => {
   const [loggedInUserType, setloggedInUserType] = useState({});
+  const [activeLink, setActiveLink] = useState(localStorage.getItem("activeLink") || "default");
 
   useEffect(() => {
     const currentUserString = localStorage.getItem("currentUser");
@@ -37,7 +38,7 @@ const Leftbar = ({ children }) => {
   }, []);
   const navigate = useNavigate();
   const [Open, setOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("default");
+
   const [hidden, setHidden] = useState("link_text");
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   // const [, , removeCookie] = useCookies();
@@ -59,6 +60,7 @@ const Leftbar = ({ children }) => {
   };
   const handleLinkClick = (path) => {
     setActiveLink(path);
+    localStorage.setItem("activeLink", path);
   };
 
   const handleDrawerClick = () => {
@@ -91,6 +93,7 @@ const Leftbar = ({ children }) => {
   const logout = () => {
     // removeCookie('userType');
     // setLoginStatus(null);
+    localStorage.removeItem("activeLink");
     navigate("/");
   };
 
@@ -102,7 +105,7 @@ const Leftbar = ({ children }) => {
         } `}
       ></div>
       <div
-        className={`leftbar fixed  bg-gradient-to-l from-neutral-100 to-blue-100`}
+        className={`leftbar fixed  bg-gradient-to-l from-neutral-100 to-blue-100`} // issue-overflow-y-auto hides the navButtons
       >
         <div className=" m-2 relative overflow-hidden h-20 bg-lue-700">
           <div className="  w-full overflow-hidden absolute pl-1 text-5xl text-nowrap font-bold bg-gradient-to-r  from-blue-600 to-indigo-900 bg-clip-text text-transparent">
@@ -226,14 +229,14 @@ const Leftbar = ({ children }) => {
                     >
                       <NavLink
                         to="payment_entry "
-                        className={`drop-down flex w-4/5 rounded border border-transparent ${
+                        className={`drop-down flex w-[90%] rounded border border-transparent ${
                           activeLink === "payment_entry"
                             ? "active-link-drop-down  text-black"
                             : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("payment_entry")}
                       >
-                        <div className="w-full flex items-center px-[20px] py-[10px]">
+                        <div className="w-full flex  items-center pl-[16px] py-[10px]">
                           <GiMoneyStack className="text-3xl" />
                           <div
                             className={` ${hidden} h-full flex items-center `}
@@ -246,14 +249,14 @@ const Leftbar = ({ children }) => {
                       </NavLink>
                       <NavLink
                         to="payment_detail"
-                        className={`drop-down mt-1  flex w-4/5 rounded border border-transparent ${
+                        className={`drop-down mt-1  flex w-[90%] rounded border border-transparent ${
                           activeLink === "payment_detail"
                             ? "active-link-drop-down    text-black"
                             : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("payment_detail")}
                       >
-                        <div className="w-full flex items-center  px-[20px] py-[10px]">
+                        <div className="w-full flex items-center  pl-[16px] py-[10px]">
                           <GrMoney/>
                           {/* <i className="fa-solid fa-indian-rupee-sign text-xl  "></i> */}
                           <div
@@ -314,14 +317,14 @@ const Leftbar = ({ children }) => {
                     >
                       <NavLink
                         to="patient_details/0"
-                        className={`drop-down flex w-4/5  rounded border border-transparent  ${
+                        className={`drop-down flex w-[90%]  rounded border border-transparent  ${
                           activeLink === "patient_details"
                             ? "active-link-drop-down  text-black"
                             : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("patient_details")}
                       >
-                        <div className="w-full flex items-center  px-[20px] py-[10px]">
+                        <div className="w-full flex items-center  pl-[16px] py-[10px]">
                           <PiWheelchair className="text-3xl" />
                           <div
                             className={` ${hidden} h-full flex items-center`}
@@ -334,14 +337,14 @@ const Leftbar = ({ children }) => {
                       </NavLink>
                       <NavLink
                         to="all_patients"
-                        className={`drop-down  mt-1  flex w-4/5  rounded  border border-transparent ${
+                        className={`drop-down  mt-1  flex w-[90%]  rounded  border border-transparent ${
                           activeLink === "all_patients"
                             ? "active-link-drop-down  text-black"
                             : "hover:bg-gray-200"
                         }`}
                         onClick={() => handleLinkClick("all_patients")}
                       >
-                        <div className="w-full flex items-center  px-[20px] py-[10px]">
+                        <div className="w-full flex items-center  pl-[16px] py-[10px]">
                           <MdOutlineElderlyWoman className="text-3xl " />
                           <div
                             className={` ${hidden} h-full flex items-center`}
