@@ -137,9 +137,7 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
   
 try {
   const response = await axios.post('https://manipal-server.onrender.com/api/patient/shoulder/register_problem', formData, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
+
   });
 
   if (response.status === 200) {
