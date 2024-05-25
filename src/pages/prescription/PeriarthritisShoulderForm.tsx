@@ -1,140 +1,157 @@
 import React, { useState } from 'react'
 import {useSubmitShoulderProblemInDoctorPrescriptionMutation} from "../../API/API"
 import { Button } from '../../components/ui/button';
-const PeriarthritisShoulderForm = () => {
-  const [selectedShoulder, setSelectedShoulder] = useState('right');
-  const [durationPain, setDurationPain] = useState({ years: '', months: '', weeks: '', days: '' });
+import axios from 'axios';
+
+const PeriarthritisShoulderForm = ({ patientID }) => {
+  // Declare all necessary state variables
+  const [painAndStiffnessSide, setPainAndStiffnessSide] = useState('right');
+  const [duration, setDuration] = useState({ years: "", months: "", weeks: "", days: "" });
+  const [patientId, setPatientId] = useState(patientID);
+  const [durationOfPain, setDurationOfPain] = useState({ years: "", months: "", weeks: "", days: "" });
   const [natureOfPain, setNatureOfPain] = useState('continuous');
   const [symptoms, setSymptoms] = useState('improving');
   const [onset, setOnset] = useState('gradual');
-  const [injury, setInjury] = useState('no');
-  const [typeOfInjury, setTypeOfInjury] = useState('fall');
-  const [aggravatingFactor, setAggravatingFactor] = useState('movement');
+  const [injury, setInjury] = useState(true);
   const [relievingFactor, setRelievingFactor] = useState('rest');
+  const [injuryType, setInjuryType] = useState([]);
+  const [aggravatingFactor, setAggravatingFactor] = useState('');
   const [intensityOfPainAtNight, setIntensityOfPainAtNight] = useState('increased');
-  const [sleepDisturbance, setSleepDisturbance] = useState('no');
-  const [HTN, setHTN] = useState({ status: 'no', medication: '' });
-  const [DM2, setDM2] = useState({ status: 'no', medication: '' });
-  const [hypothyroidism, setHypothyroidism] = useState({ status: 'no', medication: '' });
+  const [sleepDisturbance, setSleepDisturbance] = useState(true);
+  const [pastHistoryHTN, setPastHistoryHTN] = useState({ present: true, medication: '' });
+  const [pastHistoryDM2, setPastHistoryDM2] = useState({ present: true, medication: 'regular' });
+  const [pastHistoryHypothyroidism, setPastHistoryHypothyroidism] = useState({ present: true });
   const [rxHistory, setRxHistory] = useState('');
-  const [selectedShoulder1, setSelectedShoulder1] = useState('right');
-  const [swelling, setSwelling] = useState('no');
-  const [muscleWasting, setMuscleWasting] = useState('no');
-  const [neurologicalDeficit, setNeurologicalDeficit] = useState('no');
-  const [neurologicalType, setNeurologicalType] = useState('');
-  const [capsularPattern, setCapsularPattern] = useState('no');
-  const [muscleTightness, setMuscleTightness] = useState('no');
+  const [shoulderSide, setShoulderSide] = useState('right');
+  const [neurologicalDeficit, setNeurologicalDeficit] = useState({ present: true, type: 'motor' });
+  const [swelling, setSwelling] = useState(true);
+  const [muscleWasting, setMuscleWasting] = useState(true);
+  const [capsularPattern, setCapsularPattern] = useState(true);
+  const [muscleTightness, setMuscleTightness] = useState(true);
   const [musclesName, setMusclesName] = useState([]);
   const [tenderness, setTenderness] = useState([]);
-  const [rom, setRom] = useState('left');
-  const [musclePower, setMusclePower] = useState('fine');
-  const [gripPinch, setGripPinch] = useState('strong');
-  const [tone, setTone] = useState('normal');
-  const [coordination, setCoordination] = useState('good');
-  const [thumbDropTest, setThumbDropTest] = useState('');
-  const [painfulArcTest, setPainfulArcTest] = useState('');
-  const [adl, setAdl] = useState('');
+  const [rom, setRom] = useState('');
+  const [tone, setTone] = useState('');
+  const [musclePower, setMusclePower] = useState('');
+  const [coordination, setCoordination] = useState('');
+  const [gripPinch, setGripPinch] = useState('');
+  const [thumbDropTest, setThumbDropTest] = useState('positive');
+  const [painfulArcTest, setPainfulArcTest] = useState('positive');
+  const [adl, setAdl] = useState('dependent');
   const [difficulty, setDifficulty] = useState([]);
   const [modalities, setModalities] = useState([]);
   const [exercises, setExercises] = useState([]);
 
-  const [submitShoulderProblemInDoctorPrescription]= useSubmitShoulderProblemInDoctorPrescriptionMutation()
-
-  const handleToggleExercise = (exercise) => {
-    if (exercises.includes(exercise)) {
-      setExercises(exercises.filter((item) => item !== exercise));
-    } else {
-      setExercises([...exercises, exercise]);
-    }
+  // Toggle functions for handling button state
+  const handleToggle = (setStateFunction, value) => {
+    setStateFunction(value);
   };
 
-  // console.log()
-  //   const handleToggle = (setState, value) => setState(value);
-
-  //   const handleToggleMultiple = (state, setState, value) => {
-  //     if (state.includes(value)) {
-  //       setState(state.filter((item) => item !== value));
-  //     } else {
-  //       setState([...state, value]);
-  //     }
-  //   };
-
-  const handleToggle = (setState, value) => setState(value);
-
-  const handleToggleMultiple = (state, setState, value) => {
-    if (state.includes(value)) {
-      setState(state.filter((item) => item !== value));
-    } else {
-      setState([...state, value]);
-    }
+  const handleToggleMultiple = (stateArray, setStateFunction, value) => {
+    const newStateArray = stateArray.includes(value) 
+      ? stateArray.filter(item => item !== value) 
+      : [...stateArray, value];
+    setStateFunction(newStateArray);
   };
 
-  const handleMedicationChange = (condition, value) => {
-    switch (condition) {
-      case 'HTN':
-        setHTN({ ...HTN, medication: value });
-        break;
-      case 'DM2':
-        setDM2({ ...DM2, medication: value });
-        break;
-      case 'Hypothyroidism':
-        setHypothyroidism({ ...hypothyroidism, medication: value });
-        break;
-      default:
-        break;
-    }
+  const handleToggleExercise = (value) => {
+    const newStateArray = exercises.includes(value) 
+      ? exercises.filter(item => item !== value) 
+      : [...exercises, value];
+    setExercises(newStateArray);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleMedicationChange = (condition, medicationType) => {
+    if (condition === 'HTN') {
+      setPastHistoryHTN({ ...pastHistoryHTN, medication: medicationType });
+    } else if (condition === 'DM2') {
+      setPastHistoryDM2({ ...pastHistoryDM2, medication: medicationType });
+    }
+  };
+  
+
+  // Function to handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     const formData = {
-      selectedShoulder,
-      durationPain,
-      natureOfPain,
-      symptoms,
-      onset,
-      injury,
-      typeOfInjury,
-      aggravatingFactor,
-      relievingFactor,
-      intensityOfPainAtNight,
-      sleepDisturbance,
-      HTN,
-      DM2,
-      hypothyroidism,
-      rxHistory,
-      selectedShoulder1,
-      swelling,
-      muscleWasting,
-      neurologicalDeficit,
-      neurologicalType,
-      capsularPattern,
-      muscleTightness,
-      musclesName,
-      tenderness,
-      rom,
-      musclePower,
-      gripPinch,
-      tone,
-      coordination,
-      thumbDropTest,
-      painfulArcTest,
-      adl,
-      difficulty,
-      modalities,
-      exercises,
+      painAndStiffness: {
+        side: painAndStiffnessSide,
+        duration
+      },
+      patientId,
+      Hopi: {
+        durationOfPain,
+        natureOfPain,
+        symptoms,
+        onset,
+        injury,
+        relievingFactor,
+        injuryType,
+        aggravatingFactor,
+        intensityOfPainAtNight,
+        sleepDisturbance
+      },
+      pastHistory: {
+        HTN: pastHistoryHTN,
+        DM2: pastHistoryDM2,
+        hypothyroidism: pastHistoryHypothyroidism,
+        rxHistory
+      },
+      onExamination: {
+        shoulderSide,
+        neurologicalDeficit,
+        swelling,
+        muscleWasting,
+        capsularPatternAltered: capsularPattern,
+        musclesTightness: muscleTightness,
+        muscles: musclesName.map(name => ({
+          name,
+          tenderness: tenderness.includes(name)
+        })),
+        ROM: {
+          side: rom
+        },
+        tone,
+        musclePower,
+        coordination,
+        gripAndPinch: gripPinch
+      },
+      physiotherapyManagement: {
+        thumbDropTest,
+        painfulArcTest,
+        functionalAssessment: adl,
+        difficultyIn: difficulty.map(activity => ({ activity })),
+        modalities: modalities.map(modality => ({ modality }))
+      },
+      exercisesPlan: {
+        gradedMobilization: exercises.includes('Graded Mobilization'),
+        strengtheningOfRotatorCuffMuscles: exercises.includes('Strengthening of Rotator Cuff Muscles'),
+        capsularStretchingExercises: exercises.includes('Capsular Stretching Exercises'),
+        avoidJerkyMovements: exercises.includes('Avoid Jerky Movements'),
+        homeProgramGiven: exercises.includes('Home Program Given'),
+        prognosisWellExplainedInPatientsWords: exercises.includes('Prognosis Well Explained in Patients Words')
+      }
     };
 
-    try {
-      await submitShoulderProblemInDoctorPrescription(formData).unwrap();
-      alert('Form submitted successfully!');
-    } catch (error) {
-      console.error('Failed to submit form: ', error);
-      alert('Failed to submit form');
+  
+try {
+  const response = await axios.post('https://manipal-server.onrender.com/api/patient/shoulder/register_problem', formData, {
+    headers: {
+      'Content-Type': 'application/json'
     }
-  };
+  });
 
+  if (response.status === 200) {
+    console.log('Form submitted successfully');
+    
+  } else {
+    console.error('Form submission failed');
+  }
+} catch (error) {
+  console.error('Error:', error);
+}
+  };
   return (
     <div className=' w-screen-4/5'>
       <form onSubmit={handleSubmit} className="rounded shadow-md  mt-10">
@@ -147,8 +164,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setSelectedShoulder('right')}
-                  className={`px-4 py-2 rounded-full border ${selectedShoulder === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPainAndStiffnessSide('right')}
+                  className={`px-4 py-2 rounded-full border ${painAndStiffnessSide === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Right
@@ -156,8 +173,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setSelectedShoulder('left')}
-                  className={`px-4 py-2 rounded-full border ${selectedShoulder === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPainAndStiffnessSide('left')}
+                  className={`px-4 py-2 rounded-full border ${painAndStiffnessSide === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Left
@@ -166,30 +183,39 @@ const PeriarthritisShoulderForm = () => {
             </div>
 
             <div className="mb-4 bg-slate-200 p-3 rounded w-[500px] center flex-col gap-2 ">
-              <label className="block text-sm font-medium text-gray-700">Duration</label>
-              <div className="mt-2 flex gap-2">
-                <input
-                  type="number"
-                  placeholder="Years"
-                  className="p-2 border border-gray-300 rounded w-20"
-                />
-                <input
-                  type="number"
-                  placeholder="Months"
-                  className="p-2 border border-gray-300 rounded w-20"
-                />
-                <input
-                  type="number"
-                  placeholder="Weeks"
-                  className="p-2 border border-gray-300 rounded w-20"
-                />
-                <input
-                  type="number"
-                  placeholder="Days"
-                  className="p-2 border border-gray-300 rounded w-20"
-                />
-              </div>
-            </div>
+  <label className="block text-sm font-medium text-gray-700">Duration</label>
+  <div className="mt-2 flex gap-2">
+    <input
+      type="number"
+      placeholder="Years"
+      value={duration.years}
+      onChange={(e) => setDuration({ ...duration, years: e.target.value })}
+      className="p-2 border border-gray-300 rounded w-20"
+    />
+    <input
+      type="number"
+      placeholder="Months"
+      value={duration.months}
+      onChange={(e) => setDuration({ ...duration, months: e.target.value })}
+      className="p-2 border border-gray-300 rounded w-20"
+    />
+    <input
+      type="number"
+      placeholder="Weeks"
+      value={duration.weeks}
+      onChange={(e) => setDuration({ ...duration, weeks: e.target.value })}
+      className="p-2 border border-gray-300 rounded w-20"
+    />
+    <input
+      type="number"
+      placeholder="Days"
+      value={duration.days}
+      onChange={(e) => setDuration({ ...duration, days: e.target.value })}
+      className="p-2 border border-gray-300 rounded w-20"
+    />
+  </div>
+</div>
+
           </div>
         </div>
 
@@ -203,29 +229,29 @@ const PeriarthritisShoulderForm = () => {
                 <input
                   type="number"
                   placeholder="Years"
-                  value={durationPain.years}
-                  onChange={(e) => setDurationPain({ ...durationPain, years: e.target.value })}
+                  value={durationOfPain.years}
+                  onChange={(e) => setDurationOfPain({ ...durationOfPain, years: e.target.value })}
                   className="p-2 border border-gray-300 rounded  w-20"
                 />
                 <input
                   type="number"
                   placeholder="Months"
-                  value={durationPain.months}
-                  onChange={(e) => setDurationPain({ ...durationPain, months: e.target.value })}
+                  value={durationOfPain.months}
+                  onChange={(e) => setDurationOfPain({ ...durationOfPain, months: e.target.value })}
                   className="p-2 border border-gray-300 rounded  w-20"
                 />
                 <input
                   type="number"
                   placeholder="Weeks"
-                  value={durationPain.weeks}
-                  onChange={(e) => setDurationPain({ ...durationPain, weeks: e.target.value })}
+                  value={durationOfPain.weeks}
+                  onChange={(e) => setDurationOfPain({ ...durationOfPain, weeks: e.target.value })}
                   className="p-2 border border-gray-300 rounded  w-20"
                 />
                 <input
                   type="number"
                   placeholder="Days"
-                  value={durationPain.days}
-                  onChange={(e) => setDurationPain({ ...durationPain, days: e.target.value })}
+                  value={durationOfPain.days}
+                  onChange={(e) => setDurationOfPain({ ...durationOfPain, days: e.target.value })}
                   className="p-2 border border-gray-300 rounded  w-20"
                 />
               </div>
@@ -317,8 +343,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setInjury('yes')}
-                  className={`px-4 py-2 rounded-full border ${injury === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setInjury(true)}
+                  className={`px-4 py-2 rounded-full border ${injury? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -326,8 +352,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setInjury('no')}
-                  className={`px-4 py-2 rounded-full border ${injury === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setInjury(false)}
+                  className={`px-4 py-2 rounded-full border ${!injury  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
@@ -365,8 +391,8 @@ const PeriarthritisShoulderForm = () => {
                   variant={'avgSizeBtn'}
                     key={type}
                     type="button"
-                    onClick={() => setTypeOfInjury(type)}
-                    className={`px-4 py-2 rounded-full border ${typeOfInjury === type ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => setInjuryType(type)}
+                    className={`px-4 py-2 rounded-full border ${injuryType === type ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -421,8 +447,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setSleepDisturbance('yes')}
-                  className={`px-4 py-2 rounded-full border ${sleepDisturbance === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setSleepDisturbance(true)}
+                  className={`px-4 py-2 rounded-full border ${sleepDisturbance  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -430,8 +456,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setSleepDisturbance('no')}
-                  className={`px-4 py-2 rounded-full border ${sleepDisturbance === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setSleepDisturbance(false)}
+                  className={`px-4 py-2 rounded-full border ${!sleepDisturbance ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
@@ -454,8 +480,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setHTN({ ...HTN, status: 'yes' })}
-                  className={`px-4 py-2 rounded-full border ${HTN.status === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPastHistoryHTN({ ...pastHistoryHTN, present: true })}
+                  className={`px-4 py-2 rounded-full border ${pastHistoryHTN.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -463,21 +489,21 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setHTN({ ...HTN, status: 'no' })}
-                  className={`px-4 py-2 rounded-full border ${HTN.status === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPastHistoryHTN({ ...pastHistoryHTN, present: false })}
+                  className={`px-4 py-2 rounded-full border ${! pastHistoryHTN.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
                 </Button>
               </div>
-              {HTN.status === 'yes' && (
+              {pastHistoryHTN.present && (
 
                 <div className="mt-4 flex flex-col gap-2 absolute bottom-2">
                   <Button
                   variant={'badaSizeBtn'}
                     type="button"
                     onClick={() => handleMedicationChange('HTN', 'regular')}
-                    className={`px-4 py-2 rounded-full border ${HTN.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    className={`px-4 py-2 rounded-full border ${pastHistoryHTN.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Regular Medications
@@ -486,7 +512,7 @@ const PeriarthritisShoulderForm = () => {
                   variant={'badaSizeBtn'}
                     type="button"
                     onClick={() => handleMedicationChange('HTN', 'irregular')}
-                    className={`px-4 py-2 rounded-full border ${HTN.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    className={`px-4 py-2 rounded-full border ${pastHistoryHTN.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Irregular Medications
@@ -503,8 +529,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setDM2({ ...DM2, status: 'yes' })}
-                  className={`px-4 py-2 rounded-full border ${DM2.status === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPastHistoryDM2({ ...pastHistoryDM2, present:true })}
+                  className={`px-4 py-2 rounded-full border ${pastHistoryDM2.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -512,20 +538,20 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setDM2({ ...DM2, status: 'no' })}
-                  className={`px-4 py-2 rounded-full border ${DM2.status === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPastHistoryDM2({ ...pastHistoryDM2, present: false })}
+                  className={`px-4 py-2 rounded-full border ${!pastHistoryDM2.present  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
                 </Button>
               </div>
-              {DM2.status === 'yes' && (
+              {pastHistoryDM2.present && (
                 <div className="mt-4 flex flex-col gap-2 absolute bottom-2">
                   <Button
                   variant={'badaSizeBtn'}
                     type="button"
                     onClick={() => handleMedicationChange('DM2', 'regular')}
-                    className={`px-4 py-2 rounded-full border ${DM2.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    className={`px-4 py-2 rounded-full border ${pastHistoryDM2.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Regular Medications
@@ -534,7 +560,7 @@ const PeriarthritisShoulderForm = () => {
                   variant={'badaSizeBtn'}
                     type="button"
                     onClick={() => handleMedicationChange('DM2', 'irregular')}
-                    className={`px-4 py-2 rounded-full border ${DM2.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    className={`px-4 py-2 rounded-full border ${pastHistoryDM2.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Irregular Medications
@@ -550,8 +576,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setHypothyroidism({ ...hypothyroidism, status: 'yes' })}
-                  className={`px-4 py-2 rounded-full border ${hypothyroidism.status === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPastHistoryHypothyroidism({ ...pastHistoryHypothyroidism, present: true })}
+                  className={`px-4 py-2 rounded-full border ${pastHistoryHypothyroidism.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -559,20 +585,20 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => setHypothyroidism({ ...hypothyroidism, status: 'no' })}
-                  className={`px-4 py-2 rounded-full border ${hypothyroidism.status === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPastHistoryHypothyroidism({ ...pastHistoryHypothyroidism, present: false })}
+                  className={`px-4 py-2 rounded-full border ${!pastHistoryHypothyroidism.present  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
                 </Button>
               </div>
-              {hypothyroidism.status === 'yes' && (
+              {/* {pastHistoryHypothyroidism.present  && (
                 <div className="mt-4 flex flex-col gap-2 absolute bottom-2">
                   <Button
                   variant={'badaSizeBtn'}
                                       type="button"
                     onClick={() => handleMedicationChange('Hypothyroidism', 'regular')}
-                    className={`px-4 py-2 rounded-full border ${hypothyroidism.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    className={`px-4 py-2 rounded-full border ${pastHistoryHypothyroidism.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Regular Medications
@@ -581,13 +607,13 @@ const PeriarthritisShoulderForm = () => {
                   variant={'badaSizeBtn'}
                     type="button"
                     onClick={() => handleMedicationChange('Hypothyroidism', 'irregular')}
-                    className={`px-4 py-2 rounded-full border ${hypothyroidism.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    className={`px-4 py-2 rounded-full border ${pastHistoryHypothyroidism.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Irregular Medications
                   </Button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -616,8 +642,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setSelectedShoulder1, 'right')}
-                  className={`px-4 py-2 rounded-full border ${selectedShoulder1 === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setShoulderSide, 'right')}
+                  className={`px-4 py-2 rounded-full border ${shoulderSide === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Right
@@ -625,8 +651,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setSelectedShoulder1, 'left')}
-                  className={`px-4 py-2 rounded-full border ${selectedShoulder1 === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setShoulderSide, 'left')}
+                  className={`px-4 py-2 rounded-full border ${shoulderSide === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Left
@@ -641,8 +667,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setSwelling, 'yes')}
-                  className={`px-4 py-2 rounded-full border ${swelling === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setSwelling, true)}
+                  className={`px-4 py-2 rounded-full border ${swelling ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -650,8 +676,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setSwelling, 'no')}
-                  className={`px-4 py-2 rounded-full border ${swelling === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setSwelling, false)}
+                  className={`px-4 py-2 rounded-full border ${!swelling  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
@@ -666,8 +692,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setMuscleWasting, 'yes')}
-                  className={`px-4 py-2 rounded-full border ${muscleWasting === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setMuscleWasting, true)}
+                  className={`px-4 py-2 rounded-full border ${muscleWasting  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -675,8 +701,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setMuscleWasting, 'no')}
-                  className={`px-4 py-2 rounded-full border ${muscleWasting === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setMuscleWasting, false)}
+                  className={`px-4 py-2 rounded-full border ${!muscleWasting  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
@@ -689,8 +715,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setNeurologicalDeficit, 'yes')}
-                  className={`px-4 py-2 rounded-full border ${neurologicalDeficit === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setNeurologicalDeficit, true)}
+                  className={`px-4 py-2 rounded-full border ${neurologicalDeficit.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -698,20 +724,20 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setNeurologicalDeficit, 'no')}
-                  className={`px-4 py-2 rounded-full border ${neurologicalDeficit === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setNeurologicalDeficit, false)}
+                  className={`px-4 py-2 rounded-full border ${!neurologicalDeficit.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
                 </Button>
               </div>
-              {neurologicalDeficit === 'yes' && (
+              {neurologicalDeficit  && (
                 <div className="mt-4 flex space-x-4 absolute top-24">
                   <Button
                   variant={'avgSizeBtn'}
                     type="button"
-                    onClick={() => handleToggle(setNeurologicalType, 'motor')}
-                    className={`px-4 py-2 rounded-full border ${neurologicalType === 'motor' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleToggle(setNeurologicalDeficit, 'motor')}
+                    className={`px-4 py-2 rounded-full border ${neurologicalDeficit.type === 'motor' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     Motor
@@ -719,8 +745,8 @@ const PeriarthritisShoulderForm = () => {
                   <Button
                   variant={'avgSizeBtn'}
                     type="button"
-                    onClick={() => handleToggle(setNeurologicalType, 'sensory')}
-                    className={`px-4 py-2 rounded-full border ${neurologicalType === 'sensory' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleToggle(neurologicalDeficit, 'sensory')}
+                    className={`px-4 py-2 rounded-full border ${neurologicalDeficit.type === 'sensory' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     Sensory
@@ -736,8 +762,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setCapsularPattern, 'yes')}
-                  className={`px-4 py-2 rounded-full border ${capsularPattern === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setCapsularPattern, true)}
+                  className={`px-4 py-2 rounded-full border ${capsularPattern ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -745,8 +771,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setCapsularPattern, 'no')}
-                  className={`px-4 py-2 rounded-full border ${capsularPattern === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setCapsularPattern, false)}
+                  className={`px-4 py-2 rounded-full border ${!capsularPattern  ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
@@ -761,8 +787,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setMuscleTightness, 'yes')}
-                  className={`px-4 py-2 rounded-full border ${muscleTightness === 'yes' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setMuscleTightness, true)}
+                  className={`px-4 py-2 rounded-full border ${muscleTightness ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Yes
@@ -770,8 +796,8 @@ const PeriarthritisShoulderForm = () => {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setMuscleTightness, 'no')}
-                  className={`px-4 py-2 rounded-full border ${muscleTightness === 'no' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setMuscleTightness, false)}
+                  className={`px-4 py-2 rounded-full border ${!muscleTightness ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
