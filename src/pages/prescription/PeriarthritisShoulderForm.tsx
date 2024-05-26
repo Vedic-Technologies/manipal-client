@@ -5,25 +5,25 @@ import axios from 'axios';
 
 const PeriarthritisShoulderForm = ({ patientID }) => {
   // Declare all necessary state variables
-  const [painAndStiffnessSide, setPainAndStiffnessSide] = useState('right');
-  const [duration, setDuration] = useState({ years: "", months: "", weeks: "", days: "" });
-  const [patientId, setPatientId] = useState(patientID);
-  const [durationOfPain, setDurationOfPain] = useState({ years: "", months: "", weeks: "", days: "" });
-  const [natureOfPain, setNatureOfPain] = useState('continuous');
-  const [symptoms, setSymptoms] = useState('improving');
-  const [onset, setOnset] = useState('gradual');
+  const [painAndStiffnessSide, setPainAndStiffnessSide] = useState('Right');
+  const [duration, setDuration] = useState({ years: 0, months: 0, weeks: 0, days: 0 });
+  // const [patientId, setPatientId] = useState(patientID);
+  const [durationOfPain, setDurationOfPain] = useState({ years: 0, months: 0, weeks: 0, days: 0 });
+  const [natureOfPain, setNatureOfPain] = useState('Continuous');
+  const [symptoms, setSymptoms] = useState('Improving');
+  const [onset, setOnset] = useState('Gradual');
   const [injury, setInjury] = useState(true);
-  const [relievingFactor, setRelievingFactor] = useState('rest');
+  const [relievingFactor, setRelievingFactor] = useState('Rest');
   const [injuryType, setInjuryType] = useState([]);
   const [aggravatingFactor, setAggravatingFactor] = useState('');
-  const [intensityOfPainAtNight, setIntensityOfPainAtNight] = useState('increased');
+  const [intensityOfPainAtNight, setIntensityOfPainAtNight] = useState('Increased');
   const [sleepDisturbance, setSleepDisturbance] = useState(true);
   const [pastHistoryHTN, setPastHistoryHTN] = useState({ present: true, medication: '' });
-  const [pastHistoryDM2, setPastHistoryDM2] = useState({ present: true, medication: 'regular' });
+  const [pastHistoryDM2, setPastHistoryDM2] = useState({ present: true, medication: 'On Regular Medications' });
   const [pastHistoryHypothyroidism, setPastHistoryHypothyroidism] = useState({ present: true });
   const [rxHistory, setRxHistory] = useState('');
-  const [shoulderSide, setShoulderSide] = useState('right');
-  const [neurologicalDeficit, setNeurologicalDeficit] = useState({ present: true, type: 'motor' });
+  const [shoulderSide, setShoulderSide] = useState('Right');
+  const [neurologicalDeficit, setNeurologicalDeficit] = useState({ present: true, type: 'Motor' });
   const [swelling, setSwelling] = useState(true);
   const [muscleWasting, setMuscleWasting] = useState(true);
   const [capsularPattern, setCapsularPattern] = useState(true);
@@ -35,9 +35,9 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
   const [musclePower, setMusclePower] = useState('');
   const [coordination, setCoordination] = useState('');
   const [gripPinch, setGripPinch] = useState('');
-  const [thumbDropTest, setThumbDropTest] = useState('positive');
-  const [painfulArcTest, setPainfulArcTest] = useState('positive');
-  const [adl, setAdl] = useState('dependent');
+  const [thumbDropTest, setThumbDropTest] = useState('Positive');
+  const [painfulArcTest, setPainfulArcTest] = useState('Positive');
+  const [adl, setAdl] = useState('Dependent');
   const [difficulty, setDifficulty] = useState([]);
   const [modalities, setModalities] = useState([]);
   const [exercises, setExercises] = useState([]);
@@ -66,20 +66,24 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
       setPastHistoryHTN({ ...pastHistoryHTN, medication: medicationType });
     } else if (condition === 'DM2') {
       setPastHistoryDM2({ ...pastHistoryDM2, medication: medicationType });
+    } else if (condition === 'NeurologicalDeficit') {
+      setNeurologicalDeficit({ ...neurologicalDeficit, type: medicationType });
     }
   };
+
+  // const handleIssueType=(condition)
   
 
   // Function to handle form submission
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+console.log(patientID)
     const formData = {
       painAndStiffness: {
         side: painAndStiffnessSide,
         duration
       },
-      patientId,
+      patientId:patientID,
       Hopi: {
         durationOfPain,
         natureOfPain,
@@ -107,7 +111,7 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
         musclesTightness: muscleTightness,
         muscles: musclesName.map(name => ({
           name,
-          tenderness: tenderness.includes(name)
+          tenderness: true
         })),
         ROM: {
           side: rom
@@ -137,8 +141,9 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
   
 try {
   const response = await axios.post('https://manipal-server.onrender.com/api/patient/shoulder/register_problem', formData, {
-
+  
   });
+  console.log(formData)
 
   if (response.status === 200) {
     console.log('Form submitted successfully');
@@ -149,10 +154,124 @@ try {
 } catch (error) {
   console.error('Error:', error);
 }
+
   };
+
+  // const handleHi = async (event) => {
+  //   event.preventDefault();
+  //   console.log(patientID)
+  
+    
+  // const formData = {
+  //   patientId: patientID,
+  //   painAndStiffness: {
+  //     side: "Left",
+  //     duration: {
+  //       years: 0,
+  //       months: 1,
+  //       weeks: 2,
+  //       days: 3,
+  //     },
+  //   },
+  //   Hopi: {
+  //     durationOfPain: {
+  //       years: 0,
+  //       months: 1,
+  //       weeks: 2,
+  //       days: 3,
+  //     },
+  //     natureOfPain: "Continuous",
+  //     symptoms: "Improving",
+  //     onset: "Gradual",
+  //     injury: true,
+  //     relievingFactor: "Rest",
+  //     injuryType: "Fall",
+  //     aggravatingFactor: "Movement",
+  //     intensityOfPainAtNight: "Increased",
+  //     sleepDisturbance: true,
+  //   },
+  //   pastHistory: {
+  //     HTN: {
+  //       present: true,
+  //       medication: "Amlodipine",
+  //     },
+  //     DM2: {
+  //       present: true,
+  //       medication: "On Regular Medications",
+  //     },
+  //     hypothyroidism: {
+  //       present: false,
+  //     },
+  //     rxHistory: "None",
+  //   },
+  //   onExamination: {
+  //     shoulderSide: "Right",
+  //     neurologicalDeficit: {
+  //       present: false,
+  //       type: "",
+  //     },
+  //     swelling: true,
+  //     muscleWasting: false,
+  //     capsularPatternAltered: true,
+  //     musclesTightness: true,
+  //     muscles: [
+  //       {
+  //         name: "Supraspinatus",
+  //         tenderness: true,
+  //       },
+  //       {
+  //         name: "Deltoid",
+  //         tenderness: false,
+  //       },
+  //     ],
+  //     ROM: {
+  //       side: "Right",
+  //     },
+  //     tone: "Normal",
+  //     musclePower: "4/5",
+  //     coordination: "Intact",
+  //     gripAndPinch: "Strong",
+  //   },
+  //   physiotherapyManagement: {
+  //     thumbDropTest: "Positive",
+  //     painfulArcTest: "Negative",
+  //     functionalAssessment: "Independent",
+  //     difficultyIn: [
+  //       { activity: "Lifting Objects" },
+  //       { activity: "Overhead activities" },
+  //     ],
+  //     modalities: [
+  //       { modality: "Moist Heat" },
+  //       { modality: "TENS" },
+  //     ],
+  //   },
+  //   exercisesPlan: {
+  //     gradedMobilization: true,
+  //     strengtheningOfRotatorCuffMuscles: true,
+  //     capsularStretchingExercises: false,
+  //     avoidJerkyMovements: true,
+  //     homeProgramGiven: false,
+  //     prognosisWellExplainedInPatientsWords: true,
+  //   },
+  // };
+  
+  //   try {
+  //     console.log(formData)
+  //     const response = await axios.post('https://manipal-server.onrender.com/api/patient/shoulder/register_problem', formData);
+  // console.log(response)
+  //     if (response.status === 200) {
+  //       console.log('Form submitted successfully');
+  //     } else {
+  //       console.error('Form submission failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
   return (
     <div className=' w-screen-4/5'>
-      <form onSubmit={handleSubmit} className="rounded shadow-md  mt-10">
+      <form onSubmit={handleSubmit}  className="rounded shadow-md  mt-10">
+        {/* <button onClick={handleHi}>HIIIII</button> */}
         <div className='bg-slate-100 px-3 py-2 rounded'>
           <h2 className="text-2xl font-bold mb-4">Shoulder Pain & Stiffness</h2>
           <div className='flex gap-2 flex-wrap'>
@@ -162,8 +281,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setPainAndStiffnessSide('right')}
-                  className={`px-4 py-2 rounded-full border ${painAndStiffnessSide === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPainAndStiffnessSide('Right')}
+                  className={`px-4 py-2 rounded-full border ${painAndStiffnessSide === 'Right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Right
@@ -171,8 +290,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setPainAndStiffnessSide('left')}
-                  className={`px-4 py-2 rounded-full border ${painAndStiffnessSide === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setPainAndStiffnessSide('Left')}
+                  className={`px-4 py-2 rounded-full border ${painAndStiffnessSide === 'Left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Left
@@ -261,8 +380,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setNatureOfPain('continuous')}
-                  className={`px-4 py-2 rounded-full border ${natureOfPain === 'continuous' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setNatureOfPain('Continuous')}
+                  className={`px-4 py-2 rounded-full border ${natureOfPain === 'Continuous' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Continuous
@@ -270,8 +389,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setNatureOfPain('onActivity')}
-                  className={`px-4 py-2 rounded-full border ${natureOfPain === 'onActivity' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setNatureOfPain('On Activity')}
+                  className={`px-4 py-2 rounded-full border ${natureOfPain === 'On Activity' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   On Activity
@@ -285,8 +404,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setSymptoms('improving')}
-                  className={`px-4 py-2 rounded-full border ${symptoms === 'improving' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setSymptoms('Improving')}
+                  className={`px-4 py-2 rounded-full border ${symptoms === 'Improving' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Improving
@@ -294,16 +413,16 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setSymptoms('worsening')}
-                  className={`px-4 py-2 rounded-full border ${symptoms === 'worsening' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setSymptoms('Worsening')}
+                  className={`px-4 py-2 rounded-full border ${symptoms === 'Worsening' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Worsening
                 </Button>
                 <Button
                 variant={'avgSizeBtn'}                  type="button"
-                  onClick={() => setSymptoms('remainSame')}
-                  className={`px-4 py-2 rounded-full border ${symptoms === 'remainSame' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setSymptoms('Remain Same')}
+                  className={`px-4 py-2 rounded-full border ${symptoms === 'Remain Same' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Remain Same
@@ -317,8 +436,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setOnset('gradual')}
-                  className={`px-4 py-2 rounded-full border ${onset === 'gradual' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setOnset('Gradual')}
+                  className={`px-4 py-2 rounded-full border ${onset === 'Gradual' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Gradual
@@ -326,8 +445,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setOnset('sudden')}
-                  className={`px-4 py-2 rounded-full border ${onset === 'sudden' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setOnset('Sudden')}
+                  className={`px-4 py-2 rounded-full border ${onset === 'Sudden' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Sudden
@@ -364,8 +483,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setRelievingFactor('rest')}
-                  className={`px-4 py-2 rounded-full border ${relievingFactor === 'rest' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setRelievingFactor('Rest')}
+                  className={`px-4 py-2 rounded-full border ${relievingFactor === 'Rest' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Rest
@@ -373,8 +492,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setRelievingFactor('medication')}
-                  className={`px-4 py-2 rounded-full border ${relievingFactor === 'medication' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setRelievingFactor('Medication')}
+                  className={`px-4 py-2 rounded-full border ${relievingFactor === 'Medication' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Medication
@@ -384,7 +503,7 @@ try {
             <div className="mb-4 bg-slate-200 p-3 rounded w-[500px] center flex-col gap-2 ">
               <label className="block text-sm font-medium text-gray-700">Type of Injury</label>
               <div className="mt-1 center gap-2 flex-wrap ">
-                {['fall', 'RTA', 'throwing', 'lifting'].map((type) => (
+                {['Fall', 'RTA', 'Throwing', 'Lifting'].map((type) => (
                   <Button
                   variant={'avgSizeBtn'}
                     key={type}
@@ -422,8 +541,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setIntensityOfPainAtNight('increased')}
-                  className={`px-4 py-2 rounded-full border ${intensityOfPainAtNight === 'increased' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setIntensityOfPainAtNight('Increased')}
+                  className={`px-4 py-2 rounded-full border ${intensityOfPainAtNight === 'Increased' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Increased
@@ -431,8 +550,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => setIntensityOfPainAtNight('decreased')}
-                  className={`px-4 py-2 rounded-full border ${intensityOfPainAtNight === 'decreased' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => setIntensityOfPainAtNight('Decreased')}
+                  className={`px-4 py-2 rounded-full border ${intensityOfPainAtNight === 'Decreased' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Decreased
@@ -500,8 +619,8 @@ try {
                   <Button
                   variant={'badaSizeBtn'}
                     type="button"
-                    onClick={() => handleMedicationChange('HTN', 'regular')}
-                    className={`px-4 py-2 rounded-full border ${pastHistoryHTN.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleMedicationChange('HTN', 'On Regular Medications')}
+                    className={`px-4 py-2 rounded-full border ${pastHistoryHTN.medication === 'On Regular Medications' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Regular Medications
@@ -509,8 +628,8 @@ try {
                   <Button
                   variant={'badaSizeBtn'}
                     type="button"
-                    onClick={() => handleMedicationChange('HTN', 'irregular')}
-                    className={`px-4 py-2 rounded-full border ${pastHistoryHTN.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleMedicationChange('HTN', 'On Irregular Medications')}
+                    className={`px-4 py-2 rounded-full border ${pastHistoryHTN.medication === 'On Irregular Medications' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Irregular Medications
@@ -548,8 +667,8 @@ try {
                   <Button
                   variant={'badaSizeBtn'}
                     type="button"
-                    onClick={() => handleMedicationChange('DM2', 'regular')}
-                    className={`px-4 py-2 rounded-full border ${pastHistoryDM2.medication === 'regular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleMedicationChange('DM2', 'On Regular Medications')}
+                    className={`px-4 py-2 rounded-full border ${pastHistoryDM2.medication === 'On Regular Medications' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Regular Medications
@@ -557,8 +676,8 @@ try {
                   <Button
                   variant={'badaSizeBtn'}
                     type="button"
-                    onClick={() => handleMedicationChange('DM2', 'irregular')}
-                    className={`px-4 py-2 rounded-full border ${pastHistoryDM2.medication === 'irregular' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleMedicationChange('DM2', 'On Irregular Medications')}
+                    className={`px-4 py-2 rounded-full border ${pastHistoryDM2.medication === 'On Irregular Medications' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     On Irregular Medications
@@ -640,8 +759,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setShoulderSide, 'right')}
-                  className={`px-4 py-2 rounded-full border ${shoulderSide === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setShoulderSide, 'Right')}
+                  className={`px-4 py-2 rounded-full border ${shoulderSide === 'Right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Right
@@ -649,8 +768,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setShoulderSide, 'left')}
-                  className={`px-4 py-2 rounded-full border ${shoulderSide === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setShoulderSide, 'Left')}
+                  className={`px-4 py-2 rounded-full border ${shoulderSide === 'Left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Left
@@ -713,7 +832,7 @@ try {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setNeurologicalDeficit, true)}
+                  onClick={() => setNeurologicalDeficit({ ...neurologicalDeficit, present: true })}
                   className={`px-4 py-2 rounded-full border ${neurologicalDeficit.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
@@ -722,20 +841,20 @@ try {
                 <Button
                 variant={'yesNoBtn'}
                   type="button"
-                  onClick={() => handleToggle(setNeurologicalDeficit, false)}
+                  onClick={() => setNeurologicalDeficit({ ...neurologicalDeficit, present: false })}
                   className={`px-4 py-2 rounded-full border ${!neurologicalDeficit.present ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   No
                 </Button>
               </div>
-              {neurologicalDeficit  && (
-                <div className="mt-4 flex space-x-4 absolute top-24">
+              {neurologicalDeficit.present  && (
+                <div className="mt-4 flex gap-2 absolute top-24">
                   <Button
                   variant={'avgSizeBtn'}
                     type="button"
-                    onClick={() => handleToggle(setNeurologicalDeficit, 'motor')}
-                    className={`px-4 py-2 rounded-full border ${neurologicalDeficit.type === 'motor' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleMedicationChange('NeurologicalDeficit', 'Motor')}
+                    className={`px-4 py-2 rounded-full border ${neurologicalDeficit.type === 'Motor' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     Motor
@@ -743,8 +862,8 @@ try {
                   <Button
                   variant={'avgSizeBtn'}
                     type="button"
-                    onClick={() => handleToggle(neurologicalDeficit, 'sensory')}
-                    className={`px-4 py-2 rounded-full border ${neurologicalDeficit.type === 'sensory' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                    onClick={() => handleMedicationChange('NeurologicalDeficit', 'Sensory')}
+                    className={`px-4 py-2 rounded-full border ${neurologicalDeficit.type === 'Sensory' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                       }`}
                   >
                     Sensory
@@ -821,7 +940,7 @@ try {
             </div>
 
             {/* Tenderness on */}
-            <div className="mb-4 bg-slate-200 p-3 rounded w-[550px] center flex-col gap-2">
+            {/* <div className="mb-4 bg-slate-200 p-3 rounded w-[550px] center flex-col gap-2">
               <label className="block text-sm font-medium text-gray-700">Tenderness on</label>
               <div className="mt-1 grid grid-cols-3 gap-4">
                 {['Supraspinatus Tendon', 'Deltoid Insertion', 'AC Joint'].map((tendernessPoint) => (
@@ -837,7 +956,7 @@ try {
                   </Button>
                 ))}
               </div>
-            </div>
+            </div> */}
             {/* ROM */}
             <div className="mb-4 bg-slate-200 p-3 rounded w-[500px] center flex-col gap-2">
               <label className="block text-sm font-medium text-gray-700">ROM</label>
@@ -845,8 +964,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setRom, 'left')}
-                  className={`px-4 py-2 rounded-full border ${rom === 'left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setRom, 'Left')}
+                  className={`px-4 py-2 rounded-full border ${rom === 'Left' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Left Shoulder
@@ -854,8 +973,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setRom, 'right')}
-                  className={`px-4 py-2 rounded-full border ${rom === 'right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setRom, 'Right')}
+                  className={`px-4 py-2 rounded-full border ${rom === 'Right' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Right Shoulder
@@ -879,8 +998,8 @@ try {
                 <Button
                 variant={'badaSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setMusclePower, 'decreased')}
-                  className={`px-4 py-2 rounded-full border ${musclePower === 'decreased' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setMusclePower, 'Decreased')}
+                  className={`px-4 py-2 rounded-full border ${musclePower === 'Decreased' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Decreased due to pain
@@ -992,8 +1111,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setThumbDropTest, 'positive')}
-                  className={`px-4 py-2 rounded-full border ${thumbDropTest === 'positive' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setThumbDropTest, 'Positive')}
+                  className={`px-4 py-2 rounded-full border ${thumbDropTest === 'Positive' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Positive
@@ -1001,8 +1120,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setThumbDropTest, 'negative')}
-                  className={`px-4 py-2 rounded-full border ${thumbDropTest === 'negative' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setThumbDropTest, 'Negative')}
+                  className={`px-4 py-2 rounded-full border ${thumbDropTest === 'Negative' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Negative
@@ -1017,8 +1136,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setPainfulArcTest, 'positive')}
-                  className={`px-4 py-2 rounded-full border ${painfulArcTest === 'positive' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setPainfulArcTest, 'Positive')}
+                  className={`px-4 py-2 rounded-full border ${painfulArcTest === 'Positive' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Positive
@@ -1026,8 +1145,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setPainfulArcTest, 'negative')}
-                  className={`px-4 py-2 rounded-full border ${painfulArcTest === 'negative' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setPainfulArcTest, 'Negative')}
+                  className={`px-4 py-2 rounded-full border ${painfulArcTest === 'Negative' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Negative
@@ -1042,8 +1161,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setAdl, 'dependent')}
-                  className={`px-4 py-2 rounded-full border ${adl === 'dependent' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setAdl, 'Dependent')}
+                  className={`px-4 py-2 rounded-full border ${adl === 'Dependent' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Dependent
@@ -1051,8 +1170,8 @@ try {
                 <Button
                 variant={'avgSizeBtn'}
                   type="button"
-                  onClick={() => handleToggle(setAdl, 'independent')}
-                  className={`px-4 py-2 rounded-full border ${adl === 'independent' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
+                  onClick={() => handleToggle(setAdl, 'Independent')}
+                  className={`px-4 py-2 rounded-full border ${adl === 'Independent' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border-gray-300'
                     }`}
                 >
                   Independent
