@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import {useSubmitShoulderProblemInDoctorPrescriptionMutation} from "../../API/API"
+import {useGetAllPatientWithShoulderProblemQuery, useSubmitShoulderProblemInDoctorPrescriptionMutation} from "../../API/API"
 import { Button } from '../../components/ui/button';
 import axios from 'axios';
 
 const PeriarthritisShoulderForm = ({ patientID }) => {
   // Declare all necessary state variables
   const [painAndStiffnessSide, setPainAndStiffnessSide] = useState('Right');
-  const [duration, setDuration] = useState({ years: 0, months: 0, weeks: 0, days: 0 });
+  const [duration, setDuration] = useState({ years: "", months: "", weeks: "", days: "" });
   // const [patientId, setPatientId] = useState(patientID);
-  const [durationOfPain, setDurationOfPain] = useState({ years: 0, months: 0, weeks: 0, days: 0 });
+  const [durationOfPain, setDurationOfPain] = useState({ years: "", months: "", weeks: "", days: "" });
   const [natureOfPain, setNatureOfPain] = useState('Continuous');
   const [symptoms, setSymptoms] = useState('Improving');
   const [onset, setOnset] = useState('Gradual');
@@ -42,6 +42,10 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
   const [modalities, setModalities] = useState([]);
   const [exercises, setExercises] = useState([]);
 
+  
+  const [submitShoulderProblem, { isLoading, isError, isSuccess }] = useSubmitShoulderProblemInDoctorPrescriptionMutation();
+const {data}=useGetAllPatientWithShoulderProblemQuery("")
+console.log(data)
   // Toggle functions for handling button state
   const handleToggle = (setStateFunction, value) => {
     setStateFunction(value);
@@ -77,13 +81,14 @@ const PeriarthritisShoulderForm = ({ patientID }) => {
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log(patientID)
+    console.log("Patient ID:", patientID);
+  
     const formData = {
       painAndStiffness: {
         side: painAndStiffnessSide,
         duration
       },
-      patientId:patientID,
+      patientId: patientID,
       Hopi: {
         durationOfPain,
         natureOfPain,
@@ -137,25 +142,26 @@ console.log(patientID)
         prognosisWellExplainedInPatientsWords: exercises.includes('Prognosis Well Explained in Patients Words')
       }
     };
-
   
-try {
-  const response = await axios.post('https://manipal-server.onrender.com/api/patient/shoulder/register_problem', formData, {
+    try {
+      console.log("Form Data:", JSON.stringify(formData, null, 2));
   
-  });
-  console.log(formData)
-
-  if (response.status === 200) {
-    console.log('Form submitted successfully');
-    
-  } else {
-    console.error('Form submission failed');
-  }
-} catch (error) {
-  console.error('Error:', error);
-}
-
+      const response = await submitShoulderProblem(formData).unwrap();
+      console.log("API Response:", response);
+  
+      if (response && response.patientId) { // Adjust based on actual response structure
+        console.log("Form submitted successfully");
+      } else {
+        console.error("Form submission failed:", response);
+      }
+    } catch (error) {
+      console.error("Error Details:", error);
+      if (error.data) {
+        console.error("Error Data:", JSON.stringify(error.data, null, 2));
+      }
+    }
   };
+  
 
   // const handleHi = async (event) => {
   //   event.preventDefault();

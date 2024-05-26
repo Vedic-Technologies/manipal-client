@@ -83,6 +83,14 @@ export const API = createApi({
       })
      }),
 
+     getAllPatientWithShoulderProblem: builder.query({
+      query:()=>({
+        url: `patient/shoulder`,
+        method: "GET"
+      })
+      }),
+   
+
      submitShoulderProblemInDoctorPrescription: builder.mutation({
       query:(formdata)=>({
         url: `patient/shoulder/register_problem`,
@@ -109,5 +117,6 @@ export const {
     useStaffSignupMutation,
     useGetAllUsersQuery,
     useDeleteUserByIdMutation,
+    useGetAllPatientWithShoulderProblemQuery,
     useSubmitShoulderProblemInDoctorPrescriptionMutation,
 } = API
