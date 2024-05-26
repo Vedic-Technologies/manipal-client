@@ -151,7 +151,6 @@ console.log(data)
   
       if (response && response.patientId) { // Adjust based on actual response structure
         console.log("Form submitted successfully");
-        console.log(response.status)
       } else {
         console.error("Form submission failed:", response);
       }
