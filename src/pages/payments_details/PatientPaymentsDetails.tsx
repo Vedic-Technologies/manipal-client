@@ -78,7 +78,7 @@ const PatientPaymentsDetails = () => {
       item?.patient?.contact === trimmedSearchInput ||
       item?.patient?.email?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
       item?.patient?.age === parseInt(trimmedSearchInput) ||
-      item?._id === trimmedSearchInput ||
+      item?._id === trimmedSearchInput || 
       item?.patient?.name?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
       item?.paymentType?.toLowerCase() === trimmedSearchInput.toLowerCase() ||
       item?.amount === trimmedSearchInput ||
