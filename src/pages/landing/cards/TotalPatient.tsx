@@ -1,66 +1,81 @@
-import React from 'react'
-import { Chart as ChartJS, defaults } from "chart.js/auto";
-import { Line } from "react-chartjs-2"
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import React, { useEffect, useState } from 'react';
+import { useGetAllPatientsQuery } from '../../../API/API'; // Update this with the actual path to your API slice
 
-const patientsData = {
-    "labels": ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"],
-    "datasets": [
-        {
-            "label": "Total Patients",
-            "data": [50, 60, 70, 190, 50, 130, 120, 190, 80, 150, 190, 210],
-            "backgroundColor": "rgba(255, 99, 132, 0.2)",
-            "borderColor": "rgba(255, 99, 132, 1)",
-            "borderWidth": 1
-        }
-    ]
-};
-let totalPatients = 0;
-for (let i = 0; i < patientsData.datasets[0].data.length; i++) {
-    totalPatients += patientsData.datasets[0].data[i];
-}
-
-const calculatePatientPercentageChange = () => {
-    const data = patientsData.datasets[0].data;
-    const previousMonthPatients = data[data.length - 2];
-    const currentMonthPatients = data[data.length - 1];
-    const percentageChange = ((currentMonthPatients - previousMonthPatients) / previousMonthPatients) * 100;
-    return percentageChange.toFixed(2);
-};
 const TotalPatient = () => {
-    const data = patientsData.labels.map((label, index) => ({
-        name: label,
-        value: patientsData.datasets[0].data[index]
-    }));
-    const percentageChange = calculatePatientPercentageChange();
+    const { data: patients = [], error, isLoading, refetch } = useGetAllPatientsQuery("");
+    const [totalPatients, setTotalPatients] = useState(0);
+    const [yearlyPatients, setYearlyPatients] = useState(0);
+    const [monthlyPatients, setMonthlyPatients] = useState(0);
+    const [percentageChange, setPercentageChange] = useState(0);
+
+    useEffect(() => {
+        console.log('Fetched patients:', patients); // Debugging log
+        if (patients.length > 0) {
+            // Calculate total patients
+            const total = patients.length;
+            setTotalPatients(total);
+
+            // Filter patients by year and month
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth() + 1;
+
+            const yearlyPatientsCount = patients.filter(patient => 
+                new Date(patient.createdAt).getFullYear() === currentYear
+            ).length;
+            setYearlyPatients(yearlyPatientsCount);
+
+            const monthlyPatientsCount = patients.filter(patient => {
+                const patientDate = new Date(patient.createdAt);
+                return patientDate.getFullYear() === currentYear && (patientDate.getMonth() + 1) === currentMonth;
+            }).length;
+            setMonthlyPatients(monthlyPatientsCount);
+
+            // Calculate percentage change from last month to current month
+            const lastMonthPatients = patients.filter(patient => {
+                const patientDate = new Date(patient.createdAt);
+                return patientDate.getFullYear() === currentYear && (patientDate.getMonth() + 1) === currentMonth - 1;
+            }).length;
+
+            if (lastMonthPatients > 0) {
+                const change = ((monthlyPatientsCount - lastMonthPatients) / lastMonthPatients) * 100;
+                setPercentageChange(change.toFixed(2));
+            } else {
+                setPercentageChange(0);
+            }
+        }
+    }, [patients]);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error fetching data</div>;
 
     return (
-        <div className=' bg-white h-[200px]  w-auto p-2 min-h-[50%] flex justify-around gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
-            <div className=' '>
-                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient Till Today</div>
-                <div className='text-3xl font-bold p-2'>7250</div>
-                <div className='text-sm pt-3 '>
-                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
-                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }} >{percentageChange} %</span> from last year</div>
+        <div className='bg-white h-[200px] w-auto p-2 min-h-[50%] flex justify-around gap-2 rounded-lg shadow-[0px_0px_10px_0px_#9f7aea]'>
+            <div>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patients Till Today</div>
+                <div className='text-3xl font-bold p-2'>{totalPatients}</div>
+                <div className='text-sm pt-3'>
+                    {+percentageChange >= 0 ? <i className="fa-solid fa-arrow-trend-up text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down text-red-600 text-2xl px-1"></i>}
+                    <span className='text-lg p-1' style={{ color: +percentageChange >= 0 ? 'blue' : 'red' }}>{percentageChange} %</span> from last month
+                </div>
             </div>
-            <div className=' '>
-                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient This Year</div>
-                <div className='text-3xl font-bold p-2'>380</div>
-                <div className='text-sm pt-3 '>
-                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
-                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }} >{percentageChange} %</span> from last year</div>
+            <div>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patients This Year</div>
+                <div className='text-3xl font-bold p-2'>{yearlyPatients}</div>
+                <div className='text-sm pt-3'>
+                    {+percentageChange >= 0 ? <i className="fa-solid fa-arrow-trend-up text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down text-red-600 text-2xl px-1"></i>}
+                    <span className='text-lg p-1' style={{ color: +percentageChange >= 0 ? 'blue' : 'red' }}>{percentageChange} %</span> from last month
+                </div>
             </div>
-            <div className=' '>
-                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patient This Month</div>
-                <div className='text-3xl font-bold p-2'>35</div>
-                <div className='text-sm pt-3 '>
-                    {+percentageChange > 0 ? <i className="fa-solid fa-arrow-trend-up  text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down  text-red-600 text-2xl px-1"></i>}
-                    <span className='text-2xl p-1' style={{ color: +percentageChange > 0 ? 'blue' : 'red' }} >{percentageChange} %</span> from last year</div>
+            <div>
+                <div className='text-sm text-gray-400 tracking-wider p-1'>Total Patients This Month</div>
+                <div className='text-3xl font-bold p-2'>{monthlyPatients}</div>
+                <div className='text-sm pt-3'>
+                    {+percentageChange >= 0 ? <i className="fa-solid fa-arrow-trend-up text-blue-600 text-2xl px-1"></i> : <i className="fa-solid fa-arrow-trend-down text-red-600 text-2xl px-1"></i>}
+                    <span className='text-lg p-1' style={{ color: +percentageChange >= 0 ? 'blue' : 'red' }}>{percentageChange} %</span> from last month
+                </div>
             </div>
-           
         </div>
-
     );
 };
 
-export default TotalPatient
+export default TotalPatient;

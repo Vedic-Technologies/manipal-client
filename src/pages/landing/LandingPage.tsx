@@ -16,10 +16,11 @@ import PatientToday from "./infocard/PatientToday";
 import NewPatient from "./infocard/NewPatient";
 import StaffAvailable from "./infocard/StaffAvailable";
 import IncomeToday from "./infocard/IncomeToday";
-import { data, InfoData } from "../landing/infocard/infoData";
+import { useInfoData, InfoData } from "../landing/infocard/infoData";
 import InfoCard from "./infocard/InfoCard";
 
 const LandingPage = () => {
+  const { data } = useInfoData();
   return (
     <div className=" mb-10 w-[100%]  flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
      
