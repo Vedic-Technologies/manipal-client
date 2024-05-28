@@ -4,11 +4,30 @@ import 'tailwindcss/tailwind.css';
 import formatDate from '../../util/TimeFormate';
 
 const MonthlyIncExp = () => {
-  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const today = new Date().toISOString().split('T')[0];
+  const [dateRange, setDateRange] = useState({ start: today, end: today });
+
   const { data: payments = [], error, isLoading, refetch } = useGetAllPaymentsQuery("");
 
   // Group payments by date and calculate the total amount for each day
-  const groupedPayments = payments.reduce((acc, pay) => {
+  const filteredPayments = payments.filter(pay=>{
+    const paymentDate =new Date(pay.paymentDate);
+    const startDate =new Date(dateRange.start);
+    const endDate = new Date(dateRange.end);
+    if(!isNaN(startDate) && !isNaN(endDate)){
+      return paymentDate >= startDate && paymentDate <=endDate; 
+    }
+    else if(!isNaN(startDate))
+    {
+return paymentDate >= startDate;
+    }
+    else if(!isNaN(endDate)){
+      return paymentDate <= endDate;
+    }
+    return true
+  })
+
+  const groupedPayments = filteredPayments.reduce((acc, pay) => {
     const date = formatDate(pay.paymentDate);
     if (!acc[date]) {
       acc[date] = { totalAmount: 0, payments: [] };
@@ -27,13 +46,14 @@ const MonthlyIncExp = () => {
   // Sort the paymentSummary array by date in ascending order
   paymentSummary.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen w-4/5 m-auto">
     <div className="flex gap-5 m-2">
       <div className="text-lg font-semibold"> Daily Payments of month </div>
       <div className="">
-        <input type="date" className='ml-5 px-5' onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })} />
-        <input type="date" className='ml-5 px-5' onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })} />
+        <input type="date" className='ml-5 px-5'    value={dateRange.start} onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })} />
+        <input type="date" className='ml-5 px-5'    value={dateRange.end} onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })} />
       </div>
     </div>
      
