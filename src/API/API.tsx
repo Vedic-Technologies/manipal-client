@@ -44,6 +44,8 @@ export const API = createApi({
 
       })
      }),
+
+     
      getAllPayments: builder.query({
       query: () => "payment/all_payments",
      }),

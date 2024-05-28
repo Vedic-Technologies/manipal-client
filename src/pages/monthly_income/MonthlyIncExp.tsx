@@ -10,6 +10,7 @@ const MonthlyIncExp = () => {
   // Group payments by date and calculate the total amount for each day
   const groupedPayments = payments.reduce((acc, pay) => {
     const date = formatDate(pay.paymentDate);
+    console.log("date: ",date)
     if (!acc[date]) {
       acc[date] = { totalAmount: 0, payments: [] };
     }
@@ -17,7 +18,7 @@ const MonthlyIncExp = () => {
     acc[date].payments.push(pay);
     return acc;
   }, {});
-
+console.log(groupedPayments)
   // Convert groupedPayments to an array of objects for easier rendering
   const paymentSummary = Object.keys(groupedPayments).map(date => ({
     date,
