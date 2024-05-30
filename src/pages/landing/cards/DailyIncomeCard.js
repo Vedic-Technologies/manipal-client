@@ -10,7 +10,6 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { useGetAllPaymentsQuery } from '../../../API/API'; // Adjust the import path accordingly
-import physio from '../../../assets/images/image.png';
 
 ChartJS.register(
   CategoryScale,
@@ -70,6 +69,8 @@ const DailyIncomeCard = () => {
            paymentDay <= currentDay;
   });
 
+  console.log('Filtered Payments:', filteredPayments); // Debug statement
+
   const dailyIncome = labels.map(day => {
     const dayIncome = filteredPayments
       .filter(payment => {
@@ -77,8 +78,14 @@ const DailyIncomeCard = () => {
         return paymentDate.getDate() === parseInt(day, 10);
       })
       .reduce((acc, payment) => acc + payment.amount, 0);
+
+    // const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    // console.log(`Income for date ${formattedDate}: ${dayIncome}`); // Log the income for each date
+
     return dayIncome;
   });
+
+  // console.log('Daily Income:', dailyIncome); // Debug statement
 
   const chartData = {
     labels,
@@ -90,7 +97,6 @@ const DailyIncomeCard = () => {
       },
     ],
   };
-
   return (
     <div className="rounded-xl bg-white shadow-lg min-h-full p-10 w-1/2">
       <Bar options={options} data={chartData} />
