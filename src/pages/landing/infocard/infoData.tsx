@@ -28,13 +28,13 @@ export const initialData: InfoData[] = [
       buttonText: "View Messages",
       cardUrl: "/messages"
     },
-    {
-      title: "Staff Available",
-      count: 0,
-      icon: staff_available,
-      buttonText: "View Tasks",
-      cardUrl: "/tasks"
-    },
+    // {
+    //   title: "Staff Available",
+    //   count: 0,
+    //   icon: staff_available,
+    //   buttonText: "View Tasks",
+    //   cardUrl: "/tasks"
+    // },
     {
       title: "Income Today",
       count: 0,

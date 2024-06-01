@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const InfoCard : React.FC<{item:InfoData}> = ({item }) => {
   return (
     <>
-        <div className="flex-1 bg-white shadow-basic  w-full h-24 p-2 rounded-lg flex justify-start gap-5 items-center relative overflow-hidden">
+        <div className="bg-white shadow-basic  w-[20%] h-24 p-2 rounded-lg flex justify-start gap-5 items-center relative overflow-hidden">
             <div className="">
             <img src={item.icon} alt="" className='size-20 border-2 p-2 rounded-lg'/>
             </div>

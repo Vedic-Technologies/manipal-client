@@ -8,6 +8,7 @@ import {
 } from "../../components/ui/select";
 import DailyPayment from "./DailyPayment";
 import DiscountPayment from "./DiscountPayment";
+import Opd from "./Opd";
 
 const PaymentDetails = ({patientId}) => {
   const [paymentType, setPaymentType] = useState("");
@@ -23,7 +24,7 @@ const PaymentDetails = ({patientId}) => {
         <div className="flex w-1/2 ">
         <div className="text-xl font-semibold mb-6">Enter Payment Method</div>
         <div className="ml-3 ">
-            <Select id="gender"
+            <Select id="gender"            
              required
             value={paymentType}
             onValueChange={setPaymentType} >
@@ -33,13 +34,14 @@ const PaymentDetails = ({patientId}) => {
                     <SelectContent>
                       <SelectItem value="daily">Daily</SelectItem>
                       <SelectItem value="discount">Discount</SelectItem>
-                     
+                      <SelectItem value="opd">OPD</SelectItem>                  
                     </SelectContent>
                   </Select> </div>
         
         </div>
      {paymentType==="daily" && <DailyPayment patientId={patientId} />}
      {paymentType==="discount" && <DiscountPayment/>}
+     {paymentType==="opd" && <Opd patientId={patientId}/>}
       </div>
     </>
   );
