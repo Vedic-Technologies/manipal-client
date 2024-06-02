@@ -1,22 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import StaffSignup from "../pages/staff/StaffSignup";
 
-const token = localStorage.getItem("authToken");
-if (!token) {
-  console.error("No token found, please log in.");
-  console.log(" ------------------------- No token found, please log in. ----------------------");
-}
+// Function to dynamically prepare headers for each request
+const prepareHeaders = (headers) => {
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  } else {
+    console.error("No token found, please log in.");
+  }
+  return headers;
+};
 
-// const token =
-//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjAwMTQ1NmQ5N2YwZThlNjAzOWYyNmMiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcxNzMwMDMwNn0.pfU8xBMrVQhobpTmrsmB8WzE5CSrk186TvCE0-wqvDI";
-
+// Create the API slice
 export const API = createApi({
   reducerPath: "patientApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://manipal-server.onrender.com/api/",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    prepareHeaders,
   }),
   endpoints: (builder) => ({
     getAllPatients: builder.query({
