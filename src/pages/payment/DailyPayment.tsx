@@ -27,13 +27,15 @@ const DailyPayment = ({patientId}) => {
     paymentType:string,
     patientId:string
   }
+  const [currentDate, setCurrentDate] = useState("");
+
   const initialData={
     amount:null,
-    paymentDate:"",
+    paymentDate: currentDate,
     paymentType:"daily",
     patientId:patientId
   }
-  const [currentDate, setCurrentDate] = useState('');
+  console.log(initialData);
   const [paymentData, setPaymentData] = useState<paymentType>(initialData)
   const [showPrintCard,setShowPrintCard]=useState(false)
   const [isLoading, setIsLoading] = useState(false);
