@@ -7,11 +7,10 @@ import {PatientType} from '../../types/PatientTypes';
 import { ChangeEvent, useState } from "react";
 import { initialData } from "../../initial_values/InitialValues";
 import Webcam from "../webcam/Camera";
-import axios from "axios";
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
-
+import {useSubmitStaffPrescriptionMutation} from "../../API/API"
 const PresCriptionSadcn=()=> {
 
 const [patientData, setPatientData] = useState<PatientType>(initialData)
@@ -20,39 +19,39 @@ const [imageFile, setImageFile]=useState("");
   const [jobDoneMessage, setJobDoneMessage] = useState("")
   const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
   const [alertColor, setAlertColor] = useState("")
-  
+  const [submitStaffPrescription] = useSubmitStaffPrescriptionMutation()
+
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
   }
-const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
+
+  const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();  
-    console.log(patientData)
+    console.log(patientData);
     try {
-      const response = await axios.post(
-        "https://manipal-server.onrender.com/api/patient/patient_registration",
-        {...patientData,image:imageFile}
-      );
-      console.log(response.data);
-      setJobDoneMessage("Patient registration successful!")
-      setAlertColor("green")
-      setOpenJobDoneAlert(true)
+        const response = await submitStaffPrescription({ ...patientData, image: imageFile }).unwrap();
+        console.log(response);
+        setJobDoneMessage("Patient registration successful!");
+        setAlertColor("green");
+        setOpenJobDoneAlert(true);
 
-      // removing success alert automatically
-      setTimeout(() => {
-        setOpenJobDoneAlert(false)
-      }, 3000);
+        // removing success alert automatically
+        setTimeout(() => {
+            setOpenJobDoneAlert(false);
+        }, 3000);
     } catch (error) {
-      console.error("Error:", error);
-         setJobDoneMessage("Failed to register Patient!!")
-         setAlertColor("red")
-        setOpenJobDoneAlert(true)
+        console.error("HI,Error:", error);
+        setJobDoneMessage("Failed to register Patient!!");
+        setAlertColor("red");
+        setOpenJobDoneAlert(true);
 
-      // removing failed alert automatically
-      setTimeout(() => {
-        setOpenJobDoneAlert(false)
-      }, 3000);
+        // removing failed alert automatically
+        setTimeout(() => {
+            setOpenJobDoneAlert(false);
+        }, 3000);
     }
-  };
+};
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {  
     const { name, value } = e.target;
     setPatientData({
@@ -171,13 +170,13 @@ const handleBloodGroupSelectChange=(value)=>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
-            <Label htmlFor="dob">Occupation</Label>
+            <Label htmlFor="occupation">Occupation</Label>
             <Input
-              id="dob"
+              id="occupation"
               
               type="text"
-              name="dob"
-              value={patientData.dob}
+              name="occupation"
+              value={patientData.occupation}
               placeholder="Enter Occupation"
               onChange={handleChange}
             />

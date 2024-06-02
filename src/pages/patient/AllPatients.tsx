@@ -245,6 +245,7 @@ const AllPatients = () => {
   }
 
   if (!currentPatients.length) {
+    console.log(patients)
     return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
     <div> No patients found.</div>
     <div>

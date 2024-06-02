@@ -3,7 +3,7 @@ export type PatientType = {
     gender: string;
     age: string;
     image: string | null;
-    dob: string;
+    occupation: string | number | readonly string[] | undefined;
     contact: string;
     email: string;
     idProof: string;

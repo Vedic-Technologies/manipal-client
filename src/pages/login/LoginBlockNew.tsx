@@ -46,13 +46,22 @@ const LoginBlockNew = () => {
         );
 
         console.log(response);
+        // console.log(response.data);
+        // console.log(response.data.user);
+        // console.log(response.data.user.userType);
 
         if (response.data) {
-          navigate("/home");
+ 
           localStorage.setItem("currentUser", JSON.stringify(response.data));
           const token = response.data.token;
           localStorage.setItem("authToken", token);
           console.log("Login successful, token stored.");
+          const userType = response.data.user.userType;
+          if(userType === "admin"){
+            navigate("/home");
+          }else if(userType === "staff"){
+            navigate("/home/prescription")
+          }
           setError(null);
           setEmailError(null);
         }
