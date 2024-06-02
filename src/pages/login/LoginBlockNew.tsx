@@ -42,8 +42,7 @@ const LoginBlockNew = () => {
         setLoader(true);
         const response = await axios.post(
           "https://manipal-server.onrender.com/api/users/login",
-          { email, password },
-          { withCredentials: true }
+          { email, password }
         );
 
         console.log(response);
@@ -51,6 +50,9 @@ const LoginBlockNew = () => {
         if (response.data) {
           navigate("/home");
           localStorage.setItem("currentUser", JSON.stringify(response.data));
+          const token = response.data.token;
+          localStorage.setItem("authToken", token);
+          console.log("Login successful, token stored.");
           setError(null);
           setEmailError(null);
         }
