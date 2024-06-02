@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import login_image from '../../assets/images/login/login_image.png';
+import login_image from "../../assets/images/login/login_image.png";
 import { useNavigate } from "react-router-dom";
 import { BiSolidHide } from "react-icons/bi";
 import { IoMdEye } from "react-icons/io";
@@ -34,14 +34,19 @@ const LoginBlockNew = () => {
     } else if (password.length > 30) {
       setError("Password too long, must be less than 31 characters");
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Invalid email format. Please enter a valid email address.");
+      setEmailError(
+        "Invalid email format. Please enter a valid email address."
+      );
     } else {
       try {
         setLoader(true);
         const response = await axios.post(
           "https://manipal-server.onrender.com/api/users/login",
-          { email, password }
+          { email, password },
+          { withCredentials: true }
         );
+
+        console.log(response);
 
         if (response.data) {
           navigate("/home");
@@ -53,9 +58,13 @@ const LoginBlockNew = () => {
       } catch (error: any) {
         setLoader(false);
         if (axios.isAxiosError(error) && !error.response) {
-          setServerError("Network Error: Please check your internet connection and try again.");
+          setServerError(
+            "Network Error: Please check your internet connection and try again."
+          );
         } else {
-          setServerError("An unexpected error occurred. Please try again later.");
+          setServerError(
+            "An unexpected error occurred. Please try again later."
+          );
         }
       }
     }
@@ -66,18 +75,31 @@ const LoginBlockNew = () => {
       <div className="w-1/2 bg-white rounded-3xl shadow-lg mx-4">
         <div className="md:flex">
           <div className="hidden md:block md:w-1/2 relative p-5">
-            <img className="object-cover w-full h-full rounded-2xl" src={login_image} alt="hello" />
+            <img
+              className="object-cover w-full h-full rounded-2xl"
+              src={login_image}
+              alt="hello"
+            />
+            42
           </div>
           <div className="w-1/2 p-5">
             <div className="text-center">
-              <h2 className="text-zinc-600 text-6xl font-bold mt-10" style={{ fontFamily: "Edu VIC WA NT Beginner" }}>
+              <h2
+                className="text-zinc-600 text-6xl font-bold mt-10"
+                style={{ fontFamily: "Edu VIC WA NT Beginner" }}
+              >
                 Sign In
               </h2>
             </div>
             <div className="center">
               <form className="space-y-6 mt-14 w-[70%]" onSubmit={verifyLogin}>
                 <div>
-                  <label htmlFor="email" className="text-sm font-medium text-zinc-700 block mb-2">Email</label>
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-zinc-700 block mb-2"
+                  >
+                    Email
+                  </label>
                   <input
                     type="email"
                     id="email"
@@ -91,10 +113,17 @@ const LoginBlockNew = () => {
                       setError(null);
                     }}
                   />
-                  {emailError && <div className="text-sm text-red-700">{emailError}</div>}
+                  {emailError && (
+                    <div className="text-sm text-red-700">{emailError}</div>
+                  )}
                 </div>
                 <div>
-                  <label htmlFor="password" className="text-sm font-medium text-zinc-700 block mb-2">Password</label>
+                  <label
+                    htmlFor="password"
+                    className="text-sm font-medium text-zinc-700 block mb-2"
+                  >
+                    Password
+                  </label>
                   <div className="relative">
                     <input
                       type="password"
@@ -161,12 +190,19 @@ const LoginBlockNew = () => {
               </form>
             </div>
             <div className="mt-6 text-center">
-              <p className="text-sm text-zinc-600">Can't access your account? <a href="#" className="text-green-600 hover:text-green-500">Connect admin</a></p>
+              <p className="text-sm text-zinc-600">
+                Can't access your account?{" "}
+                <a href="#" className="text-green-600 hover:text-green-500">
+                  Connect admin
+                </a>
+              </p>
             </div>
           </div>
         </div>
       </div>
-      {serverError && (<ErrorPrompt message={serverError} setServerError={setServerError} />)}
+      {serverError && (
+        <ErrorPrompt message={serverError} setServerError={setServerError} />
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import StaffSignup from '../pages/staff/StaffSignup'
 
 export const API = createApi({
   reducerPath: 'patientApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://manipal-server.onrender.com/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://manipal-server.onrender.com/api/' , credentials: 'include' }),
   endpoints: (builder) => ({
 
 
