@@ -5,22 +5,17 @@ import PaymentCard from "./PaymentCard";
 
 import { FaCheckCircle } from "react-icons/fa";
 const Opd = ({ patientId }) => {
-    const [currentDate, setCurrentDate] = useState("");
-   
-    const [showPrintCard, setShowPrintCard] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [addPayment] = useAddPaymentMutation();
-    const [isSuccess, setIsSuccess] = useState(false);
-  useEffect(() => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
+  const [showPrintCard, setShowPrintCard] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [addPayment] = useAddPaymentMutation();
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    const formattedDate = `${yyyy}-${mm}-${dd}`;
-    console.log(formattedDate)
-    setCurrentDate(formattedDate);
-  }, []);
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+
+  const currentDate = `${yyyy}-${mm}-${dd}`;
 
   type paymentType = {
     amount: number;
@@ -34,24 +29,24 @@ const Opd = ({ patientId }) => {
     paymentType: "opd",
     patientId: patientId,
   };
-  
+
   const [paymentData, setPaymentData] = useState<paymentType>(initialData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);   
+    setIsLoading(true);
   };
-  
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPaymentData({
       ...paymentData,
       [name]: value,
     });
-  }; 
+  };
 
   const addOpdPayment = async () => {
-    console.log(currentDate)
+    console.log(currentDate);
     console.log(paymentData);
     setIsLoading(true);
     try {
@@ -154,9 +149,8 @@ const Opd = ({ patientId }) => {
           </form>
         </div>
       </div>
-      {showPrintCard && <PaymentCard />}     
-      <div>       
-      </div>
+      {showPrintCard && <PaymentCard />}
+      <div></div>
     </div>
   );
 };
