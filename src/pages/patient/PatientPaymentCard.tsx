@@ -4,7 +4,7 @@ const PatientPaymentCard = ({ payment }) => {
   return (
     <div>
       <div className="container mx-auto px-0 py-8 ">
-        <div className="bg-white rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
+        <div className="bg-white h-[500px] overflow-y-auto rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
           <h2 className="text-2xl font-bold mb-4">Payments</h2>
           <div className="overflow-x-auto">
             <table className="w-full table-auto">
@@ -17,7 +17,7 @@ const PatientPaymentCard = ({ payment }) => {
                       <th className="px-4 py-3 text-end pr-24">Action</th>
                     </tr>
                   </thead>
-                  {payment.map((pay) => (
+                  {payment?.slice(0)?.reverse()?.map((pay) => (
                     <>
                       <tbody>
                         <tr

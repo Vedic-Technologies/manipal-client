@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import user_logo from '../assets/images/user.png'
 import user_logo_1 from '../assets/logoes/user.png'
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
@@ -8,6 +8,19 @@ import { BiTerminal } from "react-icons/bi";
 const NavBar = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [showAlert,setShowAlert] = useState(false)
+const [loggedInUserType,setLoggedInUserType]= useState("")
+
+useEffect(()=>{
+  const currentUserstring= localStorage.getItem("currentUser");
+  if(currentUserstring){
+    const currentUserData= JSON.parse(currentUserstring);
+    const fullName = `${currentUserData?.user?.firstName} ${currentUserData?.user?.lastName}`
+    setLoggedInUserType(fullName);
+    // console.log("fullname",fullName)
+    // console.log("firstName",currentUserData.user.firstName)
+    // console.log("lastname",currentUserData.user.lastName)
+  }
+})
 
   const handleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -36,7 +49,7 @@ const NavBar = () => {
             <div className="absolute bg-red-500 w-2 h-2 rounded-full top-1 right-2"></div>
           </div>
           <div className="center gap-2">
-          <div className="">Kislay  Kumar</div>
+          <div className="">{loggedInUserType}</div>
           <div className=" bg-gray-300 w-8 h-8 rounded-full center ">
            <img src={user_logo_1} alt="user" className="cursor-pointer"
            onClick={()=>{setShowAlert(!showAlert)}}

@@ -197,6 +197,7 @@ const Patient = () => {
                       isOpen={openJobDoneAlert}
                       OnCancel={handleAlert}
                       isCancelButton="block"
+                      icon={null}
                     />
                   </motion.div>
                 </AlertWrapper>
