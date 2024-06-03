@@ -136,12 +136,12 @@ export default function StaffSignup() {
 
             />
           </div>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="usertype">Usertype</Label>
             <Input id="usertype" name="userType" required type="usertype"
 
               onChange={handleChange} />
-          </div>
+          </div> */}
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input id="password" name="password" required type="password"
