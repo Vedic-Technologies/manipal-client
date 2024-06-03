@@ -14,6 +14,7 @@ export const API = createApi({
   reducerPath: "patientApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://manipal-server.onrender.com/api/",
+    // baseUrl: "http://localhost:8000/api/",
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -74,14 +75,14 @@ export const API = createApi({
 
     staffSignup: builder.mutation({
       query: (user) => ({
-        url: `users/signup`,
+        url: `staffs/register`,
         method: "POST",
         body: user,
       }),
     }),
 
     getAllUsers: builder.query({
-      query: () => "users",
+      query: () => "staffs",
     }),
 
     deleteUserById: builder.mutation({
