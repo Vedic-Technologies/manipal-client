@@ -11,11 +11,10 @@ import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
 import {useSubmitStaffPrescriptionMutation} from "../../API/API"
-import defaultImage from "../../assets/images/default_Image.jpg"
 const PresCriptionSadcn=()=> {
 
 const [patientData, setPatientData] = useState<PatientType>(initialData)
-const [imageFile, setImageFile]=useState(defaultImage);
+const [imageFile, setImageFile]=useState("");
   // jodDone alert message 
   const [jobDoneMessage, setJobDoneMessage] = useState("")
   const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
@@ -29,8 +28,6 @@ const [imageFile, setImageFile]=useState(defaultImage);
   const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();  
     console.log(patientData);
-    // const imageToSubmit = imageFile || defaultImage;
-
     try {
         const response = await submitStaffPrescription({ ...patientData, image: imageFile }).unwrap();
         console.log(response);
