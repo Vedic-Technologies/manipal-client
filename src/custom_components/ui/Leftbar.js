@@ -94,6 +94,7 @@ const Leftbar = ({ children }) => {
     // removeCookie('userType');
     // setLoginStatus(null);
     localStorage.removeItem("activeLink");
+    // localStorage.removeItem("currentUser");
     navigate("/");
   };
 
