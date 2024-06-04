@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { BiSolidHide } from "react-icons/bi";
 import { IoMdEye } from "react-icons/io";
 import ErrorPrompt from "../../custom_components/ErrorPrompt";
+import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
+import { Label } from "../../components/ui/label";
 
 const LoginBlockNew = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("admin");
   const [error, setError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -41,26 +44,26 @@ const LoginBlockNew = () => {
       try {
         setLoader(true);
         const response = await axios.post(
+          // "http://localhost:8000/api/users/login",
           "https://manipal-server.onrender.com/api/users/login",
-          { email, password }
+          { email, password, userType }
         );
 
-        console.log(response);
+        console.log(response.data);
         // console.log(response.data);
         // console.log(response.data.user);
         // console.log(response.data.user.userType);
 
         if (response.data) {
- 
           localStorage.setItem("currentUser", JSON.stringify(response.data));
           const token = response.data.token;
           localStorage.setItem("authToken", token);
           console.log("Login successful, token stored.");
           const userType = response.data.user.userType;
-          if(userType === "admin"){
+          if (userType === "admin") {
             navigate("/home");
-          }else if(userType === "staff"){
-            navigate("/home/prescription")
+          } else if (userType === "staff") {
+            navigate("/home/prescription");
           }
           setError(null);
           setEmailError(null);
@@ -166,6 +169,40 @@ const LoginBlockNew = () => {
                     )}
                   </div>
                   {error && <div className="text-sm text-red-700">{error}</div>}
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <RadioGroup
+                      defaultValue="admin"
+                      aria-label="User Role"
+                      className="flex items-center gap-4"
+                    >
+                      <Label
+                        htmlFor="admin"
+                        className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-400"
+                      >
+                        <RadioGroupItem
+                          value="admin"
+                          id="admin"
+                          onClick={(e) => setUserType(e.target.value)}
+                          className="peer h-4 w-4 appearance-none rounded-full border-2 border-gray-300 bg-white transition-colors checked:border-gray-900 checked:bg-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:checked:border-gray-50 dark:checked:bg-gray-50"
+                        />
+                        Admin
+                      </Label>
+                      <Label
+                        htmlFor="staff"
+                        className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-400"
+                      >
+                        <RadioGroupItem
+                          value="staff"
+                          id="staff"
+                          onClick={(e) => setUserType(e.target.value)}
+                          className="peer h-4 w-4 appearance-none rounded-full border-2 border-gray-300 bg-white transition-colors checked:border-gray-900 checked:bg-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:checked:border-gray-50 dark:checked:bg-gray-50"
+                        />
+                        Staff
+                      </Label>
+                    </RadioGroup>
+                  </div>
                 </div>
                 <div>
                   <button

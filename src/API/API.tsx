@@ -15,6 +15,7 @@ const prepareHeaders = (headers) => {
 export const API = createApi({
   reducerPath: "patientApi",
   baseQuery: fetchBaseQuery({
+    // baseUrl: "http://localhost:8000/api/",
     baseUrl: "https://manipal-server.onrender.com/api/",
     prepareHeaders,
   }),
@@ -74,14 +75,14 @@ export const API = createApi({
 
     staffSignup: builder.mutation({
       query: (user) => ({
-        url: `users/signup`,
+        url: `staffs/register`,
         method: "POST",
         body: user,
       }),
     }),
 
     getAllUsers: builder.query({
-      query: () => "users",
+      query: () => "staffs",
     }),
 
     deleteUserById: builder.mutation({
