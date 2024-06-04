@@ -8,13 +8,15 @@ import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
 import { useGetAllPatientsQuery } from '../../API/API';
-const PaymentEntry = () => {
+
+const PaymentEntry = ({addPaymentFromPatientId}) => {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [patientId, setPatientId] = useState('');
  // jodDone alert message 
  const [jobDoneMessage, setJobDoneMessage] = useState("")
  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
-
+ 
+console.log("addPaymentFromPatientId",addPaymentFromPatientId)
  const handleCancelAlert = () => {
   setOpenJobDoneAlert(false)
 }
@@ -29,6 +31,9 @@ const {data =[]} = useGetAllPatientsQuery("");
     setPatientId(e.target.value);
   };
 
+  useEffect(()=>{
+    setPatientId(addPaymentFromPatientId)
+  })
   const handleFindButtonClick = () => {
     setSelectedPatient('');
     const foundPatient = data.find(user => user._id === patientId);
@@ -118,6 +123,7 @@ const {data =[]} = useGetAllPatientsQuery("");
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
               <JobDoneAlert
+              icon={null}
                 height="h-24"
                 width="w-52"
                 textColor="text-white"

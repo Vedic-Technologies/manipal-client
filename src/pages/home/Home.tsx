@@ -37,17 +37,18 @@ const Home = () => {
       {loggedInUserType=== "admin" &&(
         <>
         <Route path='/' element={<LandingPage />} />
-        <Route path="/doctor_prescription" element={<DoctorPrescription />} />
+        {/* <Route path="/doctor_prescription" element={<DoctorPrescription />} /> */}
         <Route path="/createstaff" element={<StaffSignup/>} />
         <Route path="/editstaffs" element={<UpdateStaff/>} />
-        </>)}
-        <Route path="/all_patients" element={<AllPatients />} />
-        <Route path="/patient_details/:id" element={<PatientDetails />} />
+        <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
         <Route path="/doctor_reference" element={<DoctorReference />} />
+        </>)}
+
         {loggedInUserType==="staff" &&(
         <Route path="/prescription" element={<PresCriptionSadcn />} />
       )}
-        <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
+           <Route path="/all_patients" element={<AllPatients />} />
+        <Route path="/patient_details/:id" element={<PatientDetails />} />
         <Route path="/payment_entry" element={<PaymentEntry/>} />
         <Route path="/payment_detail" element={<PatientPaymentsDetails/>} />
 

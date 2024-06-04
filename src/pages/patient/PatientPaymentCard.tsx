@@ -1,6 +1,24 @@
 import { Button } from "../../components/ui/button";
+import formatDate from '../../util/TimeFormate';
+import { useNavigate } from "react-router-dom";
+import PaymentEntry from "../payment/PaymentEntry";
+const PatientPaymentCard = ({ payment,idOfPatient }) => {
 
-const PatientPaymentCard = ({ payment }) => {
+const navigate= useNavigate()
+
+// console.log("patientIDChecking",idOfPatient)
+  const handleAddPayment = () =>{
+console.log("idOFPatient",idOfPatient)
+handleNavigation()
+return (
+  <PaymentEntry addPaymentFromPatientId={idOfPatient} />
+);
+
+  }
+  const handleNavigation=()=>{
+    navigate(`/home/payment_entry`)
+  }
+  // console.log("paymentDate:",payment);
   return (
     <div>
       <div className="container mx-auto px-0 py-8 ">
@@ -24,7 +42,7 @@ const PatientPaymentCard = ({ payment }) => {
                           key={pay._id}
                           className="border-b dark:border-gray-600"
                         >
-                          <td className="px-4 py-3">{pay.paymentDate}</td>
+                          <td className="px-4 py-3">{formatDate(pay.paymentDate)}</td>
                           <td className="px-4 py-3">{pay.amount}</td>
                           <td className="px-4 py-3 flex items-center justify-end space-x-2">
                             <Button size="sm" variant="outline">
@@ -46,7 +64,7 @@ const PatientPaymentCard = ({ payment }) => {
                       <p className="text-gray-500 dark:text-gray-400">
                         No amount added
                       </p>
-                      <Button>Add</Button>
+                      <Button onClick={handleAddPayment} >Add</Button>
                     </div>
                   </div>
                 </div>

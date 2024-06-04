@@ -295,6 +295,7 @@ const AllPatients = () => {
         const updatedStatus = { ...patientToUpdate, active: !patientToUpdate.active }
         const result = await updateActiveStatus({ id, ...updatedStatus }).unwrap()
         refetch()
+        console.log("activeSttaus",updatedStatus)
       }
     }
     catch (error) {

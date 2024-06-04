@@ -14,7 +14,7 @@ useEffect(()=>{
   const currentUserstring= localStorage.getItem("currentUser");
   if(currentUserstring){
     const currentUserData= JSON.parse(currentUserstring);
-    const fullName = `${currentUserData?.user?.firstName} ${currentUserData?.user?.lastName}`
+    const fullName = `${currentUserData?.user?.firstName?.charAt(0)?.toUpperCase() + currentUserData?.user?.firstName?.slice(1) || ""} ${currentUserData?.user?.lastName?.charAt(0).toUpperCase() + currentUserData?.user?.lastName?.slice(1) || ""}`
     setLoggedInUserType(fullName);
     // console.log("fullname",fullName)
     // console.log("firstName",currentUserData.user.firstName)
