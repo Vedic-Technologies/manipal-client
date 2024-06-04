@@ -1,8 +1,23 @@
 import { Button } from "../../components/ui/button";
 import formatDate from '../../util/TimeFormate';
+import { useNavigate } from "react-router-dom";
+import PaymentEntry from "../payment/PaymentEntry";
+const PatientPaymentCard = ({ payment,idOfPatient }) => {
 
-const PatientPaymentCard = ({ payment }) => {
+const navigate= useNavigate()
 
+// console.log("patientIDChecking",idOfPatient)
+  const handleAddPayment = () =>{
+console.log("idOFPatient",idOfPatient)
+handleNavigation()
+return (
+  <PaymentEntry addPaymentFromPatientId={idOfPatient} />
+);
+
+  }
+  const handleNavigation=()=>{
+    navigate(`/home/payment_entry`)
+  }
   // console.log("paymentDate:",payment);
   return (
     <div>
@@ -49,7 +64,7 @@ const PatientPaymentCard = ({ payment }) => {
                       <p className="text-gray-500 dark:text-gray-400">
                         No amount added
                       </p>
-                      <Button>Add</Button>
+                      <Button onClick={handleAddPayment} >Add</Button>
                     </div>
                   </div>
                 </div>

@@ -205,7 +205,8 @@ const Patient = () => {
             ) : (
               <div>
                 <PatientDetailCard patient={patientById} />
-                <PatientPaymentCard payment={patientById.payments || []} />
+                <PatientPaymentCard payment={patientById.payments || []}
+                                    idOfPatient={patientById?._id}    />
               </div>
             )
           ) : (

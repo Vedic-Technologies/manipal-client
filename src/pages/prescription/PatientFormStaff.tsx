@@ -355,6 +355,7 @@ const [imageFile, setImageFile]=useState("");
     animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
   >
     <JobDoneAlert
+    icon={null}
       height="h-24"
       width="w-52"
       textColor="text-white"
