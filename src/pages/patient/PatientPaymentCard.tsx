@@ -1,23 +1,18 @@
 import { Button } from "../../components/ui/button";
 import formatDate from '../../util/TimeFormate';
 import { useNavigate } from "react-router-dom";
-import PaymentEntry from "../payment/PaymentEntry";
+import {PatientIdContext} from "../../API/PatientIdProvider"
+import { useContext } from "react";
 const PatientPaymentCard = ({ payment,idOfPatient }) => {
 
 const navigate= useNavigate()
-
+const { handleUpdateId } = useContext(PatientIdContext);
 // console.log("patientIDChecking",idOfPatient)
-  const handleAddPayment = () =>{
-console.log("idOFPatient",idOfPatient)
-handleNavigation()
-return (
-  <PaymentEntry addPaymentFromPatientId={idOfPatient} />
-);
-
-  }
-  const handleNavigation=()=>{
-    navigate(`/home/payment_entry`)
-  }
+const handleAddPayment = () => {
+  console.log("idOFPatient", idOfPatient);
+  handleUpdateId(idOfPatient); // Update the context with idOfPatient
+  navigate('/home/payment_entry')
+};
   // console.log("paymentDate:",payment);
   return (
     <div>

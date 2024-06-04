@@ -6,12 +6,14 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ApiProvider } from "@reduxjs/toolkit/query/react";
 import { API } from "./API/API";
-
+import { PatientIdProvider } from "./API/PatientIdProvider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <ApiProvider api={API}>
+    <PatientIdProvider>
       <App />
+      </PatientIdProvider>
     </ApiProvider>
   </BrowserRouter>
 );

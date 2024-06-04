@@ -9,17 +9,30 @@ import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
 import { useGetAllPatientsQuery } from '../../API/API';
 
-const PaymentEntry = ({addPaymentFromPatientId}) => {
+import { useContext } from 'react';
+import { PatientIdContext } from '../../API/PatientIdProvider'; // Import the context
+
+const PaymentEntry = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [patientId, setPatientId] = useState('');
  // jodDone alert message 
  const [jobDoneMessage, setJobDoneMessage] = useState("")
  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
- 
-console.log("addPaymentFromPatientId",addPaymentFromPatientId)
+ const { idOfPatient } = useContext(PatientIdContext);
+
+console.log("addPaymentFromPatientId",idOfPatient)
  const handleCancelAlert = () => {
   setOpenJobDoneAlert(false)
 }
+
+
+useEffect(() => {
+  if (idOfPatient) {
+    setPatientId(idOfPatient);
+    handleFindButtonClick(); // Call handleFindButtonClick here
+  }
+}, [idOfPatient]);
+
 
 const {data =[]} = useGetAllPatientsQuery("");
 
@@ -31,12 +44,9 @@ const {data =[]} = useGetAllPatientsQuery("");
     setPatientId(e.target.value);
   };
 
-  useEffect(()=>{
-    setPatientId(addPaymentFromPatientId)
-  })
   const handleFindButtonClick = () => {
     setSelectedPatient('');
-    const foundPatient = data.find(user => user._id === patientId);
+    const foundPatient = data.find(user => user._id === patientId ||user._id ===  idOfPatient);
     if (foundPatient) {
       setSelectedPatient(foundPatient._id);
     } else {
