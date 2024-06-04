@@ -1,0 +1,197 @@
+/* styles.css */
+.create_staff_header {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-self: center;
+    
+  }
+  
+  .create_staff_text {
+    background-color: #45a049;
+    width: fit-content;
+    padding: 10px 50px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .create_staff_container {
+    display: flex;
+    margin-top: 30px;
+    padding: 0px 40px;
+  }
+  
+  .create_staff_creation_info {
+    height: 80vh;
+    width: 100%;
+    margin: 0px auto;
+    padding: 50px;
+    margin-right: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-width: 450px;
+    font-size: 18px;
+    overflow-y: auto;
+    background-color: rgba(231, 242, 255, 0.399);
+  
+  }
+  
+  .create_staff_name_and_email {
+    width: 65%;
+    padding-left: 22px;
+  }
+  
+  .create_staff_name {
+    font-weight: 600;
+    padding-bottom: 0;
+    text-transform: capitalize;
+  }
+  
+  .create_staff_email {
+    font-weight: 400;
+    padding-top: 0;
+    font-size: 18px;
+    color: gray;
+  }
+  
+  .create_staff_number {
+    font-weight: 700;
+    width: 25%;
+    padding-left: 35px;
+    padding-top: 15px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  .create_each_staff_info {
+    border-bottom: 2px solid black;
+    display: flex;
+    font-size: 22px;
+    padding: 12px 0 12px 0;
+  }
+  
+  .create_staff_images {
+    width: 7%;
+    align-items: center;
+  }
+  
+  .create_staff_profile-picture {
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    /* border: 5px solid white; */
+    background-color: rgb(28, 97, 158);
+  }
+  
+  .create_staff_list {
+    text-align: center;  
+    border-bottom: 2px gray dashed;
+    margin-bottom: 60px;
+    color: rgb(10, 52, 107);
+    font-size: 33px;
+    padding: 10px 0 10px 0;
+    font-weight: bolder;
+    letter-spacing: 1px;  
+  }
+  
+  .create_staff-form {
+    /* height: 80vh; */
+    max-width: 400px;
+    min-width: 450px;
+    margin: 0px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(240, 248, 255, 0.599);
+  }
+  .create_staff-form input{
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.188);
+  
+  
+  
+  }
+  
+  .create_staff_container label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+  }
+  
+  .create_staff_container input,
+  .create_staff_container select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+  
+  }
+  
+  .create_name_container,
+  .create_gender_photo {
+  
+    display: flex;
+  
+  }
+  
+  .create_firstname_input {
+  
+    width: 50%;
+    padding-right: 10px;
+  }
+  
+  .create_lastname_input {
+  
+    width: 50%;
+    padding-left: 10px;
+  
+  }
+  
+  .create_lastname_input input {
+    width: 100%;
+  }
+  
+  .create_gender {
+    width: 50%;
+  
+  }
+  
+  .create_gender select {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.166);
+  
+  
+  }
+  
+  .create_add_photo {
+    margin-left: 20px;
+  
+  }
+  .w-100{
+    width: 100%;
+    display: flex;
+  }
+  
+  
+  .create_submit_button {
+    background-color: #136c16;
+    color: rgb(255, 255, 255);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border-radius: 5px;
+    /* float: right; */
+    margin: 25px auto 0;
+  }
+  
+  .create_submit_button:hover {
+    background-color: #45a049;
+  }

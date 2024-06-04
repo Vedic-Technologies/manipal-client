@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import NavBar from './custom_components/NavBar';
 import Admin from './pages/admin/Admin';
+import SuperAdmin from './pages/admin/SuperAdmin';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import { Routes, Route, useLocation } from 'react-router-dom';
@@ -33,6 +34,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/cp" element={<Admin />} />
         <Route path="/home/*" element={<Home />} />
+        <Route path="/SuperAdmin/*" element={<SuperAdmin />} />
       </Routes>
     </>
   );
