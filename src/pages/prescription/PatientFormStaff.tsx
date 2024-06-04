@@ -24,56 +24,60 @@ const [imageFile, setImageFile]=useState("");
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
   }
-
+ 
   const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();  
+    e.preventDefault();
     console.log(patientData);
     try {
-        const response = await submitStaffPrescription({ ...patientData, image: imageFile }).unwrap();
-        console.log(response);
-        setJobDoneMessage("Patient registration successful!");
-        setAlertColor("green");
-        setOpenJobDoneAlert(true);
+      const response = await submitStaffPrescription({
+        ...patientData,
+        image: imageFile,
+      }).unwrap();
+      console.log(response);
+      setJobDoneMessage("Patient registration successful!");
+      setAlertColor("green");
+      setOpenJobDoneAlert(true);
 
-        // removing success alert automatically
-        setTimeout(() => {
-            setOpenJobDoneAlert(false);
-        }, 3000);
+      // Reset form fields after successful submission
+      setPatientData(initialData);
+      setImageFile("");
+
+      // removing success alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false);
+      }, 3000);
     } catch (error) {
-        console.error("HI,Error:", error);
-        setJobDoneMessage("Failed to register Patient!!");
-        setAlertColor("red");
-        setOpenJobDoneAlert(true);
+      console.error("HI,Error:", error);
+      setJobDoneMessage("Failed to register Patient!!");
+      setAlertColor("red");
+      setOpenJobDoneAlert(true);
 
-        // removing failed alert automatically
-        setTimeout(() => {
-            setOpenJobDoneAlert(false);
-        }, 3000);
+      // removing failed alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false);
+      }, 3000);
     }
-};
+  };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {  
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPatientData({
       ...patientData,
       [name]: value,
     });
   };
-const handleSelectChange=(value)=>
-  {
-    
+  const handleSelectChange = (value) => {
     setPatientData((prevData) => ({
       ...prevData,
       gender: value,
     }));
-  }
-const handleBloodGroupSelectChange=(value)=>
-  {
+  };
+  const handleBloodGroupSelectChange = (value) => {
     setPatientData((prevData) => ({
       ...prevData,
       bloodGroup: value,
     }));
-  }
+  };
 
   // Function to handle address input changes
   const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
