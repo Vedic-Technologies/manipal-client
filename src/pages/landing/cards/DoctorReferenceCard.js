@@ -64,27 +64,27 @@ export const recentDoctorReferences = [
 
 export const DoctorReferenceCard = () => {
 
-  const [patientData, setPatientData] = useState([]);
+  const [doctorData, setDoctorData] = useState([]);
 
   useEffect(() => {
-    const fetchPatientData = async () => {
+    const fetchDoctorData = async () => {
       try {
         const response = await fetch(
-          "https://manipal-server.onrender.com/api/patient/all_patients"
+          "https://manipal-server.onrender.com/api-docs/#/doctor/get_api_doctors_all_doctors_"
         );
         if (response.ok) {
           const data = await response.json();
-          setPatientData(data); // Set the fetched patient data to state
+          setDoctorData(data); // Set the fetched Doctor data to state
         } else {
-          throw new Error("Failed to fetch patient data");
+          throw new Error("Failed to fetch Doctor data");
         }
       } catch (error) {
-        console.error("Error fetching patient data:", error);
+        console.error("Error fetching Doctor data:", error);
       }
     };
 
-    fetchPatientData();
-  }, []); // Fetch patient data on component mount
+    fetchDoctorData();
+  }, []); // Fetch Doctor data on component mount
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-auto grow w-full">
@@ -93,10 +93,10 @@ export const DoctorReferenceCard = () => {
         <div className="overflow-x-auto">
           <div className="w-full">
             <div className="flex w-full">
-              <div className="py-2 font-bold max-w-[10%] grow">S.N.</div>
-              <div className="py-2 font-bold max-w-[30%] grow">Referred By</div>
-              <div className="py-2 font-bold max-w-[30%] grow">Patient Name</div>
-              <div className="py-2 font-bold max-w-[30%] grow">Date</div>
+              <div className="py-2 font-bold max-w-[10%] grow">Rank</div>
+              <div className="py-2 font-bold max-w-[30%] grow">Doctor Name</div>
+              <div className="py-2 font-bold max-w-[30%] grow">This Week</div>
+              {/* <div className="py-2 font-bold max-w-[30%] grow">Date</div> */}
             </div>
 
             {/* {recentDoctorReferences.map((reference, index) => (
@@ -107,13 +107,13 @@ export const DoctorReferenceCard = () => {
                 <div className="py-2 grow">{reference.date}</div>
               </div>
             ))} */}
-
-            {patientData.slice(0, 5).map((patient, index) => (
+c
+            {doctorData.slice(0, 5).map((patient, index) => (
               <div key={index} className="flex divide-y w-full justify-start">
                 <div className="py-2 max-w-[10%] grow">{index + 1}</div>
-                <div className="py-2 max-w-[30%] grow text-left">{patient.doctorName ? patient.doctorName : 'Self'}</div>
-                <div className="py-2 max-w-[30%] grow text-left">{patient.patientName}</div>
-                <div className="py-2 grow"> {patient.date ? patient.date : 'NA'}</div>
+                <div className="py-2 max-w-[30%] grow text-left">{doctorData.doctorName}</div>
+                <div className="py-2 max-w-[30%] grow text-left">{doctorData.patientNum}</div>
+                {/* <div className="py-2 grow"> {patient.date ? patient.date : 'NA'}</div> */}
               </div>
             ))}
 
