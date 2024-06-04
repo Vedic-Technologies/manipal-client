@@ -67,10 +67,8 @@ const AllPatients = () => {
       patient?.contact === trimmedSearchInput ||
       patient?.email?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
       patient?.age === parseInt(trimmedSearchInput) ||
-      patient?._id === trimmedSearchInput ||
       patient?.patientName.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
       patient?.email?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      patient?._id?.includes(trimmedSearchInput) ||
       patient?.gender?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
       patient?.contact === parseInt(trimmedSearchInput) ||
       patient?.complaint?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
@@ -339,7 +337,7 @@ const AllPatients = () => {
             <div className="search relative">
               <input onKeyDown={handleEnterKey}
                 onChange={handleSearchInputChange}
-                value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
+                value={searchInput} type="search" placeholder='Search by Name' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
               <i onClick={handleSeachIconClick} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
                 <motion.div
