@@ -1,6 +1,9 @@
 import { Button } from "../../components/ui/button";
+import formatDate from '../../util/TimeFormate';
 
 const PatientPaymentCard = ({ payment }) => {
+
+  // console.log("paymentDate:",payment);
   return (
     <div>
       <div className="container mx-auto px-0 py-8 ">
@@ -24,7 +27,7 @@ const PatientPaymentCard = ({ payment }) => {
                           key={pay._id}
                           className="border-b dark:border-gray-600"
                         >
-                          <td className="px-4 py-3">{pay.paymentDate}</td>
+                          <td className="px-4 py-3">{formatDate(pay.paymentDate)}</td>
                           <td className="px-4 py-3">{pay.amount}</td>
                           <td className="px-4 py-3 flex items-center justify-end space-x-2">
                             <Button size="sm" variant="outline">

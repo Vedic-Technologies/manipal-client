@@ -167,7 +167,7 @@ const Leftbar = ({ children }) => {
             )}
 
             {/* ..........Doctor presCription......... */}
-            {loggedInUserType === "admin" && (
+            {/* {loggedInUserType === "admin" && (
               <NavLink
                 to="doctor_prescription"
                 className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
@@ -186,7 +186,7 @@ const Leftbar = ({ children }) => {
                   </div>
                 </li>
               </NavLink>
-            )}
+            )} */}
             {/* ----------------payment drop down---------- */}
 
             <li style={{ padding: 0 }}>
@@ -361,7 +361,7 @@ const Leftbar = ({ children }) => {
                 )}
               </div>
             </li>
-
+{loggedInUserType === "admin" &&(
             <NavLink
               to="doctor_reference"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
@@ -380,7 +380,8 @@ const Leftbar = ({ children }) => {
                 </div>
               </li>
             </NavLink>
-
+         )}
+         {loggedInUserType === "admin" &&(
             <NavLink
               to="MonthlyIncExp"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
@@ -399,6 +400,7 @@ const Leftbar = ({ children }) => {
                 </div>
               </li>
             </NavLink>
+            )}
 
             {loggedInUserType === "admin" && (
               <>
