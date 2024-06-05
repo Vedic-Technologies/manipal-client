@@ -41,7 +41,6 @@ const Home = () => {
         <Route path="/createstaff" element={<StaffSignup/>} />
         <Route path="/editstaffs" element={<UpdateStaff/>} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
-        <Route path="/doctor_reference" element={<DoctorReference />} />
         </>)}
 
         {loggedInUserType==="staff" &&(
@@ -51,6 +50,7 @@ const Home = () => {
         <Route path="/patient_details/:id" element={<PatientDetails />} />
         <Route path="/payment_entry" element={<PaymentEntry/>} />
         <Route path="/payment_detail" element={<PatientPaymentsDetails/>} />
+        <Route path="/doctor_reference" element={<DoctorReference />} />
 
         </Routes>
        

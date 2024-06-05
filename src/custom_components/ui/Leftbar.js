@@ -26,7 +26,9 @@ import { FaUserPlus } from "react-icons/fa";
 
 const Leftbar = ({ children }) => {
   const [loggedInUserType, setloggedInUserType] = useState({});
-  const [activeLink, setActiveLink] = useState(localStorage.getItem("activeLink") || "default");
+  const [activeLink, setActiveLink] = useState(
+    localStorage.getItem("activeLink") || "default"
+  );
 
   useEffect(() => {
     const currentUserString = localStorage.getItem("currentUser");
@@ -103,8 +105,7 @@ const Leftbar = ({ children }) => {
       <div
         className={` px-10 ${Open ? "hideSidebar" : "showSidebar "} ${
           innerWidth < 800 ? "hideSidebar" : "showSidebar"
-        } `}
-      ></div>
+        } `}></div>
       <div
         className={`leftbar fixed  bg-gradient-to-l from-neutral-100 to-blue-100`} // issue-overflow-y-auto hides the navButtons
       >
@@ -115,13 +116,13 @@ const Leftbar = ({ children }) => {
         </div>
 
         <nav>
-        <div className="center drawer z-50" onClick={handleDrawerClick}>
-      {isSidebarCollapsed ? (
-        <i className="fa-solid fa-circle-chevron-right select-none icon-transition rotate-right"></i>
-      ) : (
-        <i className="fa-solid fa-circle-chevron-right select-none icon-transition rotate-left"></i>
-      )}
-    </div>
+          <div className="center drawer z-50" onClick={handleDrawerClick}>
+            {isSidebarCollapsed ? (
+              <i className="fa-solid fa-circle-chevron-right select-none icon-transition rotate-right"></i>
+            ) : (
+              <i className="fa-solid fa-circle-chevron-right select-none icon-transition rotate-left"></i>
+            )}
+          </div>
 
           <ul className="mt-2">
             {loggedInUserType === "admin" && (
@@ -132,8 +133,7 @@ const Leftbar = ({ children }) => {
                     ? "active-link  text-black  "
                     : "hover: hover:bg-gray-200"
                 }  ${activeLink === "default" && "active-link  text-white "}`}
-                onClick={() => handleLinkClick(".")}
-              >
+                onClick={() => handleLinkClick(".")}>
                 <li className="">
                   <RxDashboard className="text-2xl" />
                   <div className={` ${hidden}  `}>
@@ -153,8 +153,7 @@ const Leftbar = ({ children }) => {
                     ? "active-link  text-black  "
                     : "hover:bg-gray-200"
                 }`}
-                onClick={() => handleLinkClick("prescription")}
-              >
+                onClick={() => handleLinkClick("prescription")}>
                 <li className="">
                   <BsPrescription2 className="text-2xl" />
                   <div className={hidden}>
@@ -199,8 +198,7 @@ const Leftbar = ({ children }) => {
                       ? "active-link  text-black  "
                       : "hover:bg-gray-200"
                   }`}
-                  onClick={handleIsPayment}
-                >
+                  onClick={handleIsPayment}>
                   <div className="center  px-[20px] py-[10px] ">
                     <MdOutlinePayment className="text-2xl" />
                     <div className={`${hidden} relative`}>
@@ -226,8 +224,7 @@ const Leftbar = ({ children }) => {
                         type: "keyframes",
                         ease: "easeInOut",
                       }}
-                      className="overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col items-end "
-                    >
+                      className="overflow-hidden  p-1  rounded h-28 w-[96%] flex flex-col items-end ">
                       <NavLink
                         to="payment_entry "
                         className={`drop-down flex w-[90%] rounded border border-transparent ${
@@ -235,13 +232,11 @@ const Leftbar = ({ children }) => {
                             ? "active-link-drop-down  text-black"
                             : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("payment_entry")}
-                      >
+                        onClick={() => handleLinkClick("payment_entry")}>
                         <div className="w-full flex  items-center pl-[16px] py-[10px]">
                           <GiMoneyStack className="text-3xl" />
                           <div
-                            className={` ${hidden} h-full flex items-center `}
-                          >
+                            className={` ${hidden} h-full flex items-center `}>
                             <span className=" font-roboto  text-base ml-1  ">
                               Payment Entry
                             </span>
@@ -255,14 +250,12 @@ const Leftbar = ({ children }) => {
                             ? "active-link-drop-down    text-black"
                             : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("payment_detail")}
-                      >
+                        onClick={() => handleLinkClick("payment_detail")}>
                         <div className="w-full flex items-center  pl-[16px] py-[10px]">
-                          <GrMoney/>
+                          <GrMoney />
                           {/* <i className="fa-solid fa-indian-rupee-sign text-xl  "></i> */}
                           <div
-                            className={`${hidden} h-full flex items-center  `}
-                          >
+                            className={`${hidden} h-full flex items-center  `}>
                             <span className=" font-roboto  text-base ml-1 ">
                               Payment Detail
                             </span>
@@ -287,8 +280,7 @@ const Leftbar = ({ children }) => {
                       ? "active-link  text-black  "
                       : "hover:bg-gray-200"
                   }`}
-                  onClick={handleIsPatient}
-                >
+                  onClick={handleIsPatient}>
                   <div className="center  px-[20px] py-[10px] ">
                     <FaBed className="text-2xl" />
                     <div className={`${hidden} relative`}>
@@ -314,8 +306,7 @@ const Leftbar = ({ children }) => {
                         type: "keyframes",
                         ease: "easeInOut",
                       }}
-                      className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end"
-                    >
+                      className="overflow-hidden p-1 rounded h-28 w-[96%] flex flex-col  items-end">
                       <NavLink
                         to="patient_details/0"
                         className={`drop-down flex w-[90%]  rounded border border-transparent  ${
@@ -323,13 +314,11 @@ const Leftbar = ({ children }) => {
                             ? "active-link-drop-down  text-black"
                             : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("patient_details")}
-                      >
+                        onClick={() => handleLinkClick("patient_details")}>
                         <div className="w-full flex items-center  pl-[16px] py-[10px]">
                           <PiWheelchair className="text-3xl" />
                           <div
-                            className={` ${hidden} h-full flex items-center`}
-                          >
+                            className={` ${hidden} h-full flex items-center`}>
                             <span className=" font-roboto  text-base ml-1">
                               Patient Details
                             </span>
@@ -343,13 +332,11 @@ const Leftbar = ({ children }) => {
                             ? "active-link-drop-down  text-black"
                             : "hover:bg-gray-200"
                         }`}
-                        onClick={() => handleLinkClick("all_patients")}
-                      >
+                        onClick={() => handleLinkClick("all_patients")}>
                         <div className="w-full flex items-center  pl-[16px] py-[10px]">
                           <MdOutlineElderlyWoman className="text-3xl " />
                           <div
-                            className={` ${hidden} h-full flex items-center`}
-                          >
+                            className={` ${hidden} h-full flex items-center`}>
                             <span className=" font-roboto  text-base ml-1 ">
                               All Patients
                             </span>
@@ -361,7 +348,7 @@ const Leftbar = ({ children }) => {
                 )}
               </div>
             </li>
-{loggedInUserType === "admin" &&(
+
             <NavLink
               to="doctor_reference"
               className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
@@ -369,8 +356,7 @@ const Leftbar = ({ children }) => {
                   ? "active-link  text-black  "
                   : "hover:bg-gray-200"
               }`}
-              onClick={() => handleLinkClick("doctor_reference")}
-            >
+              onClick={() => handleLinkClick("doctor_reference")}>
               <li className="">
                 <FaUserDoctor className="text-2xl" />
                 <div className={hidden}>
@@ -380,26 +366,25 @@ const Leftbar = ({ children }) => {
                 </div>
               </li>
             </NavLink>
-         )}
-         {loggedInUserType === "admin" &&(
-            <NavLink
-              to="MonthlyIncExp"
-              className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
-                activeLink === "MonthlyIncExp"
-                  ? "active-link text-black"
-                  : "hover:bg-gray-200"
-              }`}
-              onClick={() => handleLinkClick("MonthlyIncExp")}
-            >
-              <li className="">
-                <MdOutlineAccountBalanceWallet className="text-2xl" />
-                <div className={hidden}>
-                  <span className=" font-roboto  text-lg ml-3 ">
-                    PassBook
-                  </span>
-                </div>
-              </li>
-            </NavLink>
+
+            {loggedInUserType === "admin" && (
+              <NavLink
+                to="MonthlyIncExp"
+                className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
+                  activeLink === "MonthlyIncExp"
+                    ? "active-link text-black"
+                    : "hover:bg-gray-200"
+                }`}
+                onClick={() => handleLinkClick("MonthlyIncExp")}>
+                <li className="">
+                  <MdOutlineAccountBalanceWallet className="text-2xl" />
+                  <div className={hidden}>
+                    <span className=" font-roboto  text-lg ml-3 ">
+                      PassBook
+                    </span>
+                  </div>
+                </li>
+              </NavLink>
             )}
 
             {loggedInUserType === "admin" && (
@@ -411,8 +396,7 @@ const Leftbar = ({ children }) => {
                       ? "active-link text-black after: "
                       : "hover:bg-gray-200"
                   }`}
-                  onClick={() => handleLinkClick("createstaff")}
-                >
+                  onClick={() => handleLinkClick("createstaff")}>
                   <li className="">
                     <FaUserPlus className="text-2xl" />
                     <div className={hidden}>
@@ -430,8 +414,7 @@ const Leftbar = ({ children }) => {
                       ? "active-link  text-black  "
                       : "hover:bg-gray-200"
                   }`}
-                  onClick={() => handleLinkClick("editstaffs")}
-                >
+                  onClick={() => handleLinkClick("editstaffs")}>
                   <li className="">
                     <LiaUserEditSolid className="text-2xl" />
                     <div className={hidden}>
@@ -450,8 +433,7 @@ const Leftbar = ({ children }) => {
                   ? "active-link  text-black  "
                   : "hover:bg-gray-200"
               }`}
-              onClick={() => logout()}
-            >
+              onClick={() => logout()}>
               <li className="">
                 <ImExit className="text-2xl " />
                 <div className={hidden}>
