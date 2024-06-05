@@ -204,7 +204,7 @@ const SuperAdmin = () => {
                       onClick={() => OpenModal()}
                     >
                       <i className="fa-regular fa-trash-can"></i>
-                      {showModal && <DeleteModalStaff email={item.email} setShowModal={setShowModal} showModal={showModal} />}
+                      {/* {showModal && <DeleteModalStaff email={item.email} setShowModal={setShowModal} showModal={showModal} />} */}
                     </button>
                   </div>
                 </div>
