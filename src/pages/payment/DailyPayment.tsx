@@ -216,7 +216,7 @@ const DailyPayment = ({ patientId }) => {
           </form>
         </div>
       </div>
-      {showPrintCard && <PaymentCard />}
+      {showPrintCard && <PaymentCard patientId={patientId} />}
       {/* <div className="bg-green-400 w-1/2">right</div> */}
       <div>
         {/* <AlertWrapper isOpen={openJobDoneAlert}>

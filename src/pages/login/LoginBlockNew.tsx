@@ -94,7 +94,6 @@ const LoginBlockNew = () => {
               src={login_image}
               alt="hello"
             />
-            42
           </div>
           <div className="w-1/2 p-5">
             <div className="text-center">
@@ -207,7 +206,7 @@ const LoginBlockNew = () => {
                 <div>
                   <button
                     type="submit"
-                    className="w-full flex mt-10 justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-md font-medium text-white bg-blue-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    className="w-full flex items-center mt-10 justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-md font-medium text-white bg-blue-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     {loader ? (
                       <>

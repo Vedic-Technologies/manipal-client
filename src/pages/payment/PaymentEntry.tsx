@@ -38,6 +38,7 @@ const {data =[]} = useGetAllPatientsQuery("");
 
   const handleSelectChange = (e) => {
     setSelectedPatient(e.target.value);
+    setPatientId("")
   };
 
   const handleInputChange = (e) => {

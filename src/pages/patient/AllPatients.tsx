@@ -50,6 +50,9 @@ const AllPatients = () => {
   const [deletePatient] = useDeletePatientMutation();
   const [updateActiveStatus] = useUpdateActiveStatusMutation()
 
+  useEffect(()=>{
+    refetch()
+  },[patients])
   // search functionality 
   const searchPatient = (inputValue) => {
 
