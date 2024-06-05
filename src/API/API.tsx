@@ -82,6 +82,10 @@ export const API = createApi({
     }),
 
     getAllUsers: builder.query({
+      query: () => "users",
+    }),
+
+    getAllStaffs: builder.query({
       query: () => "staffs",
     }),
 
@@ -106,6 +110,19 @@ export const API = createApi({
         body: formdata,
       }),
     }),
+    
+    getAllSupperAdmin:builder.query({
+      query:()=>"superAdmin"
+    }),
+
+    loginAsSuperAdmin: builder.mutation({
+      query: ()=>({
+        url:`superAdmin/login`,
+        method:"POST"
+      })
+    }),
+    
+
   }),
 });
 
@@ -123,4 +140,5 @@ export const {
   useDeleteUserByIdMutation,
   useGetAllPatientWithShoulderProblemQuery,
   useSubmitShoulderProblemInDoctorPrescriptionMutation,
+  useGetAllStaffsQuery,
 } = API;

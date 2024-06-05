@@ -59,7 +59,10 @@ const PatientPaymentsDetails = () => {
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
   }
-
+useEffect(()=>{
+  refetch()
+  console.log("refetching hi")
+},[payments])
 
   // search functionality 
   const searchPayment = (inputValue) => {
@@ -433,7 +436,7 @@ refetch()
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div onClick={() => { handleCopyPatientId(item._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+                          <div onClick={() => { handleCopyPatientId(item?.patient?._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
                             <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
                           </div >
                         </TooltipTrigger>

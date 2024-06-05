@@ -30,14 +30,14 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {useGetAllUsersQuery, useDeleteUserByIdMutation} from "../../API/API"
+import {useGetAllStaffsQuery, useDeleteUserByIdMutation} from "../../API/API"
 import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 
 export default function UpdateStaff() {
   
-const { data, error, isLoading, refetch } = useGetAllUsersQuery()
+const { data, error, isLoading, refetch } = useGetAllStaffsQuery()
 const [deleteUserById]= useDeleteUserByIdMutation()
 useEffect(() => {
   if (data) {
