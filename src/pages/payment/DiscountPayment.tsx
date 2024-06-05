@@ -20,7 +20,7 @@ import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
 import {ThreeDots} from 'react-loader-spinner';
 
-const DiscountPayment = () => {
+const DiscountPayment = ({patientId}) => {
   const [amount, setAmount] = useState("");
   const [days, setDyas] = useState("");
   const [showPrintCard,setShowPrintCard]=useState(false)
@@ -42,7 +42,7 @@ const DiscountPayment = () => {
     patientId:string
   }
   const initialData={
-    amount:null,
+    amount:"",
     paymentDate:"",
     paymentType:"daily",
     patientId:"3456"
@@ -80,6 +80,7 @@ const DiscountPayment = () => {
       setShowPrintCard(true);
       setJobDoneMessage("Payment added successfully.")
       setOpenJobDoneAlert(true)
+      setPaymentData(initialData);  
       setAlertColor("green")
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -247,7 +248,7 @@ const DiscountPayment = () => {
           </form>
         </div>
       </div>
-      {showPrintCard && <PaymentCard/>}     
+      {showPrintCard && <PaymentCard patientId={patientId}/>}     
      <div>
           <AlertWrapper isOpen={openJobDoneAlert}>
             <motion.div

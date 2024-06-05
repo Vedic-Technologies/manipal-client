@@ -10,6 +10,7 @@ const { handleUpdateId } = useContext(PatientIdContext);
 // console.log("patientIDChecking",idOfPatient)
 const handleAddPayment = () => {
   console.log("idOFPatient", idOfPatient);
+  console.log("payment??", payment)
   handleUpdateId(idOfPatient); // Update the context with idOfPatient
   navigate('/home/payment_entry')
 };
