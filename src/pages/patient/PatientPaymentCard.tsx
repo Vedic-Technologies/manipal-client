@@ -14,6 +14,9 @@ const handleAddPayment = () => {
   handleUpdateId(idOfPatient); // Update the context with idOfPatient
   navigate('/home/payment_entry')
 };
+const handelUpdateSubmit=()=>{
+  navigate('/home/payment_entry')
+}
   // console.log("paymentDate:",payment);
   return (
     <div>
@@ -44,7 +47,7 @@ const handleAddPayment = () => {
                             <Button size="sm" variant="outline">
                               Delete
                             </Button>
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" variant="outline" onClick={handelUpdateSubmit}>
                               Update
                             </Button>
                           </td>
