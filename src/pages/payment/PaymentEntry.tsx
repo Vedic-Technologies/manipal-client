@@ -80,25 +80,25 @@ const {data =[]} = useGetAllPatientsQuery("");
     <>
       <div className="w-4/5 m-auto flex flex-col items-start justify-start  ">
         <div className="text-xl font-semibold mb-2 mt-3">Select Patient</div>
-        <div className={`container mx-auto px-4 py-4 flex border-2 rounded-2xl h-72 p-3 border-gray-300 ${selectedUser ? 'w-full' : 'w-1/2'} transition-width duration-500`}>
+        <div className={`container mx-auto px-4 py-4  justify-center items-center  flex border-2 rounded-2xl h-72 p-3 border-gray-300 ${selectedUser ? 'w-full' : 'w-1/2'} transition-width duration-500`}>
           <div className="w-1/2 flex flex-col items-center justify-center">
-            <div className="flex flex-col gap-3">
-              <div className="flex items-start mb-4 flex-col">
+            <div className="flex flex-col items-center justify-center gap-3">
+              <div className="flex items-start mb-4  flex-col">
                 <label className="mr-2 font-medium">Enter Patient Name</label>
                 <select
                   value={selectedPatient}
                   onChange={handleSelectChange}
-                  className="border border-gray-300 rounded px-3 py-2 w-60 mt-1"
+                  className="border border-gray-300 rounded px-3 py-2 w-60 mt-1 "
                 >
                   <option value="">Select a patient</option>
                   {data.map((user) => (
-                    <option key={user._id} value={user._id}>{user.patientName}</option>
+                    <option key={user._id} value={user._id} className='bg-green-100 '>{user.patientName}</option>
                   ))}
                 </select>
               </div>
               <div className="text-center font-semibold">---- OR ----</div>
               <div className="flex items-start mb-4 flex-col relative">
-                <label className="mr-2 font-medium">Patient ID:</label>
+                <label className="mr-2 font-medium">Patient IDre:</label>
                 <input
                   type="text"
                   value={patientId}
