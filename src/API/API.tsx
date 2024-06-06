@@ -58,6 +58,12 @@ export const API = createApi({
       query: () => "payment/all_payments",
     }),
 
+    getPaymentById: builder.query({
+      query:(id)=>({
+        url:`payment/${id}`,
+        method:"GET"
+      }),
+    }),
     deletePayment: builder.mutation({
       query: (selectedPatientId) => ({
         url: `payment/${selectedPatientId}`,
@@ -133,6 +139,7 @@ export const {
   useGetPatientByIdQuery,
   useAddPaymentMutation,
   useGetAllPaymentsQuery,
+  useGetPaymentByIdQuery,
   useDeletePaymentMutation,
   useSubmitStaffPrescriptionMutation,
   useStaffSignupMutation,
