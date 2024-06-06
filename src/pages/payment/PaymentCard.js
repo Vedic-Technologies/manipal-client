@@ -1,23 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "../../components/ui/button";
-import { useGetAllPaymentsQuery,useGetAllPatientsQuery } from '../../API/API';
+import { useGetAllPaymentsQuery,useGetPatientByIdQuery } from '../../API/API';
 import formatDate from '../../util/TimeFormate';
 const PaymentCard = ({ patientId }) => {
-  const { data, isLoading,refetch } = useGetAllPaymentsQuery();
-const {data:allPatient}=useGetAllPatientsQuery()
-  // Filter the data to get details of the specific patient
-  const patientData = data?.find(patient => patient?.patientId === patientId);
-const amountData= allPatient?.find(patient => patient?._id === patientId)
-console.log('patientDatafrompayment',patientData)
-console.log("amountDataALpatient",amountData)
-    // const sortedPayments = amountData?.payments?.sort((a, b) => new Date(b.paymentDate) - new Date(a.paymentDate));
+  const [id, setId]= useState("")
+ const [lastAmount, setLastAmount] = useState(null);
 
-    // // Get the latest payment amount
-    // const latestPaymentAmount = sortedPayments?.[0]?.amount;
-  
+  const { data:allPayment, isLoading,refetch } = useGetAllPaymentsQuery();
+
+  const { data: patientById = {}, refetch: refetchPatientById } = useGetPatientByIdQuery(id, {
+    skip: !id,
+  });  // Filter the data to get details of the specific patient
+  const patientData = allPayment?.find(patient => patient?.patientId === patientId);
+ useEffect(()=>{
+  setId(patientId)
+ }) 
+
+ useEffect(() => {
+  if (id) {
+    refetchPatientById();
+  }
+}, [id, refetchPatientById]);
+
+ useEffect(() => {
+  const amounts = patientById?.payments;
+  if (amounts && amounts.length > 0) {
+    // setTimeout(() => {
+    //   setLastAmount(amounts[amounts.length - 1].amount); // Assuming 'amount' is the property you want to access
+    //   console.log("lastindex",amounts[amounts.length - 1].amount)
+    // }, 2000);
+    setLastAmount(amounts[amounts.length - 1].amount); // Assuming 'amount' is the property you want to access
+    console.log("lastindex",amounts[amounts.length - 1].amount)
+  }
+}, [patientById]);
+
+ //  console.log("Onlyamounts",patientById?.payments[1])
+
+    const date = new Date()
+const today = date.toString()
 useEffect(()=>{
 refetch()
-},[data])
+},[allPayment])
   return (
     <div className="shadow-lg rounded-xl border border-gray-300 w-full py-5 px-10 printable flex-1">
       <h1 className="text-lg font-semibold text-center">Payment Card</h1>
@@ -31,8 +54,8 @@ refetch()
           <>
             <div className="mt-3 flex"><div className="w-32">Name</div>: {patientData?.patient?.name?.charAt(0)?.toUpperCase() + patientData?.patient?.name?.slice(1) }</div>
             <div className="mt-3 flex"><div className="w-32">Payment Type</div>: {patientData?.paymentType}</div>
-            <div className="mt-3 flex"><div className="w-32">Amount</div>:₹ {patientData?.amount[1]}/-</div>
-            <div className="mt-3 flex"><div className="w-32">Payment Date</div>: {formatDate(patientData?.paymentDate)}</div>
+            <div className="mt-3 flex"><div className="w-32">Amount</div>:₹ {lastAmount !== null ? lastAmount : "-"}/-</div>
+            <div className="mt-3 flex"><div className="w-32">Payment Date</div>: {formatDate(today)}</div>
             <div className="mt-3 flex"><div className="w-32">No of Days</div>: NA</div>
           </>
         )}

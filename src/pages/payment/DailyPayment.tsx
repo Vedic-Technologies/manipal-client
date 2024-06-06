@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Label } from "../../components/ui/label";
 import pay from "../../assets/images/payment.jpg";
-import { useAddPaymentMutation } from "../../API/API";
+import { useAddPaymentMutation, useGetPatientByIdQuery } from "../../API/API";
 import PaymentCard from "./PaymentCard";
 import AlertWrapper from "../../custom_components/AlertWrapper";
 import JobDoneAlert from "../../custom_components/JobDoneAlert";
@@ -9,15 +9,19 @@ import { motion } from "framer-motion";
 import { ThreeDots } from "react-loader-spinner";
 import { ImSpinner2 } from "react-icons/im";
 import { FaCheckCircle } from "react-icons/fa";
+import { useGe } from "../../API/API";
+
 const DailyPayment = ({ patientId }) => {
+
   // let currentDate
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, "0");
   const dd = String(today.getDate()).padStart(2, "0");
-
   const currentDate = `${yyyy}-${mm}-${dd}`;
   console.log(currentDate);
+
+
 
   useEffect(() => {
     // const today = new Date();
@@ -36,7 +40,7 @@ const DailyPayment = ({ patientId }) => {
   // const [currentDate, setCurrentDate] = useState("");
 
   const initialData = {
-    amount: null,
+    amount: "",
     paymentDate: currentDate,
     paymentType: "daily",
     patientId: patientId,
@@ -121,6 +125,7 @@ const DailyPayment = ({ patientId }) => {
       console.log(result);
       setShowPrintCard(true);
       setIsSuccess(true);
+      setPaymentData(initialData);     
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -129,6 +134,7 @@ const DailyPayment = ({ patientId }) => {
   };
 
   return (
+    <>
     <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-gray-300  flex">
       <div className=" w-1/2 center">
         <div className=" w-1/2">
@@ -243,6 +249,7 @@ const DailyPayment = ({ patientId }) => {
           </AlertWrapper> */}
       </div>
     </div>
+    </>
   );
 };
 

@@ -149,7 +149,7 @@ const Opd = ({ patientId }) => {
           </form>
         </div>
       </div>
-      {showPrintCard && <PaymentCard />}
+      {showPrintCard && <PaymentCard patientId={patientId} />}
       <div></div>
     </div>
   );
