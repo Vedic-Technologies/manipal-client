@@ -61,7 +61,7 @@ const PatientPaymentsDetails = () => {
   }
 useEffect(()=>{
   refetch()
-  console.log("refetching hi")
+  // console.log("refetching hi")
 },[payments])
 
   // search functionality 

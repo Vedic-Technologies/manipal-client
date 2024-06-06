@@ -20,7 +20,6 @@ const PaymentEntry = () => {
  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
  const { idOfPatient } = useContext(PatientIdContext);
 
-console.log("addPaymentFromPatientId",idOfPatient)
  const handleCancelAlert = () => {
   setOpenJobDoneAlert(false)
 }

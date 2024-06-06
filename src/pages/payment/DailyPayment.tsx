@@ -9,18 +9,24 @@ import { motion } from "framer-motion";
 import { ThreeDots } from "react-loader-spinner";
 import { ImSpinner2 } from "react-icons/im";
 import { FaCheckCircle } from "react-icons/fa";
-import { useGe } from "../../API/API";
 
 const DailyPayment = ({ patientId }) => {
-
-  // let currentDate
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, "0");
   const dd = String(today.getDate()).padStart(2, "0");
   const currentDate = `${yyyy}-${mm}-${dd}`;
-  console.log(currentDate);
 
+  const [todayDate, setTodayDate] = useState(currentDate);
+
+  const [id, setId] = useState("");
+
+  const { data: patientById = {}, refetch: refetchPatientById } = useGetPatientByIdQuery(id, {
+    skip: !id,
+  });
+  useEffect(() => {
+    setId(patientId);
+  }, [patientId]);
 
 
   useEffect(() => {
@@ -41,7 +47,7 @@ const DailyPayment = ({ patientId }) => {
 
   const initialData = {
     amount: "",
-    paymentDate: currentDate,
+    paymentDate: todayDate,
     paymentType: "daily",
     patientId: patientId,
   };
@@ -54,6 +60,27 @@ const DailyPayment = ({ patientId }) => {
   // const [alertColor, setAlertColor] = useState("")
 
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const isAlreadyPaidToday = patientById?.payments?.some(payment => {
+    const paymentDate = new Date(payment.paymentDate);
+    const today = new Date(todayDate);
+    console.log("type",payment.paymentType)
+    return (
+      paymentDate.getDate() === today.getDate() &&
+      paymentDate.getMonth() === today.getMonth() &&
+      paymentDate.getFullYear() === today.getFullYear()&&
+    payment.paymentType === "daily"
+    );
+  });
+  if (isAlreadyPaidToday) {
+    // Patient has already paid today
+    
+    console.log("Patient has already paid today.from start",isAlreadyPaidToday);
+    
+  } else {
+    // Patient hasn't paid today
+    console.log("Patient hasn't paid today.from start");
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -136,7 +163,7 @@ const DailyPayment = ({ patientId }) => {
   return (
     <>
     <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-gray-300  flex">
-      <div className=" w-1/2 center">
+      <div className=" w-1/2 center flex-col relative pb-8">
         <div className=" w-1/2">
           <form onSubmit={handleSubmit} className="">
             <div className=" flex ">
@@ -164,6 +191,7 @@ const DailyPayment = ({ patientId }) => {
                     value={paymentData.amount}
                     onChange={handleChange}
                     required
+                    disabled={ isAlreadyPaidToday}
                   />
                 </div>
                 <div className="mb-6">
@@ -178,8 +206,8 @@ const DailyPayment = ({ patientId }) => {
                     id="paymentDate"
                     type="date"
                     name="paymentDate"
-                    value={currentDate}
-                    onChange={(e) => setCurrentDate(e.target.value)}
+                    value={todayDate}
+                    // onChange={(e) => setCurrentDate(e.target.value)}
                     onChange={handleChange}
                     required
                   />
@@ -188,7 +216,7 @@ const DailyPayment = ({ patientId }) => {
                 <div className="flex items-center justify-end">
                   <button
                     onClick={addDailyPayment}
-                    disabled={isLoading}
+                    disabled={isLoading || isAlreadyPaidToday}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
                     type="submit"
                   >
@@ -210,7 +238,7 @@ const DailyPayment = ({ patientId }) => {
                           fill="currentColor"
                         />
                       </svg>
-                    ) : isSuccess ? (
+                    ) : isSuccess || isAlreadyPaidToday  ? (
                       <FaCheckCircle className="text-white" />
                     ) : (
                       "Submit"
@@ -221,8 +249,11 @@ const DailyPayment = ({ patientId }) => {
             </div>
           </form>
         </div>
+        {isAlreadyPaidToday &&(
+        <div className="absolute bottom-0 text-green-700 font-medium">Payment done today</div>
+      )}
       </div>
-      {showPrintCard && <PaymentCard patientId={patientId} />}
+      {showPrintCard && <PaymentCard patientId={patientId}   paymentType="daily"/>}
       {/* <div className="bg-green-400 w-1/2">right</div> */}
       <div>
         {/* <AlertWrapper isOpen={openJobDoneAlert}>

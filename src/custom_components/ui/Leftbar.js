@@ -78,7 +78,7 @@ const Leftbar = ({ children }) => {
 
   const { innerWidth } = useWindowSize();
 
-  console.log(innerWidth);
+  // console.log(innerWidth);
 
   useEffect(() => {
     const handleResize = () => {

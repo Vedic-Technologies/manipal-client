@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Label } from "../../components/ui/label";
-import { useAddPaymentMutation } from "../../API/API";
+import { useAddPaymentMutation, useGetPatientByIdQuery } from "../../API/API";
 import PaymentCard from "./PaymentCard";
 
 import { FaCheckCircle } from "react-icons/fa";
@@ -16,6 +16,14 @@ const Opd = ({ patientId }) => {
   const dd = String(today.getDate()).padStart(2, "0");
 
   const currentDate = `${yyyy}-${mm}-${dd}`;
+  const [id, setId] = useState("");
+
+  const { data: patientById = {}, refetch: refetchPatientById } = useGetPatientByIdQuery(id, {
+    skip: !id,
+  });
+  useEffect(() => {
+    setId(patientId);
+  }, [patientId]);
 
   type paymentType = {
     amount: number;
@@ -24,13 +32,34 @@ const Opd = ({ patientId }) => {
     patientId: string;
   };
   const initialData = {
-    amount: null,
+    amount: "",
     paymentDate: currentDate,
     paymentType: "opd",
     patientId: patientId,
   };
 
   const [paymentData, setPaymentData] = useState<paymentType>(initialData);
+
+  const isAlreadyPaidToday = patientById?.payments?.some(payment => {
+    const paymentDate = new Date(payment.paymentDate);
+    const today = new Date();
+    console.log("type",payment.paymentType)
+    return (
+      paymentDate.getDate() === today.getDate() &&
+      paymentDate.getMonth() === today.getMonth() &&
+      paymentDate.getFullYear() === today.getFullYear()&&
+    payment.paymentType === "opd"
+    );
+  });
+  if (isAlreadyPaidToday) {
+    // Patient has already paid today
+    
+    console.log("Patient has already paid today.from opd",isAlreadyPaidToday);
+    
+  } else {
+    // Patient hasn't paid today
+    console.log("Patient hasn't paid today.from opd");
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,6 +83,8 @@ const Opd = ({ patientId }) => {
       console.log(result);
       setShowPrintCard(true);
       setIsSuccess(true);
+      setPaymentData(initialData);     
+
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -63,7 +94,7 @@ const Opd = ({ patientId }) => {
 
   return (
     <div className="rounded-xl px-8 pt-6 pb-4 mb-4 border-2 border-gray-300  flex">
-      <div className=" w-1/2 center">
+      <div className=" w-1/2 center flex-col relative pb-8">
         <div className=" w-1/2">
           <form onSubmit={handleSubmit} className="">
             <div className=" flex ">
@@ -91,6 +122,7 @@ const Opd = ({ patientId }) => {
                     value={paymentData.amount}
                     onChange={handleChange}
                     required
+                    disabled={ isAlreadyPaidToday}
                   />
                 </div>
                 <div className="mb-6">
@@ -106,8 +138,8 @@ const Opd = ({ patientId }) => {
                     type="date"
                     name="paymentDate"
                     value={currentDate}
-                    onChange={(e) => setCurrentDate(e.target.value)}
-                    // onChange={handleChange}
+                    // onChange={(e) => setCurrentDate(e.target.value)}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -115,7 +147,7 @@ const Opd = ({ patientId }) => {
                 <div className="flex items-center justify-end">
                   <button
                     onClick={addOpdPayment}
-                    disabled={isLoading}
+                    disabled={isLoading || isAlreadyPaidToday}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
                     type="submit"
                   >
@@ -137,7 +169,7 @@ const Opd = ({ patientId }) => {
                           fill="currentColor"
                         />
                       </svg>
-                    ) : isSuccess ? (
+                    ) : isSuccess || isAlreadyPaidToday? (
                       <FaCheckCircle className="text-white" />
                     ) : (
                       "Submit"
@@ -148,8 +180,11 @@ const Opd = ({ patientId }) => {
             </div>
           </form>
         </div>
+        {isAlreadyPaidToday &&(
+        <div className="absolute bottom-0 text-green-700 font-medium">Payment done today</div>
+      )}
       </div>
-      {showPrintCard && <PaymentCard patientId={patientId} />}
+      {showPrintCard && <PaymentCard patientId={patientId}  paymentType="opd" />}
       <div></div>
     </div>
   );

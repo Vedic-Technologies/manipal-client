@@ -23,23 +23,6 @@ const navigate = useNavigate()
     setId(patientId)
    }) 
 
-   const isAlreadyPaidToday = patientById?.payments?.some(payment => {
-    const paymentDate = new Date(payment.paymentDate);
-    const today = new Date();
-    return (
-      paymentDate.getDate() === today.getDate() &&
-      paymentDate.getMonth() === today.getMonth() &&
-      paymentDate.getFullYear() === today.getFullYear()
-    );
-  });
-  if (isAlreadyPaidToday) {
-    // Patient has already paid today
-    
-    console.log("Patient has already paid today.from start",isAlreadyPaidToday);
-  } else {
-    // Patient hasn't paid today
-    console.log("Patient hasn't paid today.from start");
-  }
 
   useEffect(()=>
   {
@@ -52,7 +35,6 @@ const navigate = useNavigate()
   }
   return (
     <>
-    {!isAlreadyPaidToday &&(
       <div className="w-4/5 m-auto mt-5">
         <div className="flex w-1/2 ">
         <div className="text-xl font-semibold mb-6">Enter Payment Method</div>
@@ -76,14 +58,7 @@ const navigate = useNavigate()
      {paymentType==="discount" && <DiscountPayment patientId={patientId}/>}
      {paymentType==="opd" && <Opd patientId={patientId}/>}
       </div>
-      )}
-      {isAlreadyPaidToday && (
 
-        <div className="w-4/5 m-auto mt-5 center flex-col gap-10">
-          <div className=" text-2xl font-medium">Patient has already paid today</div>
-          <Button  onClick={handleNavigateToPaymentDetails} className="text-xs">Show Payment Details</Button>
-          </div>
-      )}
     </>
   );
 };

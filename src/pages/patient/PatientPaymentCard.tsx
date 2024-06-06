@@ -22,7 +22,10 @@ const handelUpdateSubmit=()=>{
     <div>
       <div className="container mx-auto px-0 py-8 ">
         <div className="bg-white h-[500px] overflow-y-auto rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
+          <div className="flex justify-between">
           <h2 className="text-2xl font-bold mb-4">Payments</h2>
+          <Button onClick={handleAddPayment} >Add</Button>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full table-auto">
               {payment.length > 0 ? (
@@ -63,7 +66,6 @@ const handelUpdateSubmit=()=>{
                       <p className="text-gray-500 dark:text-gray-400">
                         No amount added
                       </p>
-                      <Button onClick={handleAddPayment} >Add</Button>
                     </div>
                   </div>
                 </div>
