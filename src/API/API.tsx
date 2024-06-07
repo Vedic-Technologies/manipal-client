@@ -71,6 +71,13 @@ export const API = createApi({
       }),
     }),
 
+updatePaymentById: builder.mutation({
+  query:({paymentId, ...updatedAmount})=>({
+    url:`payment/${paymentId}`,
+    method:"PATCH",
+    body:updatedAmount
+  })
+}),
     submitStaffPrescription: builder.mutation({
       query: ({ image: imageFile, ...patientData }) => ({
         url: `patient/patient_registration`,
@@ -141,6 +148,7 @@ export const {
   useGetAllPaymentsQuery,
   useGetPaymentByIdQuery,
   useDeletePaymentMutation,
+  useUpdatePaymentByIdMutation,
   useSubmitStaffPrescriptionMutation,
   useStaffSignupMutation,
   useGetAllUsersQuery,

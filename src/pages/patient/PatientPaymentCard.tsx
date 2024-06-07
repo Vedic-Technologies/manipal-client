@@ -1,14 +1,17 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Button } from "../../components/ui/button";
 import formatDate from '../../util/TimeFormate';
 import { useNavigate } from "react-router-dom";
 import { PatientIdContext } from "../../API/PatientIdProvider";
+import { useUpdatePaymentByIdMutation } from '../../API/API';
 
 const PatientPaymentCard = ({ payment, idOfPatient }) => {
   const [isUpdating, setIsUpdating] = useState(null);
   const [newAmount, setNewAmount] = useState('');
   const navigate = useNavigate();
   const { handleUpdateId } = useContext(PatientIdContext);
+
+const [ updatePaymentById] = useUpdatePaymentByIdMutation()
 
   const handleAddPayment = () => {
     console.log("idOFPatient", idOfPatient);
@@ -22,22 +25,35 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
     setNewAmount(currentAmount);
   };
 
-  const handleUpdateSubmit = (paymentId) => {
-    // Perform the update logic here, e.g., making an API call to update the payment
-    console.log("Updated Payment ID:", paymentId);
-    console.log("New Amount:", newAmount);
-    
-    // Reset the update state
-    setIsUpdating(null);
-    setNewAmount('');
+  const handleUpdateSubmit = async (paymentId) => {
+    try {
+      const amountToUpdate = payment.find(pay => pay._id === paymentId);
+      if (amountToUpdate) {
+        const updatedAmount = { ...amountToUpdate, amount: newAmount };
+        const updateKarDeteHai = await updatePaymentById({ paymentId, ...updatedAmount });
+        console.log(updateKarDeteHai); 
+        console.log("Updated Payment ID:", paymentId);
+        console.log("New Amount:", newAmount);
+        setIsUpdating(null);
+        setNewAmount('');
+      }
+    } catch (error) {
+      console.error("Error updating amount:", error);
+    }
   };
+  
 
+  console.log("figuring paymentID,maybeANArray",payment)
+
+console.log("figuring paymentID,maybeANArray",payment[0]?._id)
   return (
     <div>
       <div className="container mx-auto px-0 py-8">
         <div className="bg-white h-[500px] overflow-y-auto rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
+        <div className="flex justify-between">
           <h2 className="text-2xl font-bold mb-4">Payments</h2>
-          <div className="overflow-x-auto">
+          <Button onClick={handleAddPayment} >Add</Button>
+          </div>          <div className="overflow-x-auto">
             <table className="w-full table-auto">
               {payment.length > 0 ? (
                 <>
@@ -89,7 +105,6 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
                       <p className="text-gray-500 dark:text-gray-400">
                         No amount added
                       </p>
-                      <Button onClick={handleAddPayment}>Add</Button>
                     </div>
                   </div>
                 </div>
