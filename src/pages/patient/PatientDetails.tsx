@@ -15,6 +15,8 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
+import { Link } from 'react-router-dom';
+
 
 const Patient = () => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
@@ -167,7 +169,9 @@ const Patient = () => {
             </div>
           </div>
         </div>
+        <Link to='../all_patients' >
         <Button variant="outline" onClick={() => setSelectedPatientId(null)}>View All</Button>
+        </Link>
       </div>
 
       <div className="flex justify-center m-auto w-full mt-10">
