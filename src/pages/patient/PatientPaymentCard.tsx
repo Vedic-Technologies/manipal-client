@@ -8,14 +8,12 @@ import { useUpdatePaymentByIdMutation } from '../../API/API';
 const PatientPaymentCard = ({ payment, idOfPatient }) => {
   const [isUpdating, setIsUpdating] = useState(null);
   const [newAmount, setNewAmount] = useState('');
+  const [payments, setPayments] = useState(payment); // Local state for payments
   const navigate = useNavigate();
   const { handleUpdateId } = useContext(PatientIdContext);
-
-const [ updatePaymentById] = useUpdatePaymentByIdMutation()
+  const [updatePaymentById] = useUpdatePaymentByIdMutation();
 
   const handleAddPayment = () => {
-    console.log("idOFPatient", idOfPatient);
-    console.log("payment??", payment);
     handleUpdateId(idOfPatient); // Update the context with idOfPatient
     navigate('/home/payment_entry');
   };
@@ -27,13 +25,17 @@ const [ updatePaymentById] = useUpdatePaymentByIdMutation()
 
   const handleUpdateSubmit = async (paymentId) => {
     try {
-      const amountToUpdate = payment.find(pay => pay._id === paymentId);
+      const amountToUpdate = payments.find(pay => pay._id === paymentId);
       if (amountToUpdate) {
         const updatedAmount = { ...amountToUpdate, amount: newAmount };
-        const updateKarDeteHai = await updatePaymentById({ paymentId, ...updatedAmount });
-        console.log(updateKarDeteHai); 
-        console.log("Updated Payment ID:", paymentId);
-        console.log("New Amount:", newAmount);
+        const response = await updatePaymentById({ paymentId, ...updatedAmount }).unwrap();
+        console.log(response);
+
+        // Update local state with the new amount
+        setPayments(prevPayments => prevPayments.map(pay =>
+          pay._id === paymentId ? { ...pay, amount: newAmount } : pay
+        ));
+
         setIsUpdating(null);
         setNewAmount('');
       }
@@ -41,21 +43,18 @@ const [ updatePaymentById] = useUpdatePaymentByIdMutation()
       console.error("Error updating amount:", error);
     }
   };
-  
 
-  console.log("figuring paymentID,maybeANArray",payment)
-
-console.log("figuring paymentID,maybeANArray",payment[0]?._id)
   return (
     <div>
       <div className="container mx-auto px-0 py-8">
         <div className="bg-white h-[500px] overflow-y-auto rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-bold mb-4">Payments</h2>
-          <Button onClick={handleAddPayment} >Add</Button>
-          </div>          <div className="overflow-x-auto">
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-bold mb-4">Payments</h2>
+            <Button onClick={handleAddPayment}>Add</Button>
+          </div>
+          <div className="overflow-x-auto">
             <table className="w-full table-auto">
-              {payment.length > 0 ? (
+              {payments.length > 0 ? (
                 <>
                   <thead>
                     <tr className="bg-gray-100 dark:bg-gray-700">
@@ -64,7 +63,7 @@ console.log("figuring paymentID,maybeANArray",payment[0]?._id)
                       <th className="px-4 py-3 text-end pr-24">Action</th>
                     </tr>
                   </thead>
-                  {payment?.slice(0)?.reverse()?.map((pay) => (
+                  {payments.slice(0).reverse().map((pay) => (
                     <tbody key={pay._id}>
                       <tr className="border-b dark:border-gray-600">
                         <td className="px-4 py-3">{formatDate(pay.paymentDate)}</td>
