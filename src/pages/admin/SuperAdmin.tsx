@@ -21,6 +21,7 @@ const SuperAdmin = () => {
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate(); // Add useNavigate hook
 
   const getStaffs = () => {
     axios.get("https://manipal-server.onrender.com/api/users").then((response) => {
@@ -154,7 +155,8 @@ const SuperAdmin = () => {
     setStaffInfo({
       userName: "",
       password: "",
-      firstName: "",
+      firstName:
+        "",
       lastName: "",
       email: "",
       gender: "male",
