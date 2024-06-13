@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const AddDoctorForm = ({ onAddDoctor }) => {
     const [doctorName, setDoctorName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [docSpeciality, setDocSpeciality] = useState('');
     const [currentStatus, setCurrentStatus] = useState('');
@@ -22,7 +21,6 @@ const AddDoctorForm = ({ onAddDoctor }) => {
         const newDoctor = {
             docId: Date.now(), // Generate a unique ID
             doctorName,
-            lastName,
             email,
             docSpeciality,
             currentStatus,
@@ -43,7 +41,6 @@ const AddDoctorForm = ({ onAddDoctor }) => {
                 onAddDoctor(newDoctor);
                 // Reset form fields
                 setDoctorName('');
-                setLastName('');
                 setEmail('');
                 setDocSpeciality('');
                 setCurrentStatus('');

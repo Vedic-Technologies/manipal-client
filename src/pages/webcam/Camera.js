@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import Webcam from 'react-webcam';
 
 const videoConstraints = {
@@ -7,11 +7,12 @@ const videoConstraints = {
   facingMode: "user"
 };
 
-const Camera = ({ setImageFile, setDefaultImage }) => {
+const Camera = ({ setImageFile }) => {
   const [image, setImage] = useState('');
   const webcamRef = useRef(null);
 
-  const capture = useCallback(() => {
+  const capture = useCallback((e) => {
+    e.preventDefault();
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
     setImageFile(imageSrc);
@@ -22,31 +23,29 @@ const Camera = ({ setImageFile, setDefaultImage }) => {
   };
 
   return (
-    <>
-      <div>
-        {image === '' ? (
-          <Webcam
-            audio={false}
-            height={500}
-            width={500}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-          />
-        ) : (
-          <img src={image} alt='cam_pic' />
-        )}
-        {image !== '' ? (
-          <button onClick={retakeImage} className="webcam-btn">
-            Retake Image
-          </button>
-        ) : (
-          <button onClick={capture} className="webcam-btn">
-            Capture
-          </button>
-        )}
-      </div>
-    </>
+    <div>
+      {image === '' ? (
+        <Webcam
+          audio={false}
+          height={500}
+          width={500}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={videoConstraints}
+        />
+      ) : (
+        <img src={image} alt='cam_pic' />
+      )}
+      {image !== '' ? (
+        <button onClick={retakeImage} className="webcam-btn">
+          Retake Image
+        </button>
+      ) : (
+        <button onClick={capture} className="webcam-btn">
+          Capture
+        </button>
+      )}
+    </div>
   );
 };
 

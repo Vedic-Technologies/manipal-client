@@ -1,33 +1,34 @@
+import { useEffect, useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "../../components/ui/select";
 import { Textarea } from "../../components/ui/textarea";
 import { Button } from "../../components/ui/button";
-import {PatientType} from '../../types/PatientTypes';
-import { ChangeEvent, useState } from "react";
+import { PatientType } from '../../types/PatientTypes';
+import { ChangeEvent } from "react";
 import { initialData } from "../../initial_values/InitialValues";
 import Webcam from "../webcam/Camera";
 import AlertWrapper from '../../custom_components/AlertWrapper';
-import JobDoneAlert from "../../custom_components/JobDoneAlert"
-import { motion } from "framer-motion"
-import {useSubmitStaffPrescriptionMutation} from "../../API/API"
-const PresCriptionSadcn=()=> {
+import JobDoneAlert from "../../custom_components/JobDoneAlert";
+import { motion } from "framer-motion";
+import { useSubmitStaffPrescriptionMutation } from "../../API/API";
 
-const [patientData, setPatientData] = useState<PatientType>(initialData)
-const [imageFile, setImageFile]=useState("");
-  // jodDone alert message 
-  const [jobDoneMessage, setJobDoneMessage] = useState("")
-  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
-  const [alertColor, setAlertColor] = useState("")
-  const [submitStaffPrescription] = useSubmitStaffPrescriptionMutation()
+const PresCriptionSadcn = () => {
+  const [patientData, setPatientData] = useState<PatientType>(initialData);
+  const [imageFile, setImageFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [jobDoneMessage, setJobDoneMessage] = useState("");
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false);
+  const [alertColor, setAlertColor] = useState("");
+  const [submitStaffPrescription] = useSubmitStaffPrescriptionMutation();
 
   const handleCancelAlert = () => {
-    setOpenJobDoneAlert(false)
-  }
- 
-  const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
+    setOpenJobDoneAlert(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(patientData);
+    setIsLoading(true);
     try {
       const response = await submitStaffPrescription({
         ...patientData,
@@ -37,25 +38,23 @@ const [imageFile, setImageFile]=useState("");
       setJobDoneMessage("Patient registration successful!");
       setAlertColor("green");
       setOpenJobDoneAlert(true);
-
-      // Reset form fields after successful submission
-      setPatientData(initialData);
+      setPatientData(initialData); // Reset form fields to initial state
       setImageFile("");
-
-      // removing success alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false);
+        setJobDoneMessage("");
       }, 3000);
     } catch (error) {
-      console.error("HI,Error:", error);
+      console.error("Error:", error);
       setJobDoneMessage("Failed to register Patient!!");
       setAlertColor("red");
       setOpenJobDoneAlert(true);
-
-      // removing failed alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false);
+        setJobDoneMessage("");
       }, 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -66,23 +65,23 @@ const [imageFile, setImageFile]=useState("");
       [name]: value,
     });
   };
-  const handleSelectChange = (value) => {
+
+  const handleSelectChange = (value: string) => {
     setPatientData((prevData) => ({
       ...prevData,
       gender: value,
     }));
   };
-  const handleBloodGroupSelectChange = (value) => {
+
+  const handleBloodGroupSelectChange = (value: string) => {
     setPatientData((prevData) => ({
       ...prevData,
       bloodGroup: value,
     }));
   };
 
-  // Function to handle address input changes
   const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setPatientData({
       ...patientData,
       address: {
@@ -91,26 +90,6 @@ const [imageFile, setImageFile]=useState("");
       },
     });
   };
-
-    const handleimage = (e) => {
-      // const file = e.target.files[0];
-      // setFileToBase(file);
-      // console.log(file);
-
-      // <Webcam/>
-    };
-
-    // const setFileToBase = (imageFile) => {
-    //   const reader = new FileReader();
-    //   reader.readAsDataURL(imageFile);
-    //   reader.onloadend = () => {
-    //     setPatientData({
-    //       ...patientData,
-    //       image: reader.result,
-    //     });
-    //     console.log({ ...patientData, image: reader.result });
-    //   };
-    // };
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-12 px-4 sm:px-6 md:py-16 lg:px-8">
@@ -135,9 +114,6 @@ const [imageFile, setImageFile]=useState("");
               onChange={handleChange}
             />
           </div>
-
-          {/* select gender */}
-
           <div className="space-y-2">
             <Label htmlFor="gender">Gender</Label>
             <Select
@@ -157,7 +133,6 @@ const [imageFile, setImageFile]=useState("");
               </SelectContent>
             </Select>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="age">Age</Label>
             <Input
@@ -171,13 +146,11 @@ const [imageFile, setImageFile]=useState("");
             />
           </div>
         </div>
-
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="occupation">Occupation</Label>
             <Input
               id="occupation"
-              
               type="text"
               name="occupation"
               value={patientData.occupation}
@@ -185,26 +158,22 @@ const [imageFile, setImageFile]=useState("");
               onChange={handleChange}
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="contact">Contact</Label>
             <Input
               id="contact"
               placeholder="Enter patient contact"
-              
               type="tel"
               name="contact"
               value={patientData.contact}
               onChange={handleChange}
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               placeholder="Enter patient email"
-              
               type="email"
               name="email"
               value={patientData.email}
@@ -212,28 +181,23 @@ const [imageFile, setImageFile]=useState("");
             />
           </div>
         </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">          
-
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="weight">Weight</Label>
             <Input
               id="weight"
               placeholder="Enter patient weight"
-              
               type="number"
               name="weight"
               value={patientData.weight}
               onChange={handleChange}
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="height">Height</Label>
             <Input
               id="height"
               placeholder="Enter patient height"
-              
               type="number"
               name="height"
               value={patientData.height}
@@ -241,25 +205,21 @@ const [imageFile, setImageFile]=useState("");
             />
           </div>
         </div>
-
         <div className="space-y-2">
           <Label htmlFor="complaint">Complaint</Label>
           <Textarea
             id="complaint"
             placeholder="Enter patient complaint"
-            
             name="complaint"
             value={patientData.complaint}
             onChange={handleChange}
           />
         </div>
-
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="bloodGroup">Blood Group</Label>
             <Select
               id="bloodGroup"
-              
               name="bloodGroup"
               value={patientData.bloodGroup}
               onValueChange={handleBloodGroupSelectChange}
@@ -272,14 +232,13 @@ const [imageFile, setImageFile]=useState("");
                 <SelectItem value="A-">A-</SelectItem>
                 <SelectItem value="B+">B+</SelectItem>
                 <SelectItem value="B-">B-</SelectItem>
-                <SelectItem value="AB+">AB+</SelectItem>
-                <SelectItem value="AB-">AB-</SelectItem>
                 <SelectItem value="O+">O+</SelectItem>
                 <SelectItem value="O-">O-</SelectItem>
+                <SelectItem value="AB+">AB+</SelectItem>
+                <SelectItem value="AB-">AB-</SelectItem>
               </SelectContent>
             </Select>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="referred-to">
               Referred By <span className="text-red-500">*</span>
@@ -287,89 +246,91 @@ const [imageFile, setImageFile]=useState("");
             <Input
               id="referred-to"
               placeholder="Enter referring doctor"
-              
               name="referredTo"
               value={patientData.referredTo}
               onChange={handleChange}
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="state">State</Label>
             <Input
               id="state"
               placeholder="Enter patient state"
-              
               name="state"
               value={patientData.address.state}
               onChange={handleAddressChange}
             />
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="village">Village</Label>
             <Input
               id="village"
               placeholder="Enter patient village"
-              
               name="village"
               value={patientData.address.village}
               onChange={handleAddressChange}
             />
           </div>
-
           <div className="space-y-2">
+            
             <Label htmlFor="pincode">Pincode</Label>
             <Input
               id="pincode"
               placeholder="Enter patient pincode"
-              
               type="number"
               name="pincode"
               value={patientData.address.pincode}
               onChange={handleAddressChange}
             />
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="profile-pic">Profile Picture</Label>
             <div className="flex items-center gap-4">
-              {/* <Input id="profile-pic" type="photo" /> */}
-             
-              <Webcam setImageFile={setImageFile}/>           
+              <Webcam setImageFile={setImageFile} />
             </div>
-        
           </div>
         </div>
-
         <div className="flex justify-end gap-2">
           <Button variant="outline">Cancel</Button>
-          <Button type="submit">Submit</Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className={`relative ${isLoading ? "cursor-not-allowed" : ""}`}
+          >
+            {isLoading ? "..." : jobDoneMessage ? (
+              <motion.svg
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={`h-5 w-5 text-${alertColor}`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </motion.svg>
+            ) : "Submit"}
+          </Button>
         </div>
-      </form>     
-      <AlertWrapper isOpen={openJobDoneAlert}>
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
-  >
-    <JobDoneAlert
-    icon={null}
-      height="h-24"
-      width="w-52"
-      textColor="text-white"
-      bgColor={`${alertColor === "red" ? "bg-red-400" :  "bg-green-400"}`}
-      boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" :  "shadow-[0px_0px_42px_2px_#48BB78]"}`}
-      message={jobDoneMessage}
-      isOpen={openJobDoneAlert}
-      OnCancel={handleCancelAlert}
-      isCancelButton="block"
-    />
-  </motion.div>
-</AlertWrapper>
+      </form>
+      {openJobDoneAlert && (
+        <AlertWrapper>
+          <JobDoneAlert
+            message={jobDoneMessage}
+            alertColor={alertColor}
+            onCancel={handleCancelAlert}
+          />
+        </AlertWrapper>
+      )}
     </div>
   );
-}
+};
 
-export default PresCriptionSadcn
+export default PresCriptionSadcn;
