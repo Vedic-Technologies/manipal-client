@@ -4,12 +4,13 @@ import {
   CardContent,
   Card,
 } from "../../components/ui/card";
-
+import EditModel from "./EditPatient"
 export default function PatientDetailCard({ patient }) {
   console.log(patient)
   return (
     <Card className="w-full  bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex">
+        
         <div className="w-1/3 p-4">
           <img
             alt="Profile"
@@ -24,6 +25,9 @@ export default function PatientDetailCard({ patient }) {
           />
         </div>
         <div className="w-2/3 p-4">
+        <div className = "flex justify-end relative ">
+          <button><i class="fa-solid fa-xl fa-pen-to-square"></i></button>
+        </div>
           <CardHeader>
             <CardTitle>User Details</CardTitle>
           </CardHeader>
