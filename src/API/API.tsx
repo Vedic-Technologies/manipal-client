@@ -31,6 +31,14 @@ export const API = createApi({
       }),
     }),
 
+    updatePatient: builder.mutation({
+      query: ({ patientid, data }) => ({
+        url: `patients/${patientid}`, // Adjust the URL according to your API endpoint
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+
     deletePatient: builder.mutation({
       query: (patientId) => ({
         url: `patient/${patientId}`,
@@ -64,6 +72,7 @@ export const API = createApi({
         method: "GET",
       }),
     }),
+
     deletePayment: builder.mutation({
       query: (selectedPatientId) => ({
         url: `payment/${selectedPatientId}`,
@@ -78,11 +87,12 @@ export const API = createApi({
         body: updatedAmount,
       }),
     }),
+
     submitStaffPrescription: builder.mutation({
-      query: (postData) => ({
+      query: ({ image: imageFile, ...patientData }) => ({
         url: `patient/patient_registration`,
         method: "POST",
-        body: postData,
+        body: patientData,
       }),
     }),
 
@@ -117,10 +127,10 @@ export const API = createApi({
     }),
 
     submitShoulderProblemInDoctorPrescription: builder.mutation({
-      query: (formdata) => ({
+      query: (formData) => ({
         url: `patient/shoulder/register_problem`,
         method: "POST",
-        body: formdata,
+        body: formData,
       }),
     }),
 
@@ -134,14 +144,16 @@ export const API = createApi({
         method: "POST",
       }),
     }),
+
   }),
 });
 
 export const {
   useGetAllPatientsQuery,
+  useGetPatientByIdQuery,
+  useUpdatePatientMutation,
   useDeletePatientMutation,
   useUpdateActiveStatusMutation,
-  useGetPatientByIdQuery,
   useAddPaymentMutation,
   useGetAllPaymentsQuery,
   useGetPaymentByIdQuery,
@@ -154,4 +166,6 @@ export const {
   useGetAllPatientWithShoulderProblemQuery,
   useSubmitShoulderProblemInDoctorPrescriptionMutation,
   useGetAllStaffsQuery,
+  useGetAllSupperAdminQuery,
+  useLoginAsSuperAdminMutation,
 } = API;
