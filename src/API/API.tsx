@@ -31,6 +31,14 @@ export const API = createApi({
       }),
     }),
 
+    updatePatient: builder.mutation({
+      query: ({ patientid, data }) => ({
+        url: `patients/${patientid}`, // Adjust the URL according to your API endpoint
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+
     deletePatient: builder.mutation({
       query: (patientId) => ({
         url: `patient/${patientId}`,
@@ -59,11 +67,12 @@ export const API = createApi({
     }),
 
     getPaymentById: builder.query({
-      query:(id)=>({
-        url:`payment/${id}`,
-        method:"GET"
+      query: (id) => ({
+        url: `payment/${id}`,
+        method: "GET",
       }),
     }),
+
     deletePayment: builder.mutation({
       query: (selectedPatientId) => ({
         url: `payment/${selectedPatientId}`,
@@ -71,13 +80,14 @@ export const API = createApi({
       }),
     }),
 
-updatePaymentById: builder.mutation({
-  query:({paymentId, ...updatedAmount})=>({
-    url:`payment/${paymentId}`,
-    method:"PATCH",
-    body:updatedAmount
-  })
-}),
+    updatePaymentById: builder.mutation({
+      query: ({ paymentId, ...updatedAmount }) => ({
+        url: `payment/${paymentId}`,
+        method: "PATCH",
+        body: updatedAmount,
+      }),
+    }),
+
     submitStaffPrescription: builder.mutation({
       query: ({ image: imageFile, ...patientData }) => ({
         url: `patient/patient_registration`,
@@ -117,33 +127,33 @@ updatePaymentById: builder.mutation({
     }),
 
     submitShoulderProblemInDoctorPrescription: builder.mutation({
-      query: (formdata) => ({
+      query: (formData) => ({
         url: `patient/shoulder/register_problem`,
         method: "POST",
-        body: formdata,
+        body: formData,
       }),
     }),
-    
-    getAllSupperAdmin:builder.query({
-      query:()=>"superAdmin"
+
+    getAllSupperAdmin: builder.query({
+      query: () => "superAdmin",
     }),
 
     loginAsSuperAdmin: builder.mutation({
-      query: ()=>({
-        url:`superAdmin/login`,
-        method:"POST"
-      })
+      query: () => ({
+        url: `superAdmin/login`,
+        method: "POST",
+      }),
     }),
-    
 
   }),
 });
 
 export const {
   useGetAllPatientsQuery,
+  useGetPatientByIdQuery,
+  useUpdatePatientMutation,
   useDeletePatientMutation,
   useUpdateActiveStatusMutation,
-  useGetPatientByIdQuery,
   useAddPaymentMutation,
   useGetAllPaymentsQuery,
   useGetPaymentByIdQuery,
@@ -156,4 +166,6 @@ export const {
   useGetAllPatientWithShoulderProblemQuery,
   useSubmitShoulderProblemInDoctorPrescriptionMutation,
   useGetAllStaffsQuery,
+  useGetAllSupperAdminQuery,
+  useLoginAsSuperAdminMutation,
 } = API;
