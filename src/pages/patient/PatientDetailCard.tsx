@@ -4,17 +4,23 @@ import {
   CardContent,
   Card,
 } from "../../components/ui/card";
-import EditModel from "./EditPatient"
+import EditModel from "./EditPatient";
 export default function PatientDetailCard({ patient }) {
-  console.log(patient)
+  const containsDefaultImage = (Url) => {
+    if (Url && Url.includes("default%20image")) {
+      return "p-16";
+    }
+  };
+  console.log(patient);
   return (
     <Card className="w-full  bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex">
-        
         <div className="w-1/3 p-4">
           <img
             alt="Profile"
-            className="rounded-lg shadow-md  "
+            className={` rounded-lg shadow-md ${containsDefaultImage(
+              patient?.image
+            )} `}
             // height="320"
             src={patient?.image}
             style={{
@@ -25,9 +31,11 @@ export default function PatientDetailCard({ patient }) {
           />
         </div>
         <div className="w-2/3 p-4">
-        <div className = "flex justify-end relative ">
-          <button><i class="fa-solid fa-xl fa-pen-to-square"></i></button>
-        </div>
+          <div className="flex justify-end relative ">
+            <button>
+              <i class="fa-solid fa-xl fa-pen-to-square"></i>
+            </button>
+          </div>
           <CardHeader>
             <CardTitle>User Details</CardTitle>
           </CardHeader>
