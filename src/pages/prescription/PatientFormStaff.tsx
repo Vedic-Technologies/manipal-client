@@ -29,25 +29,26 @@ const PresCriptionSadcn = () => {
   const [alertColor, setAlertColor] = useState("");
   const [submitStaffPrescription] = useSubmitStaffPrescriptionMutation();
 
-  useEffect(() => {
-    if (patientLogo) {
-      const fetchImage = async () => {
-        try {
-          const response = await fetch(patientLogo);
-          const blob = await response.blob();
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setImageFile(reader.result);
-            //  console.log("Base64 img:", reader.result);
-          };
-          reader.readAsDataURL(blob);
-        } catch (error) {
-          console.error("Error fetching image:", error);
-        }
-      };
-      fetchImage();
-    }
-  }, [patientLogo]);
+  // useEffect(() => {
+  //  default image for patient
+  //   if (patientLogo) {
+  //     const fetchImage = async () => {
+  //       try {
+  //         const response = await fetch(patientLogo);
+  //         const blob = await response.blob();
+  //         const reader = new FileReader();
+  //         reader.onloadend = () => {
+  //           setImageFile(reader.result);
+  //            console.log("Base64 img:", reader.result);
+  //         };
+  //         reader.readAsDataURL(blob);
+  //       } catch (error) {
+  //         console.error("Error fetching image:", error);
+  //       }
+  //     };
+  //     fetchImage();
+  //   }
+  // }, [patientLogo]);
 
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false);
