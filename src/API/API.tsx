@@ -59,9 +59,9 @@ export const API = createApi({
     }),
 
     getPaymentById: builder.query({
-      query:(id)=>({
-        url:`payment/${id}`,
-        method:"GET"
+      query: (id) => ({
+        url: `payment/${id}`,
+        method: "GET",
       }),
     }),
     deletePayment: builder.mutation({
@@ -71,18 +71,18 @@ export const API = createApi({
       }),
     }),
 
-updatePaymentById: builder.mutation({
-  query:({paymentId, ...updatedAmount})=>({
-    url:`payment/${paymentId}`,
-    method:"PATCH",
-    body:updatedAmount
-  })
-}),
+    updatePaymentById: builder.mutation({
+      query: ({ paymentId, ...updatedAmount }) => ({
+        url: `payment/${paymentId}`,
+        method: "PATCH",
+        body: updatedAmount,
+      }),
+    }),
     submitStaffPrescription: builder.mutation({
-      query: ({ image: imageFile, ...patientData }) => ({
+      query: (postData) => ({
         url: `patient/patient_registration`,
         method: "POST",
-        body: patientData,
+        body: postData,
       }),
     }),
 
@@ -123,19 +123,17 @@ updatePaymentById: builder.mutation({
         body: formdata,
       }),
     }),
-    
-    getAllSupperAdmin:builder.query({
-      query:()=>"superAdmin"
+
+    getAllSupperAdmin: builder.query({
+      query: () => "superAdmin",
     }),
 
     loginAsSuperAdmin: builder.mutation({
-      query: ()=>({
-        url:`superAdmin/login`,
-        method:"POST"
-      })
+      query: () => ({
+        url: `superAdmin/login`,
+        method: "POST",
+      }),
     }),
-    
-
   }),
 });
 
