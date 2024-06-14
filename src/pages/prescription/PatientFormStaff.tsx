@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
-import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "../../components/ui/select";
+import {
+  SelectValue,
+  SelectTrigger,
+  SelectItem,
+  SelectContent,
+  Select,
+} from "../../components/ui/select";
 import { Textarea } from "../../components/ui/textarea";
 import { Button } from "../../components/ui/button";
-import { PatientType } from '../../types/PatientTypes';
+import { PatientType } from "../../types/PatientTypes";
 import { ChangeEvent } from "react";
 import { initialData } from "../../initial_values/InitialValues";
 import Webcam from "../webcam/Camera";
-import AlertWrapper from '../../custom_components/AlertWrapper';
+import AlertWrapper from "../../custom_components/AlertWrapper";
 import JobDoneAlert from "../../custom_components/JobDoneAlert";
 import { motion } from "framer-motion";
 import { useSubmitStaffPrescriptionMutation } from "../../API/API";
+import patientLogo from "./user.png";
 
 const PresCriptionSadcn = () => {
   const [patientData, setPatientData] = useState<PatientType>(initialData);
@@ -22,6 +29,27 @@ const PresCriptionSadcn = () => {
   const [alertColor, setAlertColor] = useState("");
   const [submitStaffPrescription] = useSubmitStaffPrescriptionMutation();
 
+  // useEffect(() => {
+  //  default image for patient
+  //   if (patientLogo) {
+  //     const fetchImage = async () => {
+  //       try {
+  //         const response = await fetch(patientLogo);
+  //         const blob = await response.blob();
+  //         const reader = new FileReader();
+  //         reader.onloadend = () => {
+  //           setImageFile(reader.result);
+  //            console.log("Base64 img:", reader.result);
+  //         };
+  //         reader.readAsDataURL(blob);
+  //       } catch (error) {
+  //         console.error("Error fetching image:", error);
+  //       }
+  //     };
+  //     fetchImage();
+  //   }
+  // }, [patientLogo]);
+
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false);
   };
@@ -29,11 +57,13 @@ const PresCriptionSadcn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    // console.log(imageFile, "image file");
+    const postData = {
+      ...patientData,
+      image: imageFile,
+    };
     try {
-      const response = await submitStaffPrescription({
-        ...patientData,
-        image: imageFile,
-      }).unwrap();
+      const response = await submitStaffPrescription(postData).unwrap();
       console.log(response);
       setJobDoneMessage("Patient registration successful!");
       setAlertColor("green");
@@ -272,7 +302,6 @@ const PresCriptionSadcn = () => {
             />
           </div>
           <div className="space-y-2">
-            
             <Label htmlFor="pincode">Pincode</Label>
             <Input
               id="pincode"
@@ -297,7 +326,9 @@ const PresCriptionSadcn = () => {
             disabled={isLoading}
             className={`relative ${isLoading ? "cursor-not-allowed" : ""}`}
           >
-            {isLoading ? "..." : jobDoneMessage ? (
+            {isLoading ? (
+              "..."
+            ) : jobDoneMessage ? (
               <motion.svg
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -316,7 +347,9 @@ const PresCriptionSadcn = () => {
                   d="M5 13l4 4L19 7"
                 />
               </motion.svg>
-            ) : "Submit"}
+            ) : (
+              "Submit"
+            )}
           </Button>
         </div>
       </form>
