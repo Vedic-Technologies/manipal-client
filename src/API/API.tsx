@@ -32,10 +32,10 @@ export const API = createApi({
     }),
 
     updatePatient: builder.mutation({
-      query: ({ patientid, data }) => ({
-        url: `patients/${patientid}`, // Adjust the URL according to your API endpoint
+      query: ({ patientId, ...updatedData }) => ({
+        url: `patient/${patientId}`, // Adjust the URL according to your API endpoint
         method: "PATCH",
-        body: data,
+        body: updatedData,
       }),
     }),
 
@@ -160,7 +160,6 @@ export const API = createApi({
         method: "POST",
       }),
     }),
-
   }),
 });
 
