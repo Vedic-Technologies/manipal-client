@@ -62,15 +62,15 @@ export default function PatientDetailCard({ patient }) {
       }).unwrap();
       setIsEditing(false);
       setIsImgEditing(false);
-      // Optionally fetch updated data again after saving
+      console.log("updateData: ",response.patient); 
+
       refetch();
     } catch (error) {
       console.error("Error ", error);
-      console.log(Response.msg); // Ensure Response.msg is defined somewhere
     }
   };
   const handleCancel = () => {
-    setFormData(patientData); // Reset form data to original
+    setFormData(patientData); 
     setIsEditing(false);
   };
 
