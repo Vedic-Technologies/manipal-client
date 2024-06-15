@@ -5,18 +5,36 @@ import {
   CardContent,
   Card,
 } from "../../components/ui/card";
-import axios from "axios";
 import { useUpdatePatientMutation } from "../../API/API";
+import Webcam from "../webcam/Camera";
+import { MdDeleteSweep } from "react-icons/md";
+import { CiEdit } from "react-icons/ci";
 
 export default function PatientDetailCard({ patient }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isImgEditing, setIsImgEditing] = useState(false);
   const [formData, setFormData] = useState();
-  const [imageFile, setImageFIle] = useState();
+  const [imageFile, setImageFile] = useState();
   const [updatePatient, { isLoading }] = useUpdatePatientMutation();
+
+  const containsDefaultImage = (Url) => {
+    if (Url && Url.includes("default%20image")) {
+      return "p-16";
+    }
+  };
+  console.log(patient);
 
   useEffect(() => {
     setFormData(patient);
   }, [patient]);
+
+  useEffect(() => {
+    console.log(imageFile);
+    setFormData((prevData) => ({
+      ...prevData,
+      image: imageFile,
+    }));
+  }, [imageFile]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +61,7 @@ export default function PatientDetailCard({ patient }) {
       console.log(response, "----------");
 
       setIsEditing(false);
+      setIsImgEditing(false);
     } catch (error) {
       console.error("Error ", error);
       console.log(Response.msg);
@@ -57,61 +76,62 @@ export default function PatientDetailCard({ patient }) {
   // const handleFileChange = async (e) => {
   //   const file = e.target.files[0];
   //   if (file) {
-  //     setImageFIle(file);
+  //     setImageFile(file);
 
   //     await changeImageToBase64(file);
   //   }
   // };
 
-  const changeImageToBase64 = async (e) => {
-    const file = e.target.files[0];
-    setImageFIle(file);
-
-    try {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // console.log("Base64 img:", reader.result);
-        setFormData((prevData) => ({
-          ...prevData,
-          image: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error("Error converting image to Base64:", error);
-    }
-  };
-
   return (
     <Card className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex">
         <div className="w-1/3 p-4">
-          <img
-            alt="Profile"
-            className="rounded-lg shadow-md"
-            src={
-              imageFile && isEditing
-                ? URL.createObjectURL(imageFile)
-                : patient?.image
-            }
-            style={{
-              aspectRatio: "320/320",
-              objectFit: "cover",
-            }}
-          />
-          {isEditing && (
+          <div className="relative">
+            <img
+              alt="Profile"
+              className={`rounded-lg shadow-md ${containsDefaultImage} `}
+              src={imageFile && isEditing ? imageFile : patient?.image}
+              style={{
+                aspectRatio: "320/320",
+                objectFit: "cover",
+              }}
+            />
+            <div
+              className={`flex gap-5 justify-end text-4xl mt-2 ${
+                !isEditing && "hidden"
+              } `}
+            >
+              <CiEdit
+                className="text-blue-400 shadow-xl border cursor-pointer rounded-lg"
+                onClick={(e) => setIsImgEditing(true)}
+              />
+            </div>
+
+            {isImgEditing && isEditing && (
+              <div className="flex absolute top-0 items-center gap-4 rounded-lg overflow-hidden">
+                <Webcam setImageFile={setImageFile} />
+              </div>
+            )}
+          </div>
+
+          {/* {isEditing && (
             <input
               type="file"
               name="image"
               onChange={changeImageToBase64}
               className="border-b-2 border-gray-100"
             />
-          )}
+          )} */}
         </div>
         <div className="w-2/3 p-4">
           <div className="flex justify-end relative">
             {!isEditing ? (
-              <button onClick={() => setIsEditing(true)}>
+              <button
+                onClick={() => {
+                  setIsEditing(true);
+                  setIsImgEditing(false);
+                }}
+              >
                 <i className="fa-solid fa-xl fa-pen-to-square"></i>
               </button>
             ) : (
