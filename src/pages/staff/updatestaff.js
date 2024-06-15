@@ -30,7 +30,7 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {useGetAllStaffsQuery, useDeleteUserByIdMutation} from "../../API/API"
+import {useGetAllStaffsQuery, useDeleteStaffByIdMutation} from "../../API/API"
 import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
@@ -38,7 +38,7 @@ import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 export default function UpdateStaff() {
   
 const { data, error, isLoading, refetch } = useGetAllStaffsQuery()
-const [deleteUserById]= useDeleteUserByIdMutation()
+const [deleteStaffById] = useDeleteStaffByIdMutation();
 useEffect(() => {
   if (data) {
     const staffsData = data.filter((item) => item.userType !== "admin");
@@ -49,14 +49,14 @@ useEffect(() => {
 
 const [staffs, setStaffs] = useState([]);
 
-  const handeldelete= async(id)=>{
-    await deleteUserById(id).unwrap();
+  const handeldelete= async(userId)=>{
+    await deleteStaffById(userId).unwrap();
       refetch();     
     }
   
     if (isLoading) {
       return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
-       <div> Loading patients...</div>
+       <div> Loading Staffs...</div>
        <div>
        <Player
             autoplay
@@ -100,7 +100,7 @@ const [staffs, setStaffs] = useState([]);
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>Name </TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Gender</TableHead>
