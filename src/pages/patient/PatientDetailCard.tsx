@@ -9,6 +9,8 @@ import { useUpdatePatientMutation } from "../../API/API";
 import Webcam from "../webcam/Camera";
 import { MdDeleteSweep } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import { useGetPatientByIdQuery } from "../../API/API";
+
 
 export default function PatientDetailCard({ patient }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,17 +18,24 @@ export default function PatientDetailCard({ patient }) {
   const [formData, setFormData] = useState();
   const [imageFile, setImageFile] = useState();
   const [updatePatient, { isLoading }] = useUpdatePatientMutation();
+  const { data: patientData, isLoading: isPatientLoading,refetch } = useGetPatientByIdQuery(patient._id);
+
+  useEffect(() => {
+    if (patientData) {
+      setFormData(patientData);
+    }
+  }, [patientData]);
 
   const containsDefaultImage = (Url) => {
     if (Url && Url.includes("default%20image")) {
       return "p-16";
     }
   };
-  console.log(patient);
+  console.log(patientData);
 
   useEffect(() => {
-    setFormData(patient);
-  }, [patient]);
+    setFormData(patientData);
+  }, [patientData]);
 
   useEffect(() => {
     console.log(imageFile);
@@ -46,32 +55,25 @@ export default function PatientDetailCard({ patient }) {
   };
 
   const handleSave = async () => {
-    // const updatedData = formData;
-
     try {
-      console.log("new data", {
-        patientId: patient._id,
-        updatedData: formData,
-      });
       const response = await updatePatient({
         patientId: patient._id,
         ...formData,
       }).unwrap();
-
-      console.log(response, "----------");
-
       setIsEditing(false);
       setIsImgEditing(false);
+      // Optionally fetch updated data again after saving
+      refetch();
     } catch (error) {
       console.error("Error ", error);
-      console.log(Response.msg);
+      console.log(Response.msg); // Ensure Response.msg is defined somewhere
     }
   };
-
   const handleCancel = () => {
-    setFormData(patient);
+    setFormData(patientData); // Reset form data to original
     setIsEditing(false);
   };
+
 
   // const handleFileChange = async (e) => {
   //   const file = e.target.files[0];
@@ -90,7 +92,7 @@ export default function PatientDetailCard({ patient }) {
             <img
               alt="Profile"
               className={`rounded-lg shadow-md ${containsDefaultImage} `}
-              src={imageFile && isEditing ? imageFile : patient?.image}
+              src={imageFile && isEditing ? imageFile : patientData?.image}
               style={{
                 aspectRatio: "320/320",
                 objectFit: "cover",
@@ -162,7 +164,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2  border-gray-100"
                     />
                   ) : (
-                    patient?.patientName
+                    patientData?.patientName
                   )}
                 </p>
                 <p>
@@ -176,7 +178,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.gender
+                    patientData?.gender
                   )}
                 </p>
                 <p>
@@ -190,7 +192,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.height
+                    patientData?.height
                   )}
                 </p>
               </div>
@@ -206,7 +208,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.email
+                    patientData?.email
                   )}
                 </p>
                 <p>
@@ -220,7 +222,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.address?.state
+                    patientData?.address?.state
                   )}
                 </p>
               </div>
@@ -236,7 +238,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.address?.village
+                    patientData?.address?.village
                   )}
                 </p>
                 <p>
@@ -250,7 +252,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.address?.pin_code
+                    patientData?.address?.pin_code
                   )}
                 </p>
               </div>
@@ -266,7 +268,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.address?.country
+                    patientData?.address?.country
                   )}
                 </p>
                 <p>
@@ -280,7 +282,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.bloodGroup
+                    patientData?.bloodGroup
                   )}
                 </p>
               </div>
@@ -296,7 +298,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.weight
+                    patientData?.weight
                   )}
                 </p>
                 <p>
@@ -310,7 +312,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.age
+                    patientData?.age
                   )}
                 </p>
               </div>
@@ -326,7 +328,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.referredTo
+                    patientData?.referredTo
                   )}
                 </p>
                 <p>
@@ -340,7 +342,7 @@ export default function PatientDetailCard({ patient }) {
                       className="border-b-2 border-gray-300"
                     />
                   ) : (
-                    patient?.dob
+                    patientData?.dob
                   )}
                 </p>
               </div>

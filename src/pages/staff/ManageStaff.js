@@ -107,8 +107,8 @@ const ManageStaff = () => {
 
   return (
     <div>
-      <div className="flex w-full gap-2 h-screen px-4 pl-8 py-2">
-        <div className="w-[60%] p-2 bg-violet-50 rounded-md">
+      <div className="flex w-full gap-2 h-screen  px-4 pl-8 py-2">
+        <div className="w-[60%] p-2 bg-violet-50 overflow-y-auto rounded-md">
           <div className="text-4xl font-semibold text-blue-500 text-center">
             Staff List
           </div>
@@ -205,6 +205,7 @@ const ManageStaff = () => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className="block mt-2 w-1/2 px-3 py-1 border border-black rounded-md"
+                
               />
             </div>
             <div>
