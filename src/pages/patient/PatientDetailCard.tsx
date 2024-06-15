@@ -35,7 +35,6 @@ export default function PatientDetailCard({ patient }) {
         patientId: patient._id,
         updatedData: formData,
       });
-      // await axios.patch(`https://manipal-server.onrender.com/api/patient/${patient.id}`, formData);
       const response = await updatePatient({
         patientId: patient._id,
         ...formData,
@@ -43,7 +42,7 @@ export default function PatientDetailCard({ patient }) {
 
       console.log(response, "----------");
 
-      // setIsEditing(false);
+      setIsEditing(false);
     } catch (error) {
       console.error("Error ", error);
       console.log(Response.msg);
