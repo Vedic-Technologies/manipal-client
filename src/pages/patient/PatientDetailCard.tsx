@@ -1,10 +1,22 @@
-import { useState } from "react";
-import { CardTitle, CardHeader, CardContent, Card } from "../../components/ui/card";
+import { useEffect, useState } from "react";
+import {
+  CardTitle,
+  CardHeader,
+  CardContent,
+  Card,
+} from "../../components/ui/card";
 import axios from "axios";
+import { useUpdatePatientMutation } from "../../API/API";
 
 export default function PatientDetailCard({ patient }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(patient);
+  const [formData, setFormData] = useState();
+  const [imageFile, setImageFIle] = useState();
+  const [updatePatient, { isLoading }] = useUpdatePatientMutation();
+
+  useEffect(() => {
+    setFormData(patient);
+  }, [patient]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -12,20 +24,62 @@ export default function PatientDetailCard({ patient }) {
       ...prevData,
       [name]: value,
     }));
+    // console.log(formData);
   };
 
   const handleSave = async () => {
+    // const updatedData = formData;
+
     try {
-      await axios.patch(`https://manipal-server.onrender.com/api/patient/${patient.id}`, formData);
+      console.log("new data", {
+        patientId: patient._id,
+        updatedData: formData,
+      });
+      const response = await updatePatient({
+        patientId: patient._id,
+        ...formData,
+      }).unwrap();
+
+      console.log(response, "----------");
+
       setIsEditing(false);
     } catch (error) {
-      console.error("Error saving patient data:", error);
+      console.error("Error ", error);
+      console.log(Response.msg);
     }
   };
 
   const handleCancel = () => {
     setFormData(patient);
     setIsEditing(false);
+  };
+
+  // const handleFileChange = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImageFIle(file);
+
+  //     await changeImageToBase64(file);
+  //   }
+  // };
+
+  const changeImageToBase64 = async (e) => {
+    const file = e.target.files[0];
+    setImageFIle(file);
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // console.log("Base64 img:", reader.result);
+        setFormData((prevData) => ({
+          ...prevData,
+          image: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error("Error converting image to Base64:", error);
+    }
   };
 
   return (
@@ -35,12 +89,24 @@ export default function PatientDetailCard({ patient }) {
           <img
             alt="Profile"
             className="rounded-lg shadow-md"
-            src={patient?.image}
+            src={
+              imageFile && isEditing
+                ? URL.createObjectURL(imageFile)
+                : patient?.image
+            }
             style={{
               aspectRatio: "320/320",
               objectFit: "cover",
             }}
           />
+          {isEditing && (
+            <input
+              type="file"
+              name="image"
+              onChange={changeImageToBase64}
+              className="border-b-2 border-gray-100"
+            />
+          )}
         </div>
         <div className="w-2/3 p-4">
           <div className="flex justify-end relative">
@@ -50,8 +116,12 @@ export default function PatientDetailCard({ patient }) {
               </button>
             ) : (
               <div className="flex gap-2">
-                <button onClick={handleSave}><i className="fa-solid fa-xl fa-save"></i></button>
-                <button onClick={handleCancel}><i class="fa-solid fa-xl fa-xmark"></i></button>
+                <button onClick={handleSave}>
+                  <i className="fa-solid fa-xl fa-save"></i>
+                </button>
+                <button onClick={handleCancel}>
+                  <i class="fa-solid fa-xl fa-xmark"></i>
+                </button>
               </div>
             )}
           </div>
@@ -62,21 +132,21 @@ export default function PatientDetailCard({ patient }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-1">
                 <p>
-                  <strong>Name:  </strong> 
+                  <strong>Name: </strong>
                   {isEditing ? (
                     <input
                       type="text"
                       name="patientName"
                       value={formData.patientName}
                       onChange={handleChange}
-                      className="border-b-2 border-gray-300"
+                      className="border-b-2  border-gray-100"
                     />
                   ) : (
                     patient?.patientName
                   )}
                 </p>
                 <p>
-                  <strong>Sex:  </strong> 
+                  <strong>Sex: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -90,7 +160,7 @@ export default function PatientDetailCard({ patient }) {
                   )}
                 </p>
                 <p>
-                  <strong>Height:  </strong> 
+                  <strong>Height: </strong>
                   {isEditing ? (
                     <input
                       type="number"
@@ -106,7 +176,7 @@ export default function PatientDetailCard({ patient }) {
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Email:  </strong> 
+                  <strong>Email: </strong>
                   {isEditing ? (
                     <input
                       type="email"
@@ -120,7 +190,7 @@ export default function PatientDetailCard({ patient }) {
                   )}
                 </p>
                 <p>
-                  <strong>State:  </strong> 
+                  <strong>State: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -136,7 +206,7 @@ export default function PatientDetailCard({ patient }) {
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Village:  </strong> 
+                  <strong>Village: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -150,7 +220,7 @@ export default function PatientDetailCard({ patient }) {
                   )}
                 </p>
                 <p>
-                  <strong>Pin-code:  </strong> 
+                  <strong>Pin-code: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -166,7 +236,7 @@ export default function PatientDetailCard({ patient }) {
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Country:  </strong> 
+                  <strong>Country: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -180,7 +250,7 @@ export default function PatientDetailCard({ patient }) {
                   )}
                 </p>
                 <p>
-                  <strong>Blood Group:  </strong> 
+                  <strong>Blood Group: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -196,7 +266,7 @@ export default function PatientDetailCard({ patient }) {
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Weight:  </strong> 
+                  <strong>Weight: </strong>
                   {isEditing ? (
                     <input
                       type="number"
@@ -210,7 +280,7 @@ export default function PatientDetailCard({ patient }) {
                   )}
                 </p>
                 <p>
-                  <strong>Age:  </strong> 
+                  <strong>Age: </strong>
                   {isEditing ? (
                     <input
                       type="number"
@@ -226,7 +296,7 @@ export default function PatientDetailCard({ patient }) {
               </div>
               <div className="col-span-1">
                 <p>
-                  <strong>Referred To:  </strong> 
+                  <strong>Referred To: </strong>
                   {isEditing ? (
                     <input
                       type="text"
@@ -240,8 +310,8 @@ export default function PatientDetailCard({ patient }) {
                   )}
                 </p>
                 <p>
-                  <strong>Dob:  </strong> 
-                  {isEditing ?  (
+                  <strong>Dob: </strong>
+                  {isEditing ? (
                     <input
                       type="date"
                       name="dob"
