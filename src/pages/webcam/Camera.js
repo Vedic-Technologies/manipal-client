@@ -1,30 +1,34 @@
-import React, { useState, useCallback, useRef } from 'react';
-import Webcam from 'react-webcam';
+import React, { useState, useCallback, useRef } from "react";
+import Webcam from "react-webcam";
 
 const videoConstraints = {
   width: 500,
   height: 500,
-  facingMode: "user"
+  facingMode: "user",
 };
 
 const Camera = ({ setImageFile }) => {
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const webcamRef = useRef(null);
+  // const { setImageFile, imageFile } = props;
 
-  const capture = useCallback((e) => {
-    e.preventDefault();
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);
-    setImageFile(imageSrc);
-  }, [setImageFile]);
+  const capture = useCallback(
+    (e) => {
+      e.preventDefault();
+      const imageSrc = webcamRef.current.getScreenshot();
+      setImage(imageSrc);
+      setImageFile(imageSrc);
+    },
+    [setImageFile]
+  );
 
   const retakeImage = () => {
-    setImage('');
+    setImage("");
   };
 
   return (
     <div>
-      {image === '' ? (
+      {image === "" ? (
         <Webcam
           audio={false}
           height={500}
@@ -34,14 +38,20 @@ const Camera = ({ setImageFile }) => {
           videoConstraints={videoConstraints}
         />
       ) : (
-        <img src={image} alt='cam_pic' />
+        <img src={image} alt="cam_pic" />
       )}
-      {image !== '' ? (
-        <button onClick={retakeImage} className="webcam-btn">
+      {image !== "" ? (
+        <button
+          onClick={retakeImage}
+          className="webcam-btn px-2 py-1 mt-2 border shadow-xl rounded-md"
+        >
           Retake Image
         </button>
       ) : (
-        <button onClick={capture} className="webcam-btn">
+        <button
+          onClick={capture}
+          className="webcam-btn px-2 py-1 mt-2 border shadow-xl rounded-md"
+        >
           Capture
         </button>
       )}
