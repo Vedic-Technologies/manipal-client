@@ -263,7 +263,7 @@ const ManageStaff = () => {
               />
             </div>
           </div>
-          <div className="actions flex gap-20 p-8 pl-10">
+          <div className="actions flex gap-20 p-8 pl-12">
             <button
               onClick={handleFormSubmit}
               className={`px-5 py-2 bg-black hover:bg-slate-800 text-white rounded-lg ${
