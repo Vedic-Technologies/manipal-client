@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 
 const videoConstraints = {
@@ -7,7 +7,7 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-const Camera = ({ setImageFile }) => {
+const Camera = ({ setImageFile, imageFile }) => {
   const [image, setImage] = useState("");
   const webcamRef = useRef(null);
   // const { setImageFile, imageFile } = props;
@@ -21,6 +21,12 @@ const Camera = ({ setImageFile }) => {
     },
     [setImageFile]
   );
+
+  useEffect(() => {
+    if (!imageFile) {
+      setImage("");
+    }
+  }, [imageFile, setImage]);
 
   const retakeImage = () => {
     setImage("");
@@ -41,19 +47,19 @@ const Camera = ({ setImageFile }) => {
         <img src={image} alt="cam_pic" />
       )}
       {image !== "" ? (
-        <button
+        <div
           onClick={retakeImage}
-          className="webcam-btn px-2 py-1 mt-2 border shadow-xl rounded-md"
+          className="webcam-btn w-fit cursor-pointer px-2 py-1 mt-2 border shadow-xl rounded-md"
         >
           Retake Image
-        </button>
+        </div>
       ) : (
-        <button
+        <div
           onClick={capture}
-          className="webcam-btn px-2 py-1 mt-2 border shadow-xl rounded-md"
+          className="webcam-btn w-fit cursor-pointer px-2 py-1 mt-2 border shadow-xl rounded-md"
         >
           Capture
-        </button>
+        </div>
       )}
     </div>
   );

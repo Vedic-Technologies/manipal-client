@@ -14,7 +14,7 @@ export const initialData = {
   address: {
     state: "",
     village: "",
-    pincode: "",
+    pin_code: "",
   },
   image: "",
 };

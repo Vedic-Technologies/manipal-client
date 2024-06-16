@@ -52,6 +52,7 @@ const PresCriptionSadcn = () => {
 
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false);
+    setJobDoneMessage("");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,6 +122,11 @@ const PresCriptionSadcn = () => {
     });
   };
 
+  const handleCancel = () => {
+    setPatientData(initialData);
+    setImageFile("");
+  };
+
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-12 px-4 sm:px-6 md:py-16 lg:px-8">
       <div className="space-y-2 text-center">
@@ -131,7 +137,10 @@ const PresCriptionSadcn = () => {
           Fill out the form to collect patient details.
         </p>
       </div>
-      <form className="space-y-4" onSubmit={handleSubmit}>
+      <form
+        className="space-y-4"
+        onSubmit={handleSubmit}
+      >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
@@ -307,21 +316,23 @@ const PresCriptionSadcn = () => {
               id="pincode"
               placeholder="Enter patient pincode"
               type="number"
-              name="pincode"
-              value={patientData.address.pincode}
+              name="pin_code"
+              value={patientData.address.pin_code}
               onChange={handleAddressChange}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="profile-pic">Profile Picture</Label>
             <div className="flex items-center gap-4">
-              <Webcam setImageFile={setImageFile} />
+              <Webcam setImageFile={setImageFile} imageFile={imageFile} />
             </div>
           </div>
         </div>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline">Cancel</Button>
+          <Button type="reset" onClick={handleCancel} variant="outline">
+            Cancel
+          </Button>
           <Button
             type="submit"
             disabled={isLoading}
@@ -365,7 +376,9 @@ const PresCriptionSadcn = () => {
               height="h-28"
               width="w-52"
               textColor={` text-${alertColor}`}
-              bgColor={` ${alertColor == "black" ? "bg-green-200" : "bg-red-400"} `}
+              bgColor={` ${
+                alertColor == "black" ? "bg-green-200" : "bg-red-400"
+              } `}
               boxShadow=" shadow-2xl shadow-px_0px_42px_2px_#c53030] "
               message={jobDoneMessage}
               isOpen={true}

@@ -30,7 +30,7 @@ export default function PatientDetailCard({ patient }) {
   }, [patientData]);
 
   const containsDefaultImage = (Url) => {
-    if (Url && Url.includes("default%20image")) {
+    if (Url && Url.includes("default%20image") ) {
       return "p-16";
     }
   };
