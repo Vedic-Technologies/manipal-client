@@ -99,7 +99,7 @@ const {data =[]} = useGetAllPatientsQuery("");
               </div>
               <div className="text-center font-semibold">---- OR ----</div>
               <div className="flex items-start mb-4 flex-col relative">
-                <label className="mr-2 font-medium">Patient IDre:</label>
+                <label className="mr-2 font-medium">Patient ID:</label>
                 <input
                   type="text"
                   value={patientId}
