@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef} from "react";
 import user_logo_1 from '../assets/logoes/user.png'
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 import { BiTerminal } from "react-icons/bi";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -10,6 +10,7 @@ const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false); // State for dropdown visibility
   const [loggedInUserType, setLoggedInUserType] = useState("");
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
 
   useEffect(() => {
@@ -44,6 +45,26 @@ const NavBar = () => {
     // localStorage.removeItem("currentUser");
     navigate("/");
   };
+
+  const closeDropdown = () => {
+    setShowDropdown(false);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      closeDropdown();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
   return (
     <>
       <div>
@@ -66,10 +87,10 @@ const NavBar = () => {
                   onClick={toggleDropdown}
                 />
                 {showDropdown && (
-                  <div className="absolute mt-44 right-0 mt-2 w-38 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                    <button className="w-full flex  items-center gap-2 px-4 py-2 hover:bg-gray-100"><i class="fa-regular fa-user"></i>Profile</button>
-                    <button className="w-full  flex items-center gap-2 px-4 py-2 hover:bg-gray-100"><i class="fa-solid fa-gear"></i>Settings </button>
-                    <button onClick={() => logout()} className="w-full  flex   items-center gap-2 px-4 py-2 hover:bg-gray-100"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+                  <div ref={dropdownRef} className="absolute mt-44 divide-y right-0 mt-2 w-38 bg-white border border-gray-200 rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out transform opacity-100 translate-y-0">
+                    <button className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"><i className="fa-regular fa-user"></i>Profile</button>
+                    <button className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"><i className="fa-solid fa-gear"></i>Settings</button>
+                    <button onClick={logout} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-100"><i className="fa-solid fa-right-from-bracket"></i>Logout</button>
                   </div>
                 )}
               </div>
