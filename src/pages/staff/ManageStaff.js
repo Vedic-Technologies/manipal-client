@@ -204,7 +204,7 @@ const [submitResponse, setSubmitResponse] = useState(null)
   return (
     <div>
       <div className="flex w-full gap-2 h-auto  px-4 pl-8 py-2">
-        <div className="w-[60%] p-2  h-screen overflow-y-auto rounded-md">
+        <div className="w-[60%] p-2  h-[85vh] overflow-y-auto rounded-md">
           <div className="text-4xl font-semibold text-blue-500 text-center">
             Staff List
           </div>
