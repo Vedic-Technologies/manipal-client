@@ -66,14 +66,14 @@ const PresCriptionSadcn = () => {
       const response = await submitStaffPrescription(postData).unwrap();
       console.log(response);
       setJobDoneMessage("Patient registration successful!");
-      setAlertColor("green");
+      setAlertColor("black");
       setOpenJobDoneAlert(true);
       setPatientData(initialData); // Reset form fields to initial state
       setImageFile("");
       setTimeout(() => {
         setOpenJobDoneAlert(false);
         setJobDoneMessage("");
-      }, 3000);
+      }, 4000);
     } catch (error) {
       console.error("Error:", error);
       setJobDoneMessage("Failed to register Patient!!");
@@ -319,6 +319,7 @@ const PresCriptionSadcn = () => {
             </div>
           </div>
         </div>
+
         <div className="flex justify-end gap-2">
           <Button variant="outline">Cancel</Button>
           <Button
@@ -353,13 +354,25 @@ const PresCriptionSadcn = () => {
           </Button>
         </div>
       </form>
-      {openJobDoneAlert && (
-        <AlertWrapper>
-          <JobDoneAlert
-            message={jobDoneMessage}
-            alertColor={alertColor}
-            onCancel={handleCancelAlert}
-          />
+
+      {true && (
+        <AlertWrapper isOpen={openJobDoneAlert}>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+          >
+            <JobDoneAlert
+              height="h-28"
+              width="w-52"
+              textColor={` text-${alertColor}`}
+              bgColor={` ${alertColor == "black" ? "bg-green-200" : "bg-red-400"} `}
+              boxShadow=" shadow-2xl shadow-px_0px_42px_2px_#c53030] "
+              message={jobDoneMessage}
+              isOpen={true}
+              OnCancel={handleCancelAlert}
+              isCancelButton=" "
+            />
+          </motion.div>
         </AlertWrapper>
       )}
     </div>
