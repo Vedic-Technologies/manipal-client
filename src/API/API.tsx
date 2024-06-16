@@ -89,7 +89,7 @@ export const API = createApi({
     }),
 
     submitStaffPrescription: builder.mutation({
-      query: ({ image: imageFile, ...patientData }) => ({
+      query: (patientData) => ({
         url: `patient/patient_registration`,
         method: "POST",
         body: patientData,
@@ -113,17 +113,17 @@ export const API = createApi({
     }),
 
     deleteStaffById: builder.mutation({
-      query :(userId) =>({
-        url:`staffs/${userId}`,
-        method:"DELETE",
+      query: (userId) => ({
+        url: `staffs/${userId}`,
+        method: "DELETE",
       }),
     }),
 
     updateStaffById: builder.mutation({
-      query : ({userId,updateData})=>({
-        url:`staffs/${userId}`,
-        method:"PATCH",
-        body:updateData
+      query: ({ userId, updateData }) => ({
+        url: `staffs/${userId}`,
+        method: "PATCH",
+        body: updateData,
       }),
     }),
 
@@ -134,7 +134,6 @@ export const API = createApi({
       }),
     }),
 
-  
     getAllPatientWithShoulderProblem: builder.query({
       query: () => ({
         url: `patient/shoulder`,

@@ -11,14 +11,17 @@ import { MdDeleteSweep } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { useGetPatientByIdQuery } from "../../API/API";
 
-
 export default function PatientDetailCard({ patient }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isImgEditing, setIsImgEditing] = useState(false);
   const [formData, setFormData] = useState();
   const [imageFile, setImageFile] = useState();
   const [updatePatient, { isLoading }] = useUpdatePatientMutation();
-  const { data: patientData, isLoading: isPatientLoading,refetch } = useGetPatientByIdQuery(patient._id);
+  const {
+    data: patientData,
+    isLoading: isPatientLoading,
+    refetch,
+  } = useGetPatientByIdQuery(patient._id);
 
   useEffect(() => {
     if (patientData) {
@@ -62,7 +65,7 @@ export default function PatientDetailCard({ patient }) {
       }).unwrap();
       setIsEditing(false);
       setIsImgEditing(false);
-      console.log("updateData: ",response.patient); 
+      console.log("updateData: ", response.patient);
 
       refetch();
     } catch (error) {
@@ -70,10 +73,9 @@ export default function PatientDetailCard({ patient }) {
     }
   };
   const handleCancel = () => {
-    setFormData(patientData); 
+    setFormData(patientData);
     setIsEditing(false);
   };
-
 
   // const handleFileChange = async (e) => {
   //   const file = e.target.files[0];
@@ -89,30 +91,38 @@ export default function PatientDetailCard({ patient }) {
       <div className="flex">
         <div className="w-1/3 p-4">
           <div className="relative">
-            <img
-              alt="Profile"
-              className={`rounded-lg shadow-md ${containsDefaultImage} `}
-              src={imageFile && isEditing ? imageFile : patientData?.image}
-              style={{
-                aspectRatio: "320/320",
-                objectFit: "cover",
-              }}
-            />
-            <div
-              className={`flex gap-5 justify-end text-4xl mt-2 ${
-                !isEditing && "hidden"
-              } `}
-            >
-              <CiEdit
-                className="text-blue-400 shadow-xl border cursor-pointer rounded-lg"
-                onClick={(e) => setIsImgEditing(true)}
-              />
-            </div>
-
-            {isImgEditing && isEditing && (
-              <div className="flex absolute top-0 items-center gap-4 rounded-lg overflow-hidden">
-                <Webcam setImageFile={setImageFile} />
-              </div>
+            {isImgEditing && isEditing ? (
+              <>
+                <div className="flex  items-center gap-4 rounded-lg overflow-hidden">
+                  <Webcam setImageFile={setImageFile} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="relative w-fit">
+                  <img
+                    alt="Profile"
+                    className={`rounded-lg shadow-md ${containsDefaultImage} `}
+                    src={
+                      imageFile && isEditing ? imageFile : patientData?.image
+                    }
+                    style={{
+                      aspectRatio: "320/320",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div
+                    className={`flex gap-5 justify-end text-4xl mt-2 ${
+                      !isEditing && "hidden"
+                    } `}
+                  >
+                    <CiEdit
+                      className="text-blue-400 shadow-xl border cursor-pointer rounded-lg"
+                      onClick={(e) => setIsImgEditing(true)}
+                    />
+                  </div>
+                </div>
+              </>
             )}
           </div>
 
