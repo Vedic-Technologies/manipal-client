@@ -17,7 +17,11 @@ const DailyPayment = ({ patientId }) => {
   const [id, setId] = useState("");
   const [loadingPatient, setLoadingPatient] = useState(true); // Added
 
-  const { data: patientById = {}, refetch: refetchPatientById, isFetching  } = useGetPatientByIdQuery(id, {
+  const {
+    data: patientById = {},
+    refetch: refetchPatientById,
+    isFetching,
+  } = useGetPatientByIdQuery(id, {
     skip: !id,
   });
 
@@ -57,7 +61,7 @@ const DailyPayment = ({ patientId }) => {
   const [addPayment] = useAddPaymentMutation();
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const isAlreadyPaidToday = patientById?.payments?.some(payment => {
+  const isAlreadyPaidToday = patientById?.payments?.some((payment) => {
     const paymentDate = new Date(payment.paymentDate);
     const today = new Date(todayDate);
     return (
@@ -73,6 +77,17 @@ const DailyPayment = ({ patientId }) => {
     setIsLoading(true);
   };
 
+  const handleKeyDown = (e) => {
+    const inputValue = e.target.value;
+    if ((inputValue === "" || inputValue === "0") && e.key === "0") {
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "-" || e.key === "e" || e.key === "+" || e.key === ".") {
+      e.preventDefault();
+    }
+  };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPaymentData({
@@ -86,8 +101,8 @@ const DailyPayment = ({ patientId }) => {
         ...paymentData,
         paymentDate: value,
       });
-      setShowPrintCard(false) 
-      setIsSuccess(false)
+      setShowPrintCard(false);
+      setIsSuccess(false);
       // if(isAlreadyPaidToday){
       //   console.log(`patient with id-${patientId} has already paid on ${todayDate}`)
       // }else{
@@ -97,6 +112,9 @@ const DailyPayment = ({ patientId }) => {
   };
 
   const addDailyPayment = async () => {
+    if (!paymentData.amount) {
+      return;
+    }
     setIsLoading(true);
     try {
       const result = await addPayment(paymentData).unwrap();
@@ -106,7 +124,7 @@ const DailyPayment = ({ patientId }) => {
       await refetchPatientById();
       // Update paymentData but keep the amount for PaymentCard
       setPaymentData({ ...initialData, amount: paymentData.amount });
-      console.log("paymentData.amount: ",paymentData.amount)
+      console.log("paymentData.amount: ", paymentData.amount);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -140,6 +158,7 @@ const DailyPayment = ({ patientId }) => {
                     id="amount"
                     type="number"
                     name="amount"
+                    onKeyDown={handleKeyDown}
                     placeholder="Enter amount"
                     value={paymentData.amount}
                     onChange={handleChange}
@@ -169,7 +188,8 @@ const DailyPayment = ({ patientId }) => {
                 <div className="flex items-center justify-end">
                   <button
                     onClick={addDailyPayment}
-   disabled={isLoading || isAlreadyPaidToday || loadingPatient}                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
+                    disabled={isLoading || isAlreadyPaidToday || loadingPatient}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
                     type="submit"
                   >
                     {isLoading ? (
@@ -202,12 +222,19 @@ const DailyPayment = ({ patientId }) => {
           </form>
         </div>
         {isAlreadyPaidToday && (
-          <div className="absolute bottom-0 text-green-700 font-medium">Payment done on {formatDate(todayDate)}</div>
+          <div className="absolute bottom-0 text-green-700 font-medium">
+            Payment done on {formatDate(todayDate)}
+          </div>
         )}
       </div>
-      {showPrintCard && <PaymentCard patientId={patientId} paymentType="Daily"
-       amount={paymentData.amount}
-        paymentDate={todayDate}/>}
+      {showPrintCard && (
+        <PaymentCard
+          patientId={patientId}
+          paymentType="Daily"
+          amount={paymentData.amount}
+          paymentDate={todayDate}
+        />
+      )}
     </div>
   );
 };

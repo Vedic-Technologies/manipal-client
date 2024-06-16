@@ -102,7 +102,9 @@ export default function PatientDetailCard({ patient }) {
                 <div className="relative w-fit">
                   <img
                     alt="Profile"
-                    className={`rounded-lg shadow-md ${containsDefaultImage} `}
+                    className={`rounded-lg shadow-md ${containsDefaultImage(
+                      patientData?.image
+                    )} `}
                     src={
                       imageFile && isEditing ? imageFile : patientData?.image
                     }

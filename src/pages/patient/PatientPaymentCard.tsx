@@ -8,10 +8,14 @@ import { useUpdatePaymentByIdMutation } from '../../API/API';
 const PatientPaymentCard = ({ payment, idOfPatient }) => {
   const [isUpdating, setIsUpdating] = useState(null);
   const [newAmount, setNewAmount] = useState('');
-  const [payments, setPayments] = useState(payment); // Local state for payments
+  const [payments, setPayments] = useState(payment || []); // Local state for payments
   const navigate = useNavigate();
   const { handleUpdateId } = useContext(PatientIdContext);
   const [updatePaymentById] = useUpdatePaymentByIdMutation();
+
+  useEffect(() => {
+    setPayments(payment || []);
+  }, [payment]);
 
   const handleAddPayment = () => {
     handleUpdateId(idOfPatient); // Update the context with idOfPatient
@@ -47,7 +51,7 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
   return (
     <div>
       <div className="container mx-auto px-0 py-8">
-        <div className="bg-white h-[500px] overflow-y-auto rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
+        <div className="bg-white h-[90vh] overflow-y-auto rounded-lg p-6 dark:bg-gray-800 dark:text-gray-200">
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold mb-4">Payments</h2>
             <Button onClick={handleAddPayment}>Add</Button>
