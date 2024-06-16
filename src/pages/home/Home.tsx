@@ -15,6 +15,7 @@ import PatientPaymentsDetails from "../payments_details/PatientPaymentsDetails";
 import PatientDetails from "../patient/PatientDetails";
 import StaffSignup from "../staff/StaffSignup";
 import UpdateStaff from "../staff/updatestaff";
+import ManageStaff from "../staff/ManageStaff";
 import DoctorPrescription from "../prescription/DoctorPrescription";
 import { useEffect, useState } from "react";
 
@@ -38,8 +39,9 @@ const Home = () => {
         <>
         <Route path='/' element={<LandingPage />} />
         {/* <Route path="/doctor_prescription" element={<DoctorPrescription />} /> */}
-        <Route path="/createstaff" element={<StaffSignup/>} />
-        <Route path="/editstaffs" element={<UpdateStaff/>} />
+        {/* <Route path="/createstaff" element={<StaffSignup/>} />
+        <Route path="/editstaffs" element={<UpdateStaff/>} /> */}
+        <Route path="/managestaff" element={<ManageStaff/>} />
         <Route path="/MonthlyIncExp" element={<MonthlyIncExp/>} />
         </>)}
 

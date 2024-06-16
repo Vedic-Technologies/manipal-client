@@ -112,6 +112,21 @@ export const API = createApi({
       query: () => "staffs",
     }),
 
+    deleteStaffById: builder.mutation({
+      query :(userId) =>({
+        url:`staffs/${userId}`,
+        method:"DELETE",
+      }),
+    }),
+
+    updateStaffById: builder.mutation({
+      query : ({userId,updateData})=>({
+        url:`staffs/${userId}`,
+        method:"PATCH",
+        body:updateData
+      }),
+    }),
+
     deleteUserById: builder.mutation({
       query: (userId) => ({
         url: `users/${userId}`,
@@ -119,6 +134,7 @@ export const API = createApi({
       }),
     }),
 
+  
     getAllPatientWithShoulderProblem: builder.query({
       query: () => ({
         url: `patient/shoulder`,
@@ -165,6 +181,8 @@ export const {
   useGetAllPatientWithShoulderProblemQuery,
   useSubmitShoulderProblemInDoctorPrescriptionMutation,
   useGetAllStaffsQuery,
+  useDeleteStaffByIdMutation,
   useGetAllSupperAdminQuery,
   useLoginAsSuperAdminMutation,
+  useUpdateStaffByIdMutation,
 } = API;

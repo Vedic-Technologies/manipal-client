@@ -389,7 +389,7 @@ const Leftbar = ({ children }) => {
 
             {loggedInUserType === "admin" && (
               <>
-                <NavLink
+                {/* <NavLink
                   to="createstaff"
                   className={`link flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent  ${
                     activeLink === "createstaff"
@@ -420,6 +420,23 @@ const Leftbar = ({ children }) => {
                     <div className={hidden}>
                       <span className=" font-roboto  text-lg  ml-3">
                         Edit Staff
+                      </span>
+                    </div>
+                  </li>
+                </NavLink> */}
+                <NavLink
+                  to="managestaff"
+                  className={`link  flex text-nowrap text-ellipsis overflow-hidden rounded mb-1.5 cursor-pointer border border-transparent ${
+                    activeLink === "managestaff"
+                      ? "active-link  text-black  "
+                      : "hover:bg-gray-200"
+                  }`}
+                  onClick={() => handleLinkClick("managestaff")}>
+                  <li className="">
+                    <LiaUserEditSolid className="text-2xl" />
+                    <div className={hidden}>
+                      <span className=" font-roboto  text-lg  ml-3">
+                        Manage Staff
                       </span>
                     </div>
                   </li>
