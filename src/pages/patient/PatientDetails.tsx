@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
@@ -7,42 +7,51 @@ import { RiUserSearchLine } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import PatientDetailCard from "./PatientDetailCard";
 import PatientPaymentCard from "./PatientPaymentCard";
-import AlertWrapper from '../../custom_components/AlertWrapper';
-import JobDoneAlert from "../../custom_components/JobDoneAlert"
-import { motion } from "framer-motion"
-import { useGetAllPatientsQuery, useGetPatientByIdQuery } from '../../API/API'; 
-import { Player } from '@lottiefiles/react-lottie-player';
-import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
-import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
-import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
-import { Link } from 'react-router-dom';
-
+import AlertWrapper from "../../custom_components/AlertWrapper";
+import JobDoneAlert from "../../custom_components/JobDoneAlert";
+import { motion } from "framer-motion";
+import { useGetAllPatientsQuery, useGetPatientByIdQuery } from "../../API/API";
+import { Player } from "@lottiefiles/react-lottie-player";
+import LoadingAnimation from "../../assets/animations/HospitalAnimation.json";
+import NotFoundAnimation from "../../assets/animations/EmptStretcherAnimation.json";
+import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json";
+import { Link } from "react-router-dom";
 
 const Patient = () => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const param = useParams();
- // jodDone alert message 
- const [jobDoneMessage, setJobDoneMessage] = useState("")
- const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
- const [patientError, setPatientError] = useState(false); // Additional state for managing patientByIdError
+  // jodDone alert message
+  const [jobDoneMessage, setJobDoneMessage] = useState("");
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false);
+  const [patientError, setPatientError] = useState(false); // Additional state for managing patientByIdError
 
-  const { data: allPatients = [], error: allPatientsError, isLoading: isLoadingAllPatients, refetch: refetchAllPatients } = useGetAllPatientsQuery("");
-  const { data: patientById = {}, error: patientByIdError, isLoading: isLoadingPatientById, refetch: refetchPatientById } = useGetPatientByIdQuery(selectedPatientId, {
+  const {
+    data: allPatients = [],
+    error: allPatientsError,
+    isLoading: isLoadingAllPatients,
+    refetch: refetchAllPatients,
+  } = useGetAllPatientsQuery("");
+  const {
+    data: patientById = {},
+    error: patientByIdError,
+    isLoading: isLoadingPatientById,
+    refetch: refetchPatientById,
+  } = useGetPatientByIdQuery(selectedPatientId, {
     skip: !selectedPatientId,
   });
 
   useEffect(() => {
     if (param.id !== "0") {
       setSelectedPatientId(param.id);
-      setPatientError(false); 
+      setPatientError(false);
     }
   }, [param.id]);
 
   useEffect(() => {
     if (selectedPatientId) {
       refetchPatientById();
-      setPatientError(false); 
+      setPatientError(false);
     }
   }, [selectedPatientId, refetchPatientById]);
 
@@ -51,14 +60,12 @@ const Patient = () => {
       setPatientError(true);
       setJobDoneMessage("Cannot find patient. Double-check ID!");
       setOpenJobDoneAlert(true);
-  
 
       // Automatically hide the alert after 3 seconds
       setTimeout(() => {
         setOpenJobDoneAlert(false);
-        setPatientError(false); 
-        setSelectedPatientId(null)
-        
+        setPatientError(false);
+        setSelectedPatientId(null);
       }, 3000);
     }
   }, [patientByIdError]);
@@ -67,7 +74,7 @@ const Patient = () => {
     const id = e.target.value;
     setSelectedPatientId(id);
     setSearchInput("");
-     setPatientError(false); 
+    setPatientError(false);
   };
 
   const handleSearchInputChange = (e) => {
@@ -76,29 +83,33 @@ const Patient = () => {
 
   const handleSearch = () => {
     if (searchInput) {
-        setSelectedPatientId(searchInput);
-        setPatientError(false);
-        setJobDoneMessage("")
-      setOpenJobDoneAlert(false)
-      }  else{
-      console.error("Error fetching patient details:", error);
-      setJobDoneMessage("Can not find Patient. Double-check ID !!")
-      setOpenJobDoneAlert(true)
+      setSelectedPatientId(searchInput);
+      setPatientError(false);
+      setJobDoneMessage("");
+      setOpenJobDoneAlert(false);
+    } else {
+      console.error("Error fetching patient details:");
+      setJobDoneMessage("Can not find Patient. Double-check ID !!");
+      setOpenJobDoneAlert(true);
 
-    // removing result not found alert automatically
-    setTimeout(() => {
-      setOpenJobDoneAlert(false)
-    }, 3000);
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false);
+      }, 3000);
     }
   };
-  
 
   if (isLoadingAllPatients) {
     return (
       <div className="center flex-col gap-24 h-3/4 w-[90%]">
         <div>Loading patients...</div>
         <div>
-          <Player autoplay loop src={LoadingAnimation} style={{ height: '200px', width: '200px' }} />
+          <Player
+            autoplay
+            loop
+            src={LoadingAnimation}
+            style={{ height: "200px", width: "200px" }}
+          />
         </div>
       </div>
     );
@@ -107,13 +118,23 @@ const Patient = () => {
   if (allPatientsError) {
     return (
       <div className="center flex-col gap-24 h-3/4 w-[90%]">
-        <div className='text-red'>Error</div>
-        <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+        <div className="text-red">Error</div>
+        <div className="flex flex-col gap-8 justify-center items-center ml-6">
           <div>
-            <Player autoplay loop src={ErrorAnimation} style={{ height: '200px', width: '200px' }} />
+            <Player
+              autoplay
+              loop
+              src={ErrorAnimation}
+              style={{ height: "200px", width: "200px" }}
+            />
           </div>
           <div className="retry">
-            <button onClick={() => refetchAllPatients()} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+            <button
+              onClick={() => refetchAllPatients()}
+              className="text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded"
+            >
+              Retry
+            </button>
           </div>
         </div>
       </div>
@@ -125,17 +146,22 @@ const Patient = () => {
       <div className="center flex-col gap-24 h-3/4 w-[90%]">
         <div>No patients found.</div>
         <div>
-          <Player autoplay loop src={NotFoundAnimation} style={{ height: '200px', width: '200px' }} />
+          <Player
+            autoplay
+            loop
+            src={NotFoundAnimation}
+            style={{ height: "200px", width: "200px" }}
+          />
         </div>
       </div>
     );
   }
 
-  const handleAlert=()=>{
-    setOpenJobDoneAlert(false)
-    setPatientError(false); 
-    setSelectedPatientId(null)
-  }
+  const handleAlert = () => {
+    setOpenJobDoneAlert(false);
+    setPatientError(false);
+    setSelectedPatientId(null);
+  };
   return (
     <div className="flex flex-col w-3/5 m-auto m-5">
       <div className="flex items-center justify-between gap-4 p-4 border-b">
@@ -169,19 +195,26 @@ const Patient = () => {
             </div>
           </div>
         </div>
-        <Link to='../all_patients' >
-        <Button variant="outline" onClick={() => setSelectedPatientId(null)}>View All</Button>
+        <Link to="../all_patients">
+          <Button variant="outline" onClick={() => setSelectedPatientId(null)}>
+            View All
+          </Button>
         </Link>
       </div>
 
       <div className="flex justify-center m-auto w-full mt-10">
-        <Card className="w-full shadow-lg">
+        <Card className="w-full mb-10 shadow-lg">
           {selectedPatientId ? (
             isLoadingPatientById ? (
               <div className="center flex-col gap-24 h-3/4 w-[90%]">
                 <div>Loading patient details...</div>
                 <div>
-                  <Player autoplay loop src={LoadingAnimation} style={{ height: '200px', width: '200px' }} />
+                  <Player
+                    autoplay
+                    loop
+                    src={LoadingAnimation}
+                    style={{ height: "200px", width: "200px" }}
+                  />
                 </div>
               </div>
             ) : patientError ? (
@@ -208,9 +241,13 @@ const Patient = () => {
               </div>
             ) : (
               <div>
-                <PatientDetailCard patient={patientById} />
-                <PatientPaymentCard payment={patientById.payments || []}
-                                    idOfPatient={patientById?._id}    />
+                <PatientDetailCard
+                  patient={patientById}
+                />
+                <PatientPaymentCard
+                  payment={patientById.payments || []}
+                  idOfPatient={patientById?._id}
+                />
               </div>
             )
           ) : (
