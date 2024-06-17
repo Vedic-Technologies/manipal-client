@@ -1,17 +1,20 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from "react";
 import { Button } from "../../components/ui/button";
-import formatDate from '../../util/TimeFormate';
+import formatDate from "../../util/TimeFormate";
 import { useNavigate } from "react-router-dom";
 import { PatientIdContext } from "../../API/PatientIdProvider";
-import { useUpdatePaymentByIdMutation } from '../../API/API';
+import { useUpdatePaymentByIdMutation } from "../../API/API";
+import { MdCancel } from "react-icons/md";
 
 const PatientPaymentCard = ({ payment, idOfPatient }) => {
   const [isUpdating, setIsUpdating] = useState(null);
-  const [newAmount, setNewAmount] = useState('');
+  const [del, setDel] = useState();
+  const [newAmount, setNewAmount] = useState("");
   const [payments, setPayments] = useState(payment || []); // Local state for payments
   const navigate = useNavigate();
   const { handleUpdateId } = useContext(PatientIdContext);
   const [updatePaymentById] = useUpdatePaymentByIdMutation();
+
 
   useEffect(() => {
     setPayments(payment || []);
@@ -19,7 +22,7 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
 
   const handleAddPayment = () => {
     handleUpdateId(idOfPatient); // Update the context with idOfPatient
-    navigate('/home/payment_entry');
+    navigate("/home/payment_entry");
   };
 
   const handleUpdateClick = (paymentId, currentAmount) => {
@@ -29,23 +32,31 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
 
   const handleUpdateSubmit = async (paymentId) => {
     try {
-      const amountToUpdate = payments.find(pay => pay._id === paymentId);
+      const amountToUpdate = payments.find((pay) => pay._id === paymentId);
       if (amountToUpdate) {
         const updatedAmount = { ...amountToUpdate, amount: newAmount };
-        const response = await updatePaymentById({ paymentId, ...updatedAmount }).unwrap();
+        const response = await updatePaymentById({
+          paymentId,
+          ...updatedAmount,
+        }).unwrap();
         console.log(response);
 
         // Update local state with the new amount
-        setPayments(prevPayments => prevPayments.map(pay =>
-          pay._id === paymentId ? { ...pay, amount: newAmount } : pay
-        ));
+        setPayments((prevPayments) =>
+          prevPayments.map((pay) =>
+            pay._id === paymentId ? { ...pay, amount: newAmount } : pay
+          )
+        );
 
         setIsUpdating(null);
-        setNewAmount('');
+        setNewAmount("");
       }
     } catch (error) {
       console.error("Error updating amount:", error);
     }
+  };
+  const handleDeletepayment = () => {
+    console.log("delete ho gya re ");
   };
 
   return (
@@ -67,39 +78,69 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
                       <th className="px-4 py-3 text-end pr-24">Action</th>
                     </tr>
                   </thead>
-                  {payments.slice(0).reverse().map((pay) => (
-                    <tbody key={pay._id}>
-                      <tr className="border-b dark:border-gray-600">
-                        <td className="px-4 py-3">{formatDate(pay.paymentDate)}</td>
-                        <td className="px-4 py-3">
-                          {isUpdating === pay._id ? (
-                            <input
-                              type="number"
-                              value={newAmount}
-                              onChange={(e) => setNewAmount(e.target.value)}
-                              className="border rounded px-2 py-1"
-                            />
-                          ) : (
-                            pay.amount
-                          )}
-                        </td>
-                        <td className="px-4 py-3 flex items-center justify-end space-x-2">
-                          {isUpdating === pay._id ? (
-                            <Button size="sm" variant="outline" onClick={() => handleUpdateSubmit(pay._id)}>
-                              Save
+                  {payments
+                    .slice(0)
+                    .reverse()
+                    .map((pay) => (
+                      <tbody key={pay._id}>
+                        <tr className="border-b dark:border-gray-600">
+                          <td className="px-4 py-3">
+                            {formatDate(pay.paymentDate)}
+                          </td>
+                          <td className="px-4 py-3">
+                            {isUpdating === pay._id ? (
+                              <input
+                                type="number"
+                                value={newAmount}
+                                onChange={(e) => setNewAmount(e.target.value)}
+                                className="border rounded px-2 py-1"
+                              />
+                            ) : (
+                              pay.amount
+                            )}
+                            {isUpdating === pay._id ? (
+                              <Button
+                                className="bg-green-400 ml-5 h-8 hover:bg-red-500 "
+                                onClick={() => handleUpdateSubmit(pay._id)}
+                              >
+                                {" "}
+                                <MdCancel />{" "}
+                              </Button>
+                            ) : (
+                              pay.amount
+                            )}
+                          </td>
+                          <td className="px-4 py-3 flex items-center justify-end space-x-2">
+                            {isUpdating === pay._id ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleUpdateSubmit(pay._id)}
+                              >
+                                Save
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() =>
+                                  handleUpdateClick(pay._id, pay.amount)
+                                }
+                              >
+                                Update
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={handleDeletepayment}
+                            >
+                              Delete
                             </Button>
-                          ) : (
-                            <Button size="sm" variant="outline" onClick={() => handleUpdateClick(pay._id, pay.amount)}>
-                              Update
-                            </Button>
-                          )}
-                          <Button size="sm" variant="outline">
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  ))}
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
                 </>
               ) : (
                 <div className="flex items-center justify-center">
