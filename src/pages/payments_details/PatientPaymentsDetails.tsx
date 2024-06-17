@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
 import ConfirmationModal from "../../custom_components/ConfirmationModal"
@@ -21,7 +20,6 @@ import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 import { useNavigate } from 'react-router-dom';
-import { Item } from '@radix-ui/react-select';
 
 const PatientPaymentsDetails = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -69,6 +67,8 @@ const handleShowAllPayments=()=>{
   setStartDate("")
   setEndDate("")
   setShowTodayPayments(false)
+  setCurrentPage(1)
+
   }
 
 
@@ -82,51 +82,54 @@ useEffect(()=>{
 
   // search functionality 
   const searchPayment = (inputValue) => {
-    const trimmedSearchInput = searchInput.trim()
+    const trimmedSearchInput = inputValue.trim();
     if (!trimmedSearchInput) {
       // Reset search results and hide details
       setSearchResults([]);
       setShowDetails(false);
-      setOpenJobDoneAlert(false)
-      setPaymentsToRender(currentPatients)
+      setOpenJobDoneAlert(false);
+      setPaymentsToRender(currentPatients);
       return;
     }
-
-    const results = payments?.filter((item) =>
-      item?.patient?.name === trimmedSearchInput ||
-      item?.patient?.name?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
-      item?.patient?.contact === trimmedSearchInput ||
-      item?.patient?.email?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
-      item?.patient?.age === parseInt(trimmedSearchInput) ||
-      item?._id === trimmedSearchInput || 
-      item?.patient?.name?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      item?.paymentType?.toLowerCase() === trimmedSearchInput.toLowerCase() ||
-      item?.amount === trimmedSearchInput ||
-      item?.amount === parseInt(trimmedSearchInput) ||
-      item?.patient?.contact === (parseInt(trimmedSearchInput)) ||
-      item?.paymentType?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      item?.patient?.email?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      item?.patient?.age === parseInt(trimmedSearchInput) ||
-      item?.patient?._id?.includes(trimmedSearchInput) ||
-      formatDate(item?.paymentDate).includes(trimmedSearchInput)
-    )
+  
+    const searchLower = trimmedSearchInput.toLowerCase();
+    const searchInt = parseInt(trimmedSearchInput);
+  
+    const results = payments?.filter((item) => {
+      const patient = item?.patient || {};
+      return (
+        patient.name?.toLowerCase() === searchLower ||
+        patient.name?.toLowerCase().includes(searchLower) ||
+        patient.contact === trimmedSearchInput ||
+        patient.contact === searchInt ||
+        patient.email?.toLowerCase() === searchLower ||
+        patient.email?.toLowerCase().includes(searchLower) ||
+        patient.age === searchInt ||
+        item._id === trimmedSearchInput ||
+        item._id?.includes(trimmedSearchInput) ||
+        item.paymentType?.toLowerCase() === searchLower ||
+        item.paymentType?.toLowerCase().includes(searchLower) ||
+        item.amount == searchInt ||  
+        formatDate(item.paymentDate).includes(trimmedSearchInput)
+      );
+    });
+  
     if (results.length > 0) {
       setSearchResults(results);
-      // setJobDoneMessage("")
-      setOpenJobDoneAlert(false)
-      setPaymentsToRender(searchResults)
-
+      setOpenJobDoneAlert(false);
+      setPaymentsToRender(results);
     } else {
       setSearchResults([]);
       setShowDetails(false);
-      setJobDoneMessage("Sorry, no payment found. Double-check input !!");
+      setJobDoneMessage("Not Found !!");
+      setOpenJobDoneAlert(true); 
       // removing result not found alert automatically
       setTimeout(() => {
-        setOpenJobDoneAlert(false)
+        setOpenJobDoneAlert(false);
       }, 3000);
     }
   };
-
+  
   const displaySearchResult = searchResults.filter((result, idx) => idx === displaySearch)
 
   const nextSearchResult = () => {
@@ -154,9 +157,9 @@ useEffect(()=>{
   }
 
 
-  const handleEdit = (patientId) => {
-    console.log('Edit patient:', patientId);
-  };
+  // const handleEdit = (patientId) => {
+  //   console.log('Edit patient:', patientId);
+  // };
 
   const handleSearchInputChange = (e) => {
     const inputValue = e.target.value;
@@ -171,7 +174,7 @@ useEffect(()=>{
     searchPayment(searchInput); // Call searchPatient function with current search input value
   };
   const handleEnterKey = (e) => {
-    if (e.key === "Enter" && searchInput !== "" && searchResults.length > 0) {
+    if (e.key === "Enter" && searchInput !== "" && searchResults.length >= 1) {
       handleSearch()
       setShowDetails(true);
     }
@@ -186,7 +189,7 @@ useEffect(()=>{
   }
 
   const handleSeachIconClick = () => {
-    if (searchInput !== "" && searchResults.length > 0) {
+    if (searchInput !== "" && searchResults.length >=1) {
       handleSearch();
       setShowDetails(true);
     }
@@ -197,8 +200,9 @@ useEffect(()=>{
       setTimeout(() => {
         setOpenJobDoneAlert(false)
       }, 3000);
-
+    
     }
+    
   }
 
   const handleShowDetail = (id) => {
@@ -268,6 +272,7 @@ refetch()
       setNotFound(false);
       setStartDate("")
       setEndDate("")
+
     } 
     else if (showTodayPayments) {
       const todayPayments = filterPaymentsForToday();
@@ -277,6 +282,7 @@ refetch()
         setSearchInput("")
         setStartDate("")
         setEndDate("")
+
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
@@ -287,11 +293,13 @@ refetch()
         setNotFound(false);
         setShowTodayPayments(false)
         // setSearchInput("")
+      
+
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
         console.log("no payments")
-        setShowTodayPayments(false)
+        // setShowTodayPayments(false)
       }
     }
   }, [startDate, endDate, currentPatients, searchInput, searchResults]);
@@ -406,11 +414,11 @@ refetch()
                 </motion.div>
               )}
             </div>
-            <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/payment_entry"><i className="fa-solid fa-plus"></i></Link></div>
+            <Link to="/home/payment_entry">  <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
             <div onClick={handleShowAllPayments} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer font-medium'>ALL</div>
             <div className="">
-        <input type="date" value={startDate} onChange={(e)=> setStartDate(e.target.value)} className='ml-5 px-5' />
+        <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className='ml-5 px-5' />
         <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className='ml-5 px-5'  />
       </div>
       <div onClick={()=>setShowTodayPayments(true)} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-auto px-1 font-medium rounded-md cursor-pointer'>Today</div>
@@ -525,19 +533,19 @@ refetch()
       )}
     </div>
 
-
-         
-
-
-
-
-
           <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
-            <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, payments.length)} of {payments.length}</div>
+{(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments ) ? (
+             <div className='w-fit p-2 rounded-md'>Showing {paymentsToRender?.length}</div>
+          ) : (
+          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, payments?.length)} of {payments?.length}</div>
+        )}
+        
+            {/* <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, paymentsToRender.length)} of {paymentsToRender.length}</div> */}
+
             <div className='flex gap-2 bg-gray-200 rounded-md'>
               <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
               <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-              <button disabled={indexOfLastPatient >= payments.length} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+              <button disabled={(indexOfLastPatient >= payments.length) ||(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
             </div>
           </div>
         </div>
@@ -559,15 +567,16 @@ refetch()
         animate={openJobDoneAlert ? {  opacity: 1 , y:0} : {}}
         >
           <JobDoneAlert
-            height="h-24"
+            height="h-40"
             width="w-52"
             textColor="text-white"
-            bgColor="bg-red-400"
+            bgColor="bg-gradient-to-r from-rose-400 to-red-500"
             boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
             message={jobDoneMessage}
             isOpen={openJobDoneAlert}
             OnCancel={handleCancelAlert}
             isCancelButton="block"
+            icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
           />
         </motion.div>
         </AlertWrapper>
@@ -589,6 +598,7 @@ refetch()
             isOpen={openIdCopiedAlert}
             OnCancel={null}
             isCancelButton="hidden"
+            icon={null}
           />
         </motion.div>
 
