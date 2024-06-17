@@ -19,12 +19,15 @@ import JobDoneAlert from "../../custom_components/JobDoneAlert";
 import { motion } from "framer-motion";
 import { useSubmitStaffPrescriptionMutation } from "../../API/API";
 import patientLogo from "./user.png";
+import JobDoneAlertVarient from "../../custom_components/jobDoneVarient";
 
 const PresCriptionSadcn = () => {
   const [patientData, setPatientData] = useState<PatientType>(initialData);
   const [imageFile, setImageFile] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [jobDoneMessage, setJobDoneMessage] = useState("");
+  const [jobDoneDescription, setJobDoneDescription] = useState("");
+  const [popupType, setPopupType] = useState("");
   const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false);
   const [alertColor, setAlertColor] = useState("");
   const [submitStaffPrescription] = useSubmitStaffPrescriptionMutation();
@@ -53,6 +56,7 @@ const PresCriptionSadcn = () => {
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false);
     setJobDoneMessage("");
+    // alert("closed");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,7 +70,11 @@ const PresCriptionSadcn = () => {
     try {
       const response = await submitStaffPrescription(postData).unwrap();
       console.log(response);
-      setJobDoneMessage("Patient registration successful!");
+      setPopupType("success")
+      setJobDoneMessage("Patient Form Submitted");
+      setJobDoneDescription(
+        "Your patient form has been submitted successfully."
+      );
       setAlertColor("black");
       setOpenJobDoneAlert(true);
       setPatientData(initialData); // Reset form fields to initial state
@@ -77,7 +85,11 @@ const PresCriptionSadcn = () => {
       }, 4000);
     } catch (error) {
       console.error("Error:", error);
+      setPopupType("error");
       setJobDoneMessage("Failed to register Patient!!");
+      setJobDoneDescription(
+        "Oops, there was an error occured, Try again later."
+      );
       setAlertColor("red");
       setOpenJobDoneAlert(true);
       setTimeout(() => {
@@ -137,10 +149,7 @@ const PresCriptionSadcn = () => {
           Fill out the form to collect patient details.
         </p>
       </div>
-      <form
-        className="space-y-4"
-        onSubmit={handleSubmit}
-      >
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
@@ -329,65 +338,62 @@ const PresCriptionSadcn = () => {
           </div>
         </div>
 
-        <div className="flex justify-end gap-2">
-          <Button type="reset" onClick={handleCancel} variant="outline">
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className={`relative ${isLoading ? "cursor-not-allowed" : ""}`}
-          >
-            {isLoading ? (
-              "..."
-            ) : jobDoneMessage ? (
-              <motion.svg
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className={`h-5 w-5 text-${alertColor}`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </motion.svg>
-            ) : (
-              "Submit"
-            )}
-          </Button>
+        <div className="flex justify-end gap-3">
+          <div className="w-1/3 flex justify-evenly">
+            <Button type="reset" onClick={handleCancel} variant="outline">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className={`relative ${isLoading ? "cursor-not-allowed" : ""}`}
+            >
+              {isLoading ? (
+                "..."
+              ) : jobDoneMessage ? (
+                <motion.svg
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`h-5 w-5 text-${alertColor}`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </motion.svg>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
         </div>
       </form>
-
-      {true && (
-        <AlertWrapper isOpen={openJobDoneAlert}>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
-          >
-            <JobDoneAlert
-              height="h-28"
-              width="w-52"
-              textColor={` text-${alertColor}`}
-              bgColor={` ${
-                alertColor == "black" ? "bg-green-200" : "bg-red-400"
-              } `}
-              boxShadow=" shadow-2xl shadow-px_0px_42px_2px_#c53030] "
-              message={jobDoneMessage}
-              isOpen={true}
-              OnCancel={handleCancelAlert}
-              isCancelButton=" "
-            />
-          </motion.div>
-        </AlertWrapper>
-      )}
+      <div>
+        {openJobDoneAlert && (
+          <AlertWrapper isOpen={openJobDoneAlert}>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+            >
+              <JobDoneAlertVarient
+                isOpen={openJobDoneAlert}
+                OnCancel={handleCancelAlert}
+                message={jobDoneMessage}
+                description={jobDoneDescription}
+                type={popupType}
+              />
+            </motion.div>
+          </AlertWrapper>
+        )}
+      </div>
     </div>
   );
 };

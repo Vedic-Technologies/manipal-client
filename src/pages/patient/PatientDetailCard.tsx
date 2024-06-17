@@ -114,12 +114,12 @@ export default function PatientDetailCard({ patient }) {
                     }}
                   />
                   <div
-                    className={`flex gap-5 justify-end text-4xl mt-2 ${
+                    className={`flex gap-5 justify-end text-5xl mt-2 ${
                       !isEditing && "hidden"
                     } `}
                   >
                     <CiEdit
-                      className="text-blue-400 shadow-xl border cursor-pointer rounded-lg"
+                      className="text-blue-400 shadow-xl border  hover:bg-gray-100 p-1 cursor-pointer rounded-lg"
                       onClick={(e) => setIsImgEditing(true)}
                     />
                   </div>
