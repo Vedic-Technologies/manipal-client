@@ -27,7 +27,8 @@ const AllPatients = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
   const navigate = useNavigate();
-
+  const [goToPageNumber, setGoToPageNumber] = useState()
+  const [patientsToRender, setPatientsToRender] = useState([])
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
@@ -38,6 +39,12 @@ const AllPatients = () => {
 
   const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
   const [idCopied, setIdCopied] = useState("")
+  //date range
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+  const [notFound, setNotFound] = useState(false)
+
+  const [showTodayPatients, setShowTodayPatients] = useState(false);
 
 
   const handleCancelAlert = () => {
@@ -50,47 +57,133 @@ const AllPatients = () => {
   const [deletePatient] = useDeletePatientMutation();
   const [updateActiveStatus] = useUpdateActiveStatusMutation()
 
-  useEffect(()=>{
+
+  useEffect(() => {
     refetch()
-  },[patients])
+  }, [patients])
+
+
+  const indexOfLastPatient = (currentPage * pageSize);
+  const indexOfFirstPatient = indexOfLastPatient - pageSize;
+  const currentPatients = patients.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
+
+  const handleShowAllPatients = () => {
+    setPatientsToRender(currentPatients)
+    setSearchInput("")
+    setStartDate("")
+    setEndDate("")
+    setShowTodayPatients(false)
+    setCurrentPage(1)
+    setGoToPageNumber(0)
+    setSearchResults([])
+  }
+
+  //filters
+  useEffect(() => {
+    const filterPatientsByDateRange = () => {
+      if (!startDate || !endDate) {
+        return currentPatients; // Return all payments if no date range is specified
+      }
+
+      return patients.filter(patient => {
+        const registeredOnDate = new Date(patient?.createdAt);
+        return registeredOnDate >= new Date(startDate) && registeredOnDate <= new Date(endDate);
+      });
+    };
+
+    const filterPatientsForToday = () => {
+      const today = new Date();
+      const filteredTodayPatients = patients.filter(patient => {
+        const registeredOnDate = new Date(patient?.createdAt);
+        // Check if registration date is today's date
+        console.log("aaaj ka h", registeredOnDate.toDateString(), " ", today.toDateString())
+        return registeredOnDate.toDateString() === today.toDateString();
+      });
+      return filteredTodayPatients;
+    };
+
+    const filteredPatients = filterPatientsByDateRange();
+
+    if (searchInput && searchResults.length >= 1) {
+      setPatientsToRender(searchResults);
+      setShowTodayPatients(false)
+      setNotFound(false);
+      setStartDate("")
+      setEndDate("")
+
+    }
+    else if (showTodayPatients) {
+      const todayPatients = filterPatientsForToday();
+      if (todayPatients.length >= 1) {
+        setPatientsToRender(todayPatients);
+        setNotFound(false);
+        setSearchInput("")
+        setStartDate("")
+        setEndDate("")
+
+      } else {
+        setPatientsToRender([]);
+        setNotFound(true);
+      }
+    } else {
+      if (filteredPatients?.length >= 1) {
+        setPatientsToRender(filteredPatients);
+        setNotFound(false);
+        setShowTodayPatients(false)
+        // setSearchInput("")
+
+
+      } else {
+        setPatientsToRender([]);
+        setNotFound(true);
+        console.log("no patient")
+      }
+    }
+  }, [startDate, endDate, currentPatients, searchInput, searchResults]);
+
   // search functionality 
   const searchPatient = (inputValue) => {
-
-    const trimmedSearchInput = searchInput.trim();
+    const trimmedSearchInput = inputValue.trim().toLowerCase();
     if (trimmedSearchInput === "") {
       // Reset search results and hide details
       setSearchResults([]);
       setShowDetails(false);
-      setOpenJobDoneAlert(false)
+      setOpenJobDoneAlert(false);
       return;
     }
-    const results = patients?.filter((patient) =>
-      patient?.patientName === trimmedSearchInput ||
-      patient?.patientName?.toLowerCase() === trimmedSearchInput.toLowerCase() ||
-      patient?.contact === trimmedSearchInput ||
-      patient?.email?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
-      patient?.age === parseInt(trimmedSearchInput) ||
-      patient?.patientName.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      patient?.email?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      patient?.gender?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase()) ||
-      patient?.contact === parseInt(trimmedSearchInput) ||
-      patient?.complaint?.toLowerCase() === trimmedSearchInput?.toLowerCase() ||
-      patient?.complaint?.toLowerCase()?.includes(trimmedSearchInput?.toLowerCase())
-    );
+
+    const results = patients?.filter((patient) => {
+      const patientName = patient?.patientName?.toLowerCase();
+      const patientEmail = patient?.email?.toLowerCase();
+      const patientComplaint = patient?.complaint?.toLowerCase();
+      const patientContact = String(patient?.contact);
+      const patientAge = String(patient?.age);
+      const patientGender = patient?.gender?.toLowerCase();
+
+      return [
+        patientName === trimmedSearchInput,
+        patientName?.includes(trimmedSearchInput),
+        patientEmail === trimmedSearchInput,
+        patientEmail?.includes(trimmedSearchInput),
+        patientContact === trimmedSearchInput,
+        patientAge === trimmedSearchInput,
+        patientComplaint === trimmedSearchInput,
+        patientComplaint?.includes(trimmedSearchInput),
+        patientGender?.includes(trimmedSearchInput)
+      ].some(Boolean);
+    });
 
     if (results.length > 0) {
       setSearchResults(results);
-      setJobDoneMessage("")
-      setOpenJobDoneAlert(false)
-
+      setJobDoneMessage("");
+      setOpenJobDoneAlert(false);
     } else {
       setSearchResults([]);
       setShowDetails(false);
-      setJobDoneMessage("Sorry, no patient found. Double-check spelling !!");
-
-
+      setJobDoneMessage(" No Patient found !!");
     }
   };
+
 
   const displaySearchResult = searchResults.filter((result, idx) => idx === displaySearch)
   const nextSearchResult = () => {
@@ -132,9 +225,11 @@ const AllPatients = () => {
       handleSearch()
       setShowDetails(true);
     }
-    else if (e.key === "Enter" && searchResults.length === 0) {
+    else if (e.key === "Enter" && !searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
+      setJobDoneMessage("Enter Some Input !")
+
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -143,13 +238,15 @@ const AllPatients = () => {
   }
 
   const handleSeachIconClick = () => {
-    if (searchInput !== "" && searchResults.length > 0) {
+    if (searchInput !== "" && searchResults?.length > 0) {
       handleSearch();
       setShowDetails(true);
     }
-    else if (searchResults.length === 0) {
+    else if (!searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
+      setJobDoneMessage("Enter Some Input !")
+
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -158,9 +255,9 @@ const AllPatients = () => {
     }
   }
 
-  const handleEdit = (patientId) => {
-    console.log('Edit patient:', patientId);
-  };
+  // const handleEdit = (patientId) => {
+  //   console.log('Edit patient:', patientId);
+  // };
 
   // logics to delete patients
   const handleDelete = (patientId) => {
@@ -183,7 +280,6 @@ const AllPatients = () => {
   };
 
 
-
   const handleCancelDelete = () => {
     setOpenConfirm(false)
     console.log("no clicked")
@@ -193,72 +289,7 @@ const AllPatients = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const indexOfLastPatient = (currentPage * pageSize);
-  const indexOfFirstPatient = indexOfLastPatient - pageSize;
-  const currentPatients = patients.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
 
-
-  
-  if (isLoading) {
-    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
-     <div> Loading patients...</div>
-     <div>
-     <Player
-          autoplay
-          loop
-          src={LoadingAnimation}
-          style={{ height: '200px', width: '200px' }}
-        />
-        </div>
-    </div>;
-  }
-
-  if (error) {
-    // let errorMessage = 'An unknown error occurred';
-    // // Accessing error message based on the typical structure of an error object
-    // if (error.data && error.data.message) {
-    //   errorMessage = error.data.message;
-    //   console.log("1"+errorMessage )
-    // } else if (error.error) {
-    //   errorMessage = error.error;
-    //   console.log("2"+errorMessage )
-    // } else if (error.message) {
-    //   errorMessage = error.message;
-    //   console.log("3"+errorMessage )
-    // }
-    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
-    <div className='text-red '> Error</div>
-    <div className='flex flex-col gap-8 justify-center items-center ml-6'>
-      <div>
-      <Player
-         autoplay
-         loop
-         src={ErrorAnimation}
-         style={{ height: '200px', width: '200px' }}
-       />
-      </div>
-      <div className="retry">
-        <button onClick={()=> refetch()} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
-       </div>
-       </div>
-       
-   </div>;
-  }
-
-  if (!currentPatients.length) {
-    console.log(patients)
-    return <div className="center flex-col  gap-24 h-3/4 w-[90%]">
-    <div> No patients found.</div>
-    <div>
-    <Player
-         autoplay
-         loop
-         src={NotFoundAnimation}
-         style={{ height: '200px', width: '200px' }}
-       />
-       </div>
-   </div>;
-  }
 
   const downloadExcel = () => {
     const headers = ['Patient Name', 'Gender', 'Age', 'Contact', 'Email'];
@@ -296,7 +327,7 @@ const AllPatients = () => {
         const updatedStatus = { ...patientToUpdate, active: !patientToUpdate.active }
         const result = await updateActiveStatus({ id, ...updatedStatus }).unwrap()
         refetch()
-        console.log("activeSttaus",updatedStatus)
+        console.log("activeSttaus", updatedStatus)
       }
     }
     catch (error) {
@@ -327,7 +358,21 @@ const AllPatients = () => {
 
       })
   }
-  const patientsToRender = searchResults.length > 0 && searchInput !== "" ? searchResults : currentPatients;
+  const handleGoToPageNumber =()=>{
+    if(goToPageNumber && goToPageNumber> 0 &&  goToPageNumber < ((patients?.length + pageSize)/pageSize)){
+      setCurrentPage(goToPageNumber)
+    }else{
+      console.log(goToPageNumber ," page number does not exist for this data");
+
+    }
+  }
+
+  const handleGoToPageOnPessingENTERkey = (e)=>{
+    if (e.key === "Enter"){
+      handleGoToPageNumber()
+    }
+  }
+  // const patientsToRender = searchResults.length > 0 && searchInput !== "" ? searchResults : currentPatients;
   return (
     <div className="patient-list px-4 pl-8 py-2 ">
       <div className='  '><span>Patient &gt; </span>
@@ -392,8 +437,15 @@ const AllPatients = () => {
                 </motion.div>
               )}
             </div>
-            <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><Link to="/home/prescription"><i className="fa-solid fa-plus"></i></Link></div>
+            <Link to="/home/prescription"><div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
+            <div onClick={handleShowAllPatients} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer font-medium'>ALL</div>
+            <div className="">
+              <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e) => setStartDate(e.target.value)} className='ml-5 px-5' />
+              <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e) => setEndDate(e.target.value)} className='ml-5 px-5' />
+            </div>
+            <div onClick={() => setShowTodayPatients(true)} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-auto px-1 font-medium rounded-md cursor-pointer'>Today</div>
+
           </div>
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
@@ -407,58 +459,124 @@ const AllPatients = () => {
             <div className="w-[12%] hidden sm:block">Status</div>
             <div className="w-1/6 text-center">Actions</div>
           </div>
-          <div className='pt-5 h-[430px]  overflow-y-auto overflow-x-hidden'>
-            {patientsToRender?.map((patient) => (
-              <div key={patient?._id} className=" font-medium patient-row flex border-b border-gray-100  justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-                <div className=' w-[86%] flex justify-between items-center '
-                  onClick={() => handleShowDetail(patient?._id)}
-                >
-                  <div className='w-[30%] flex gap-1 items-center '>
-                    <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full ' />
-                    <div className='w-full flex  justify-between ml-4'>
-                      <div className=" ">{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
-                    </div>
-                  </div>
-                  <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
-                  <div className="w-[12%]">{patient?.age}</div>
-                  <div className="w-1/6">{patient?.contact}</div>
-                  <div className="w-[27%]  hidden sm:block">{patient?.complaint
-                  }</div>
-                  <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
-                </div>
-                <div className="w-[13%] flex justify-center items-center space-x-2">
-                  <div className='center'>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
-                            <span> <LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <button
-                    className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate "
-                    onClick={() => handleDelete(patient?._id)}
-                  >
-                    <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
-                  </button>
-                  <button onClick={() => { handleUpdateActive(patient?._id) }} className=' rounded  text-sm font-n h-7 min-w-20 text-gray-100 '> {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500 '>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}</button>
+          <div className='pt-5 h-[430px] overflow-y-auto overflow-x-hidden'>
+  {isLoading ? (
+    <div className="center flex-col gap-24 h-3/4 w-[90%]">
+      <div>Loading patients...</div>
+      <div>
+        <Player
+          autoplay
+          loop
+          src={LoadingAnimation} // Replace with actual LoadingAnimation source
+          style={{ height: '200px', width: '200px' }}
+        />
+      </div>
+    </div>
+  ) : error ? (
+    <div className="center flex-col gap-24 h-3/4 w-[90%]">
+      <div className='text-red'>Error</div>
+      <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+        <div>
+          <Player
+            autoplay
+            loop
+            src={ErrorAnimation} // Replace with actual ErrorAnimation source
+            style={{ height: '200px', width: '200px' }}
+          />
+        </div>
+        <div className="retry">
+          <button onClick={refetch} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <>
+      {patientsToRender?.length > 0 ? (
+        patientsToRender.map((patient, index) => (
+          <motion.div key={patient?._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} className="font-medium patient-row flex border-b border-gray-100 justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
+            <div className='w-[86%] flex justify-between items-center' onClick={() => handleShowDetail(patient?._id)}>
+              <div className='w-[30%] flex gap-1 items-center'>
+                <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full' />
+                <div className='w-full flex justify-between ml-4'>
+                  <div>{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
-            <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients.length)} of {patients.length}</div>
-            <div className='flex gap-2 bg-gray-200 rounded-md'>
-              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-              <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-              <button disabled={indexOfLastPatient >= patients.length}  onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+              <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
+              <div className="w-[12%]">{patient?.age}</div>
+              <div className="w-1/6">{patient?.contact}</div>
+              <div className="w-[27%] hidden sm:block">{patient?.complaint}</div>
+              <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
             </div>
+            <div className="w-[13%] flex justify-center items-center space-x-2">
+              <div className='center'>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+                        <span><LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <button className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate" onClick={() => handleDelete(patient?._id)}>
+                <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
+              </button>
+              <button onClick={() => { handleUpdateActive(patient?._id) }} className='rounded text-sm font-n h-7 min-w-20 text-gray-100'>
+                {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500'>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}
+              </button>
+            </div>
+          </motion.div>
+        ))
+      ) : (
+        <></>
+      )}
+
+      {(!patientsToRender?.length || notFound) && (
+        <div className="center flex-col gap-24 h-3/4 w-[90%]">
+          <div>No patients found.</div>
+          <div>
+            <Player
+              autoplay
+              loop
+              src={NotFoundAnimation} // Replace with actual NotFoundAnimation source
+              style={{ height: '200px', width: '200px' }}
+            />
+          </div>
+        </div>
+      )}
+    </>
+  )}
+</div>
+
+          <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
+          {(searchResults?.length >=1 || (startDate && endDate) ||showTodayPatients ) ? (
+             <div className='w-fit p-2 rounded-md'>Showing {patientsToRender?.length}</div>
+          ) : (
+          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients?.length)} of {patients?.length}</div>
+        )}            {(searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients) ? ("") : (
+              <div className='flex gap-12 items-center'>
+                <div className='flex gap-6 items-center'>
+                  <input type="number"
+                    placeholder='Go to'
+                    value={goToPageNumber}
+                    onKeyDown={handleGoToPageOnPessingENTERkey}
+                    onChange={(e) => setGoToPageNumber(e.target.value)}
+                    className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
+                  />
+                  <button onClick={handleGoToPageNumber} className='px-2 py-2 w-12 bg-gray-300 hover:bg-black hover:text-white rounded-md'>Go</button>
+
+                </div>
+                <div className='flex gap-2 rounded-md bg-gray-200'>
+                  <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
+                  <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
+                  <button disabled={(indexOfLastPatient >= patients?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients)} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div>
@@ -476,15 +594,16 @@ const AllPatients = () => {
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
               <JobDoneAlert
-                height="h-24"
+                height="h-40"
                 width="w-52"
                 textColor="text-white"
-                bgColor="bg-red-400"
+                bgColor="bg-gradient-to-r from-rose-400 to-red-500"
                 boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
                 message={jobDoneMessage}
                 isOpen={openJobDoneAlert}
                 OnCancel={handleCancelAlert}
                 isCancelButton="block"
+                icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
               />
             </motion.div>
           </AlertWrapper>
@@ -505,6 +624,7 @@ const AllPatients = () => {
                 isOpen={openIdCopiedAlert}
                 OnCancel={null}
                 isCancelButton="hidden"
+                icon={null}
               />
             </motion.div>
           </AlertWrapper>

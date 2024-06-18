@@ -70,6 +70,7 @@ const handleShowAllPayments=()=>{
   setShowTodayPayments(false)
   setCurrentPage(1)
   setGoToPageNumber(0)
+  setSearchResults([])
   }
 
 
@@ -179,9 +180,11 @@ useEffect(()=>{
       handleSearch()
       setShowDetails(true);
     }
-    else if (e.key === "Enter" && searchResults.length === 0) {
+    else if (e.key === "Enter" && !searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
+            setJobDoneMessage("Enter Some Input !")
+
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -194,9 +197,11 @@ useEffect(()=>{
       handleSearch();
       setShowDetails(true);
     }
-    else if (searchResults.length === 0) {
+    else if (!searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
+            setJobDoneMessage("Enter Some Input !")
+
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -456,7 +461,7 @@ refetch()
           <div className='pt-5 h-[430px] overflow-y-auto overflow-x-hidden'>
       {isLoading ? (
         <div className="center flex-col gap-24 h-3/4 w-[90%]">
-          <div>Loading patients...</div>
+          <div>Loading payments...</div>
           <div>
             <Player
               autoplay
@@ -532,7 +537,7 @@ refetch()
 
           {!currentPatients?.length || notFound ? (
             <div className="center flex-col gap-24 h-3/4 w-[90%]">
-              <div>No patients found.</div>
+              <div>No payments found.</div>
               <div>
                 <Player
                   autoplay
