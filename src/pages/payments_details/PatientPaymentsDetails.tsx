@@ -31,6 +31,7 @@ const PatientPaymentsDetails = () => {
   const [paymentsToRender, setPaymentsToRender]= useState([])
   const [loggedInUserType,setloggedInUserType]=useState({})
   const navigate = useNavigate();
+  const [goToPageNumber, setGoToPageNumber]= useState()
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
@@ -68,7 +69,7 @@ const handleShowAllPayments=()=>{
   setEndDate("")
   setShowTodayPayments(false)
   setCurrentPage(1)
-
+  setGoToPageNumber(0)
   }
 
 
@@ -240,8 +241,23 @@ refetch()
     setCurrentPage(page);
   };
 
+  const handleGoToPageNumber =()=>{
+    if(goToPageNumber && goToPageNumber> 0 &&  goToPageNumber < ((payments?.length + 8)/8)){
+      setCurrentPage(goToPageNumber)
+    }else{
+      console.log(goToPageNumber ," page number does not exist for this data");
 
-   useEffect(() => {
+    }
+  }
+
+  const handleGoToPageOnPessingENTERkey = (e)=>{
+    if (e.key === "Enter"){
+      handleGoToPageNumber()
+    }
+  }
+
+  //filters
+     useEffect(() => {
     const filterPaymentsByDateRange = () => {
       if (!startDate || !endDate) {
         return currentPatients; // Return all payments if no date range is specified
@@ -541,12 +557,27 @@ refetch()
         )}
         
             {/* <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, paymentsToRender.length)} of {paymentsToRender.length}</div> */}
-
-            <div className='flex gap-2 bg-gray-200 rounded-md'>
-              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-              <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-              <button disabled={(indexOfLastPatient >= payments.length) ||(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+{(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments ) ? ("") : (
+            <div className='flex gap-12 items-center'>
+            <div className='flex gap-6 items-center'>
+            <input type="number"
+            placeholder='Go to'
+            value={goToPageNumber}
+            onKeyDown={handleGoToPageOnPessingENTERkey}
+            onChange={(e)=>setGoToPageNumber(e.target.value)}
+              className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
+              />
+              <button onClick={handleGoToPageNumber} className='px-2 py-2 w-12 bg-gray-300 hover:bg-black hover:text-white rounded-md'>Go</button>
+              
             </div>
+              <div className='flex gap-2 rounded-md bg-gray-200'>
+              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
+              <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
+              <button disabled={(indexOfLastPatient >= payments?.length) ||(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+              </div>
+            </div>
+          )}
+
           </div>
         </div>
         <div>
