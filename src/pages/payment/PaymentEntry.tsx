@@ -1,11 +1,12 @@
 
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // import profile from '../../assets/images/profile.jpg'
 import UserDetails from './UserDetails';
-import DefaultUserDetails from './DefaultUserDetails';
+// import DefaultUserDetails from './DefaultUserDetails';
 import PaymentDetails from './PaymentDetails';
 import AlertWrapper from '../../custom_components/AlertWrapper';
-import JobDoneAlert from "../../custom_components/JobDoneAlert"
+// import JobDoneAlert from "../../custom_components/JobDoneAlert"
+import JobDoneAlertVarient from '../../custom_components/jobDoneVarient';
 import { motion } from "framer-motion"
 import { useGetAllPatientsQuery } from '../../API/API';
 
@@ -15,19 +16,19 @@ import { PatientIdContext } from '../../API/PatientIdProvider'; // Import the co
 const PaymentEntry = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [patientId, setPatientId] = useState('');
- // jodDone alert message 
- const [jobDoneMessage, setJobDoneMessage] = useState("")
- const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
- const { idOfPatient } = useContext(PatientIdContext);
+  // jodDone alert message 
+  const [jobDoneMessage, setJobDoneMessage] = useState("")
+  const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
+  const { idOfPatient } = useContext(PatientIdContext);
 
 
 
- const handleCancelAlert = () => {
-  setOpenJobDoneAlert(false)
-}
+  const handleCancelAlert = () => {
+    setOpenJobDoneAlert(false)
+  }
 
 
-const {data =[]} = useGetAllPatientsQuery("");
+  const { data = [] } = useGetAllPatientsQuery("");
 
   const handleSelectChange = (e) => {
     setSelectedPatient(e.target.value);
@@ -50,10 +51,10 @@ const {data =[]} = useGetAllPatientsQuery("");
       setJobDoneMessage("Not Found !!")
       setOpenJobDoneAlert(true)
 
-    // removing result not found alert automatically
-    setTimeout(() => {
-      setOpenJobDoneAlert(false)
-    }, 3000);
+      // removing result not found alert automatically
+      setTimeout(() => {
+        setOpenJobDoneAlert(false)
+      }, 3000);
 
     }
   };
@@ -63,13 +64,13 @@ const {data =[]} = useGetAllPatientsQuery("");
       setPatientId(idOfPatient);
     }
   }, [idOfPatient]);
-  
+
   useEffect(() => {
     if (patientId === idOfPatient) {
       handleFindButtonClick(); // Call handleFindButtonClick here
     }
   }, [patientId]);
-  
+
 
   const getUserDetails = () => {
     if (selectedPatient) {
@@ -127,20 +128,20 @@ const {data =[]} = useGetAllPatientsQuery("");
               <h2 className="text-lg font-semibold mb-4">User Details</h2>
               <UserDetails user={selectedUser}  />
             </div>
-          ) : 
-      
-     (
-        null
-          )}
+          ) :
+
+            (
+              null
+            )}
         </div>
       </div>
       {selectedUser && <PaymentDetails patientId={selectedUser._id} />}
       <AlertWrapper isOpen={openJobDoneAlert}>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
-            >
-              <JobDoneAlert
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+        >
+          {/* <JobDoneAlert
                 icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
                 height="h-40"
               width="w-52"
@@ -151,16 +152,22 @@ const {data =[]} = useGetAllPatientsQuery("");
                 isOpen={openJobDoneAlert}
                 OnCancel={handleCancelAlert}
                 isCancelButton="block"
-              />
-            </motion.div>
-          </AlertWrapper>
+              /> */}
+          <JobDoneAlertVarient
+            message={jobDoneMessage}
+            isOpen={openJobDoneAlert}
+            OnCancel={handleCancelAlert}
+            type={"error"}
+          />
+        </motion.div>
+      </AlertWrapper>
     </>
   );
 };
 
 
-   
-  
- 
+
+
+
 
 export default PaymentEntry;

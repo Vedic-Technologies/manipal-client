@@ -4,6 +4,7 @@
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 import { Button } from "../components/ui/button";
+import tick from "./right.gif";
 
 export default function JobDoneAlertVarient({
   isOpen,
@@ -17,22 +18,24 @@ export default function JobDoneAlertVarient({
   let color;
   let animate;
   if (type === "success") {
-    icon = <CheckIcon className="h-6 w-6" />;
+    icon = <img src={tick} className="size-12" alt="" />;
     color = "bg-green-500";
-    animate = "animate-bounce";
+    animate = "";
   }
   if (type === "error") {
     icon = <TriangleAlertIcon className="h-6 w-6" />;
     color = "bg-red-500";
-    animate = "animate-alert";
-
+    animate = "animate-pulse";
   }
 
   if (type === "notify") {
     //  icon = <TriangleAlertIcon className="h-6 w-6" />;
     //  color = "bg-red-500";
     return (
-      <div className=" inset-0 flex items-center mb-60 justify-center z-10 " onClick={OnCancel}>
+      <div
+        className=" inset-0 flex items-center mb-60 justify-center z-10 "
+        onClick={OnCancel}
+      >
         <div className=" border dark:bg-gray-800 rounded-lg shadow-md bg-green-50 w-full max-w-md mx-4 px-10 py-2 flex flex-col items-center">
           <div className="text-sm center gap-5 font-medium text-gay-200 dark:text-gray-100">
             <span
@@ -40,7 +43,7 @@ export default function JobDoneAlertVarient({
             >
               <CheckIcon className="size-4" />
             </span>
-            {"id Copied"}
+            {message}
           </div>
         </div>
       </div>
@@ -48,15 +51,15 @@ export default function JobDoneAlertVarient({
   }
 
   return (
-    <div className=" inset-0 flex items-center justify-center z-10 ">
+    <div className=" inset-0 flex items-center justify-center z-10 h-screen w-screen backdrop-blur-sm ">
       <div className="bg-white border dark:bg-gray-800 rounded-lg shadow-md w-full max-w-md mx-4 p-6 flex flex-col items-center">
         <div
-          className={` flex items-center animate-alert justify-center w-12 h-12 rounded-full ${color} text-white mb-4 `}
+          className={` flex items-center ${animate} transition-all  w-12 h-12 transition-500 justify-center rounded-full ${color} text-white mb-4 `}
         >
           {icon}
         </div>
         {message && (
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+          <h3 className="text-lg select-none font-medium text-gray-900 dark:text-gray-100 mb-2">
             {message}
           </h3>
         )}
@@ -66,7 +69,7 @@ export default function JobDoneAlertVarient({
 
         <Button
           variant="secondary"
-          className="outline-none"
+          className="outline-none select-none"
           color="green"
           onClick={() => {
             OnCancel();

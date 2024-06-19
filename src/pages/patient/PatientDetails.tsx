@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
-import DefaultUserDetails from "../payment/DefaultUserDetails";
+// import DefaultUserDetails from "../payment/DefaultUserDetails";
 import { RiUserSearchLine } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import PatientDetailCard from "./PatientDetailCard";
 import PatientPaymentCard from "./PatientPaymentCard";
 import AlertWrapper from "../../custom_components/AlertWrapper";
-import JobDoneAlert from "../../custom_components/JobDoneAlert";
+// import JobDoneAlert from "../../custom_components/JobDoneAlert";
 import { motion } from "framer-motion";
 import { useGetAllPatientsQuery, useGetPatientByIdQuery } from "../../API/API";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -16,6 +16,7 @@ import LoadingAnimation from "../../assets/animations/HospitalAnimation.json";
 import NotFoundAnimation from "../../assets/animations/EmptStretcherAnimation.json";
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json";
 import { Link } from "react-router-dom";
+import JobDoneAlertVarient from "../../custom_components/jobDoneVarient";
 
 const Patient = () => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
@@ -224,17 +225,18 @@ const Patient = () => {
                     initial={{ opacity: 0, y: 50 }}
                     animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
                   >
-                    <JobDoneAlert
-                      height="h-24"
-                      width="w-52"
-                      textColor="text-white"
-                      bgColor="bg-red-400"
-                      boxShadow="shadow-[0px_0px_42px_2px_#c53030]"
+                    <JobDoneAlertVarient
+                      // height="h-24"
+                      // width="w-52"
+                      // textColor="text-white"
+                      // bgColor="bg-red-400"
+                      // boxShadow="shadow-[0px_0px_42px_2px_#c53030]"
                       message={jobDoneMessage}
                       isOpen={openJobDoneAlert}
                       OnCancel={handleAlert}
-                      isCancelButton="block"
-                      icon={null}
+                      type="error"
+                      // isCancelButton="block"
+                      // icon={null}
                     />
                   </motion.div>
                 </AlertWrapper>
