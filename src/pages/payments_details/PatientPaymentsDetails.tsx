@@ -31,6 +31,7 @@ const PatientPaymentsDetails = () => {
   const [paymentsToRender, setPaymentsToRender]= useState([])
   const [loggedInUserType,setloggedInUserType]=useState({})
   const navigate = useNavigate();
+  const [goToPageNumber, setGoToPageNumber]= useState()
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
@@ -45,7 +46,7 @@ const [endDate, setEndDate]= useState("")
 const [notFound, setNotFound]= useState(false)
 
 const [showTodayPayments, setShowTodayPayments] = useState(false); 
-
+const [activeFilter, setActiveFilter]= useState("all")
   //from API
   const {data: payments = [], error, isLoading, refetch}= useGetAllPaymentsQuery("")
   const [deletePayment] = useDeletePaymentMutation()
@@ -68,7 +69,9 @@ const handleShowAllPayments=()=>{
   setEndDate("")
   setShowTodayPayments(false)
   setCurrentPage(1)
-
+  setGoToPageNumber(0)
+  setSearchResults([])
+  setActiveFilter("all")
   }
 
 
@@ -118,10 +121,11 @@ useEffect(()=>{
       setSearchResults(results);
       setOpenJobDoneAlert(false);
       setPaymentsToRender(results);
+      setJobDoneMessage("")
     } else {
       setSearchResults([]);
       setShowDetails(false);
-      setJobDoneMessage("Not Found !!");
+      setJobDoneMessage("Not Payment Found !!");
       setOpenJobDoneAlert(true); 
       // removing result not found alert automatically
       setTimeout(() => {
@@ -178,9 +182,11 @@ useEffect(()=>{
       handleSearch()
       setShowDetails(true);
     }
-    else if (e.key === "Enter" && searchResults.length === 0) {
+    else if (e.key === "Enter" && !searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
+            setJobDoneMessage("Enter Some Input !")
+
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -193,9 +199,11 @@ useEffect(()=>{
       handleSearch();
       setShowDetails(true);
     }
-    else if (searchResults.length === 0) {
+    else if (!searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
+            setJobDoneMessage("Enter Some Input !")
+
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
@@ -240,8 +248,23 @@ refetch()
     setCurrentPage(page);
   };
 
+  const handleGoToPageNumber =()=>{
+    if(goToPageNumber && goToPageNumber> 0 &&  goToPageNumber < ((payments?.length + 8)/8)){
+      setCurrentPage(goToPageNumber)
+    }else{
+      console.log(goToPageNumber ," page number does not exist for this data");
 
-   useEffect(() => {
+    }
+  }
+
+  const handleGoToPageOnPessingENTERkey = (e)=>{
+    if (e.key === "Enter"){
+      handleGoToPageNumber()
+    }
+  }
+
+  //filters
+     useEffect(() => {
     const filterPaymentsByDateRange = () => {
       if (!startDate || !endDate) {
         return currentPatients; // Return all payments if no date range is specified
@@ -258,7 +281,7 @@ refetch()
       const filteredTodayPayments = payments.filter(payment => {
         const paymentDate = new Date(payment.paymentDate);
         // Check if payment date is today's date
-        console.log("avika h", paymentDate.toDateString(), " ",today.toDateString() )
+        // console.log("avika h", paymentDate.toDateString(), " ",today.toDateString() )
         return paymentDate.toDateString() === today.toDateString();
       });
       return filteredTodayPayments;
@@ -286,15 +309,16 @@ refetch()
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
+        setStartDate("")
+        setEndDate("")
       }
     } else {
       if (filteredPayments?.length >= 1) {
         setPaymentsToRender(filteredPayments);
         setNotFound(false);
         setShowTodayPayments(false)
-        // setSearchInput("")
-      
-
+        // setSearchInput("") 
+        
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
@@ -305,6 +329,25 @@ refetch()
   }, [startDate, endDate, currentPatients, searchInput, searchResults]);
 
 
+  // {(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )
+  useEffect(() => {
+    if (paymentsToRender === currentPatients) {
+      setActiveFilter("all");
+    } else if (searchResults?.length >= 1) {
+      setActiveFilter("");
+    } else if (startDate && endDate ) {
+      setActiveFilter("dates");
+    } else if (showTodayPayments) {
+      setActiveFilter("today");
+    }else{
+      setActiveFilter("all");
+    }
+  }, [paymentsToRender, currentPatients, searchResults, startDate, endDate, showTodayPayments]);
+
+const handleShowTodaysPayments=()=>{
+  setShowTodayPayments(true)
+  setActiveFilter("today")
+}
 
   const downloadExcel = () => {
     const sheet = XLSX.utils.json_to_sheet(payments);
@@ -414,14 +457,16 @@ refetch()
                 </motion.div>
               )}
             </div>
-            <Link to="/home/payment_entry">  <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
+            {loggedInUserType === "staff" &&
+                <Link to="/home/payment_entry">  <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
+            }
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
-            <div onClick={handleShowAllPayments} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer font-medium'>ALL</div>
+            <div onClick={handleShowAllPayments} className={`animate center size-8 rounded-full cursor-pointer font-medium ${activeFilter === "all" ? "scale-105 bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>ALL</div>
             <div className="">
-        <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className='ml-5 px-5' />
-        <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className='ml-5 px-5'  />
+        <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
+        <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`}  />
       </div>
-      <div onClick={()=>setShowTodayPayments(true)} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-auto px-1 font-medium rounded-md cursor-pointer'>Today</div>
+      <div onClick={handleShowTodaysPayments} className={` animate center size-auto px-1 font-medium rounded-md cursor-pointer  ${activeFilter === "today" ? "bg-blue-500 text-white hover:bg-blue-600 scale-105" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>Today</div>
           </div>
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
@@ -440,7 +485,7 @@ refetch()
           <div className='pt-5 h-[430px] overflow-y-auto overflow-x-hidden'>
       {isLoading ? (
         <div className="center flex-col gap-24 h-3/4 w-[90%]">
-          <div>Loading patients...</div>
+          <div>Loading payments...</div>
           <div>
             <Player
               autoplay
@@ -516,7 +561,7 @@ refetch()
 
           {!currentPatients?.length || notFound ? (
             <div className="center flex-col gap-24 h-3/4 w-[90%]">
-              <div>No patients found.</div>
+              <div>No payments found.</div>
               <div>
                 <Player
                   autoplay
@@ -541,12 +586,27 @@ refetch()
         )}
         
             {/* <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, paymentsToRender.length)} of {paymentsToRender.length}</div> */}
-
-            <div className='flex gap-2 bg-gray-200 rounded-md'>
-              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-              <button className='px-2 py-1 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-              <button disabled={(indexOfLastPatient >= payments.length) ||(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-1 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+{(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments ) ? ("") : (
+            <div className='flex gap-12 items-center'>
+            <div className='flex gap-6 items-center'>
+            <input type="number"
+            placeholder='Go to'
+            value={goToPageNumber}
+            onKeyDown={handleGoToPageOnPessingENTERkey}
+            onChange={(e)=>setGoToPageNumber(e.target.value)}
+              className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
+              />
+              <button onClick={handleGoToPageNumber} className='px-2 py-2 w-12 bg-gray-300 hover:bg-black hover:text-white rounded-md'>Go</button>
+              
             </div>
+              <div className='flex gap-2 rounded-md bg-gray-200'>
+              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
+              <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
+              <button disabled={(indexOfLastPatient >= payments?.length) ||(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+              </div>
+            </div>
+          )}
+
           </div>
         </div>
         <div>
