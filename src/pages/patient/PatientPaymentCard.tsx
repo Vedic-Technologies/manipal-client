@@ -12,10 +12,20 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
   const navigate = useNavigate();
   const { handleUpdateId } = useContext(PatientIdContext);
   const [updatePaymentById] = useUpdatePaymentByIdMutation();
+  const [loggedInUserType,setloggedInUserType]=useState({})
 
   useEffect(() => {
     setPayments(payment || []);
   }, [payment]);
+
+  useEffect(()=>{
+    const currentUserString = localStorage.getItem("currentUser");
+    if(currentUserString){
+      const currentUserData= JSON.parse(currentUserString);
+      setloggedInUserType(currentUserData.user.userType);
+    }
+  })
+
 
   const handleAddPayment = () => {
     handleUpdateId(idOfPatient); // Update the context with idOfPatient
@@ -26,6 +36,7 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
     setIsUpdating(paymentId);
     setNewAmount(currentAmount);
   };
+
 
   const handleUpdateSubmit = async (paymentId) => {
     try {
@@ -64,7 +75,9 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
                     <tr className="bg-gray-100 dark:bg-gray-700">
                       <th className="px-4 py-3 text-left">Date</th>
                       <th className="px-4 py-3 text-left">Amount</th>
+                      {loggedInUserType === "admin" &&
                       <th className="px-4 py-3 text-end pr-24">Action</th>
+                    }
                     </tr>
                   </thead>
                   {payments.slice(0).reverse().map((pay) => (
@@ -83,6 +96,7 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
                             pay.amount
                           )}
                         </td>
+                        {loggedInUserType === "admin" && 
                         <td className="px-4 py-3 flex items-center justify-end space-x-2">
                           {isUpdating === pay._id ? (
                             <Button size="sm" variant="outline" onClick={() => handleUpdateSubmit(pay._id)}>
@@ -97,6 +111,7 @@ const PatientPaymentCard = ({ payment, idOfPatient }) => {
                             Delete
                           </Button>
                         </td>
+                        }
                       </tr>
                     </tbody>
                   ))}
