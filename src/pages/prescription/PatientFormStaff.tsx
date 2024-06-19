@@ -139,6 +139,18 @@ const PresCriptionSadcn = () => {
     setImageFile("");
   };
 
+  const handleKeyDown = (e) => {
+    const allowedFields = ['height','weight']
+    const name = e.target.name
+    const inputValue = e.target.value;
+    if ((inputValue === "" || inputValue === "0") && e.key === "0") {
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "-" || e.key === "e" || e.key === "+" || (e.key === '.' && !allowedFields.includes(name)) ) {
+      e.preventDefault();
+    }
+  };
   return (
     <div className="mx-auto max-w-4xl space-y-6 py-12 px-4 sm:px-6 md:py-16 lg:px-8">
       <div className="space-y-2 text-center">
@@ -189,6 +201,7 @@ const PresCriptionSadcn = () => {
               required
               type="number"
               name="age"
+              onKeyDown={handleKeyDown}
               value={patientData.age}
               onChange={handleChange}
             />
@@ -211,8 +224,9 @@ const PresCriptionSadcn = () => {
             <Input
               id="contact"
               placeholder="Enter patient contact"
-              type="tel"
+              type="number"
               name="contact"
+              onKeyDown={handleKeyDown}
               value={patientData.contact}
               onChange={handleChange}
             />
@@ -237,6 +251,7 @@ const PresCriptionSadcn = () => {
               placeholder="Enter patient weight"
               type="number"
               name="weight"
+              onKeyDown={handleKeyDown}
               value={patientData.weight}
               onChange={handleChange}
             />
@@ -248,6 +263,7 @@ const PresCriptionSadcn = () => {
               placeholder="Enter patient height"
               type="number"
               name="height"
+              onKeyDown={handleKeyDown}
               value={patientData.height}
               onChange={handleChange}
             />

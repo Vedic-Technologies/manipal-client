@@ -18,6 +18,7 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
+import JobDoneAlertVarient from '../../custom_components/jobDoneVarient';
 
 const AllPatients = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -45,8 +46,8 @@ const AllPatients = () => {
   const [notFound, setNotFound] = useState(false)
 
   const [showTodayPatients, setShowTodayPatients] = useState(false);
-  const [activeFilter, setActiveFilter]= useState("all")
-  const [loggedInUserType,setloggedInUserType]=useState({})
+  const [activeFilter, setActiveFilter] = useState("all")
+  const [loggedInUserType, setloggedInUserType] = useState({})
 
 
   const handleCancelAlert = () => {
@@ -158,19 +159,19 @@ const AllPatients = () => {
       setActiveFilter("all");
     } else if (searchResults?.length >= 1) {
       setActiveFilter("");
-    } else if (startDate && endDate ) {
+    } else if (startDate && endDate) {
       setActiveFilter("dates");
     } else if (showTodayPatients) {
       setActiveFilter("today");
-    }else{
+    } else {
       setActiveFilter("all");
     }
   }, [patientsToRender, currentPatients, searchResults, startDate, endDate, showTodayPatients]);
 
-const handleShowTodaysPatients=()=>{
-  setShowTodayPatients(true)
-  setActiveFilter("today")
-}
+  const handleShowTodaysPatients = () => {
+    setShowTodayPatients(true)
+    setActiveFilter("today")
+  }
   // search functionality 
   const searchPatient = (inputValue) => {
     const trimmedSearchInput = inputValue.trim().toLowerCase();
@@ -296,6 +297,7 @@ const handleShowTodaysPatients=()=>{
   }
   const handleConfirmDelete = async () => {
     try {
+      setOpenConfirm(false)
       await deletePatient(selectedPatientId).unwrap();
       refetch();
       setSearchResults([]);
@@ -304,7 +306,7 @@ const handleShowTodaysPatients=()=>{
     } catch (error) {
       console.error('Error deleting patient:', error);
     } finally {
-      setOpenConfirm(false)
+      // setOpenConfirm(false)
       setSelectedPatientId(null);
     }
   };
@@ -312,6 +314,7 @@ const handleShowTodaysPatients=()=>{
 
   const handleCancelDelete = () => {
     setOpenConfirm(false)
+    setSelectedPatientId("")
     console.log("no clicked")
   }
 
@@ -375,7 +378,7 @@ const handleShowTodaysPatients=()=>{
 
         setTimeout(() => {
           setOpenIdCopiedAlert(false)
-        }, 300);
+        }, 600);
 
       })
       .catch(err => {
@@ -388,17 +391,17 @@ const handleShowTodaysPatients=()=>{
 
       })
   }
-  const handleGoToPageNumber =()=>{
-    if(goToPageNumber && goToPageNumber> 0 &&  goToPageNumber < ((patients?.length + pageSize)/pageSize)){
+  const handleGoToPageNumber = () => {
+    if (goToPageNumber && goToPageNumber > 0 && goToPageNumber < ((patients?.length + pageSize) / pageSize)) {
       setCurrentPage(goToPageNumber)
-    }else{
-      console.log(goToPageNumber ," page number does not exist for this data");
+    } else {
+      console.log(goToPageNumber, " page number does not exist for this data");
 
     }
   }
 
-  const handleGoToPageOnPessingENTERkey = (e)=>{
-    if (e.key === "Enter"){
+  const handleGoToPageOnPessingENTERkey = (e) => {
+    if (e.key === "Enter") {
       handleGoToPageNumber()
     }
   }
@@ -468,13 +471,13 @@ const handleShowTodaysPatients=()=>{
               )}
             </div>
             {loggedInUserType === "staff" &&
-            <Link to="/home/prescription"><div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
+              <Link to="/home/prescription"><div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
             }
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
             <div onClick={handleShowAllPatients} className={`animate center size-8 rounded-full cursor-pointer font-medium ${activeFilter === "all" ? "scale-105 bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>ALL</div>
             <div className="">
-            <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
-            <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`}  />
+              <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e) => setStartDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
+              <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e) => setEndDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
             </div>
             <div onClick={handleShowTodaysPatients} className={` animate center size-auto px-1 font-medium rounded-md cursor-pointer  ${activeFilter === "today" ? "bg-blue-500 text-white hover:bg-blue-600 scale-105" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>Today</div>
 
@@ -492,104 +495,106 @@ const handleShowTodaysPatients=()=>{
             <div className="w-1/6 text-center">Actions</div>
           </div>
           <div className='pt-5 h-[430px] overflow-y-auto overflow-x-hidden'>
-  {isLoading ? (
-    <div className="center flex-col gap-24 h-3/4 w-[90%]">
-      <div>Loading patients...</div>
-      <div>
-        <Player
-          autoplay
-          loop
-          src={LoadingAnimation} // Replace with actual LoadingAnimation source
-          style={{ height: '200px', width: '200px' }}
-        />
-      </div>
-    </div>
-  ) : error ? (
-    <div className="center flex-col gap-24 h-3/4 w-[90%]">
-      <div className='text-red'>Error</div>
-      <div className='flex flex-col gap-8 justify-center items-center ml-6'>
-        <div>
-          <Player
-            autoplay
-            loop
-            src={ErrorAnimation} // Replace with actual ErrorAnimation source
-            style={{ height: '200px', width: '200px' }}
-          />
-        </div>
-        <div className="retry">
-          <button onClick={refetch} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <>
-      {patientsToRender?.length > 0 ? (
-        patientsToRender.map((patient, index) => (
-          <motion.div key={patient?._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} className="font-medium patient-row flex border-b border-gray-100 justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-            <div className='w-[86%] flex justify-between items-center' onClick={() => handleShowDetail(patient?._id)}>
-              <div className='w-[30%] flex gap-1 items-center'>
-                <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full' />
-                <div className='w-full flex justify-between ml-4'>
-                  <div>{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
+            {isLoading ? (
+              <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                <div>Loading patients...</div>
+                <div>
+                  <Player
+                    autoplay
+                    loop
+                    src={LoadingAnimation} // Replace with actual LoadingAnimation source
+                    style={{ height: '200px', width: '200px' }}
+                  />
                 </div>
               </div>
-              <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
-              <div className="w-[12%]">{patient?.age}</div>
-              <div className="w-1/6">{patient?.contact}</div>
-              <div className="w-[27%] hidden sm:block">{patient?.complaint}</div>
-              <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
-            </div>
-            <div className="w-[13%] flex justify-center items-center space-x-2">
-              <div className='center'>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
-                        <span><LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+            ) : error ? (
+              <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                <div className='text-red'>Error</div>
+                <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+                  <div>
+                    <Player
+                      autoplay
+                      loop
+                      src={ErrorAnimation} // Replace with actual ErrorAnimation source
+                      style={{ height: '200px', width: '200px' }}
+                    />
+                  </div>
+                  <div className="retry">
+                    <button onClick={refetch} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+                  </div>
+                </div>
               </div>
-              <button className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate" onClick={() => handleDelete(patient?._id)}>
-                <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
-              </button>
-              <button onClick={() => { handleUpdateActive(patient?._id) }} className='rounded text-sm font-n h-7 min-w-20 text-gray-100'>
-                {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500'>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}
-              </button>
-            </div>
-          </motion.div>
-        ))
-      ) : (
-        <></>
-      )}
+            ) : (
+              <>
+                {patientsToRender?.length > 0 ? (
+                  patientsToRender.map((patient, index) => (
+                    <span className={` ${selectedPatientId === patient?._id && "opacity-20 cursor-not-allowed"} `}>
+                      <motion.div key={patient?._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} className="font-medium patient-row flex border-b border-gray-100 justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
+                        <div className='w-[86%] flex justify-between items-center' onClick={() => handleShowDetail(patient?._id)}>
+                          <div className='w-[30%] flex gap-1 items-center'>
+                            <img src={patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full' />
+                            <div className='w-full flex justify-between ml-4'>
+                              <div>{patient?.patientName?.[0]?.toUpperCase() + patient?.patientName?.slice(1)}</div>
+                            </div>
+                          </div>
+                          <div className="w-[12%]">{patient?.gender?.[0]?.toUpperCase() + patient?.gender?.slice(1)}</div>
+                          <div className="w-[12%]">{patient?.age}</div>
+                          <div className="w-1/6">{patient?.contact}</div>
+                          <div className="w-[27%] hidden sm:block">{patient?.complaint}</div>
+                          <div className="w-[12%] hidden sm:block">{patient?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
+                        </div>
+                        <div className="w-[13%] flex justify-center items-center space-x-2">
+                          <div className='center'>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div onClick={() => { handleCopyPatientId(patient._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+                                    <span><LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className='size-full px-2 py-1 bg-gray-200 center rounded-md text-sm font-normal'>Copy Patient ID</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                          <button disabled={selectedPatientId === patient?._id} className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate" onClick={() => handleDelete(patient?._id)}>
+                            <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
+                          </button>
+                          <button onClick={() => { handleUpdateActive(patient?._id) }} className='rounded text-sm font-n h-7 min-w-20 text-gray-100'>
+                            {patient.active === false ? (<div className='bg-green-400 center size-full rounded hover:bg-green-500'>Activate</div>) : (<div className='bg-red-400 center size-full rounded hover:bg-red-500'>Deactivate</div>)}
+                          </button>
+                        </div>
+                      </motion.div>
+                    </span>
+                  ))
+                ) : (
+                  <></>
+                )}
 
-      {(!patientsToRender?.length || notFound) && (
-        <div className="center flex-col gap-24 h-3/4 w-[90%]">
-          <div>No patients found.</div>
-          <div>
-            <Player
-              autoplay
-              loop
-              src={NotFoundAnimation} // Replace with actual NotFoundAnimation source
-              style={{ height: '200px', width: '200px' }}
-            />
+                {(!patientsToRender?.length || notFound) && (
+                  <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                    <div>No patients found.</div>
+                    <div>
+                      <Player
+                        autoplay
+                        loop
+                        src={NotFoundAnimation} // Replace with actual NotFoundAnimation source
+                        style={{ height: '200px', width: '200px' }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-        </div>
-      )}
-    </>
-  )}
-</div>
 
           <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
-          {(searchResults?.length >=1 || (startDate && endDate) ||showTodayPatients ) ? (
-             <div className='w-fit p-2 rounded-md'>Showing {patientsToRender?.length}</div>
-          ) : (
-          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients?.length)} of {patients?.length}</div>
-        )}            {(searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients) ? ("") : (
+            {(searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients) ? (
+              <div className='w-fit p-2 rounded-md'>Showing {patientsToRender?.length}</div>
+            ) : (
+              <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, patients?.length)} of {patients?.length}</div>
+            )}            {(searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients) ? ("") : (
               <div className='flex gap-12 items-center'>
                 <div className='flex gap-6 items-center'>
                   <input type="number"
@@ -646,17 +651,10 @@ const handleShowTodaysPatients=()=>{
               initial={{ opacity: 0, y: 20 }}
               animate={openIdCopiedAlert ? { opacity: 1, y: 0 } : {}}
             >
-              <JobDoneAlert
-                height="h-12"
-                width="w-24"
-                textColor="text-black"
-                bgColor="bg-gray-300"
-                boxShadow={null}
+              <JobDoneAlertVarient
                 message={idCopied}
                 isOpen={openIdCopiedAlert}
-                OnCancel={null}
-                isCancelButton="hidden"
-                icon={null}
+                type="notify"
               />
             </motion.div>
           </AlertWrapper>

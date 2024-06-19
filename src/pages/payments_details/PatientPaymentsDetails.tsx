@@ -12,7 +12,7 @@ import {
 } from "../../components/ui/tooltip"
 import AlertWrapper from '../../custom_components/AlertWrapper';
 import JobDoneAlert from "../../custom_components/JobDoneAlert"
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
 import { useGetAllPaymentsQuery } from '../../API/API';
 import { useDeletePaymentMutation } from '../../API/API';
 import { Player } from '@lottiefiles/react-lottie-player';
@@ -28,10 +28,10 @@ const PatientPaymentsDetails = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8);
-  const [paymentsToRender, setPaymentsToRender]= useState([])
-  const [loggedInUserType,setloggedInUserType]=useState({})
+  const [paymentsToRender, setPaymentsToRender] = useState([])
+  const [loggedInUserType, setloggedInUserType] = useState({})
   const navigate = useNavigate();
-  const [goToPageNumber, setGoToPageNumber]= useState()
+  const [goToPageNumber, setGoToPageNumber] = useState()
   // confirmation dialogue box
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null)
@@ -40,15 +40,15 @@ const PatientPaymentsDetails = () => {
   const [openJobDoneAlert, setOpenJobDoneAlert] = useState(false)
   const [openIdCopiedAlert, setOpenIdCopiedAlert] = useState(false)
   const [idCopied, setIdCopied] = useState("")
-//date range
-const [startDate, setStartDate]= useState("")
-const [endDate, setEndDate]= useState("")
-const [notFound, setNotFound]= useState(false)
+  //date range
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+  const [notFound, setNotFound] = useState(false)
 
-const [showTodayPayments, setShowTodayPayments] = useState(false); 
-const [activeFilter, setActiveFilter]= useState("all")
+  const [showTodayPayments, setShowTodayPayments] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all")
   //from API
-  const {data: payments = [], error, isLoading, refetch}= useGetAllPaymentsQuery("")
+  const { data: payments = [], error, isLoading, refetch } = useGetAllPaymentsQuery("")
   const [deletePayment] = useDeletePaymentMutation()
   useEffect(() => {
     const currentUserString = localStorage.getItem('currentUser');
@@ -62,26 +62,26 @@ const [activeFilter, setActiveFilter]= useState("all")
   const indexOfFirstPatient = indexOfLastPatient - pageSize;
   const currentPatients = payments?.slice(0)?.reverse()?.slice(indexOfFirstPatient, indexOfLastPatient);
 
-const handleShowAllPayments=()=>{
-  setPaymentsToRender(currentPatients)
-  setSearchInput("")
-  setStartDate("")
-  setEndDate("")
-  setShowTodayPayments(false)
-  setCurrentPage(1)
-  setGoToPageNumber(0)
-  setSearchResults([])
-  setActiveFilter("all")
+  const handleShowAllPayments = () => {
+    setPaymentsToRender(currentPatients)
+    setSearchInput("")
+    setStartDate("")
+    setEndDate("")
+    setShowTodayPayments(false)
+    setCurrentPage(1)
+    setGoToPageNumber(0)
+    setSearchResults([])
+    setActiveFilter("all")
   }
 
 
   const handleCancelAlert = () => {
     setOpenJobDoneAlert(false)
   }
-useEffect(()=>{
-  refetch()
-  // console.log("refetching hi")
-},[payments])
+  useEffect(() => {
+    refetch()
+    // console.log("refetching hi")
+  }, [payments])
 
   // search functionality 
   const searchPayment = (inputValue) => {
@@ -94,10 +94,10 @@ useEffect(()=>{
       setPaymentsToRender(currentPatients);
       return;
     }
-  
+
     const searchLower = trimmedSearchInput.toLowerCase();
     const searchInt = parseInt(trimmedSearchInput);
-  
+
     const results = payments?.filter((item) => {
       const patient = item?.patient || {};
       return (
@@ -112,11 +112,11 @@ useEffect(()=>{
         item._id?.includes(trimmedSearchInput) ||
         item.paymentType?.toLowerCase() === searchLower ||
         item.paymentType?.toLowerCase().includes(searchLower) ||
-        item.amount == searchInt ||  
+        item.amount == searchInt ||
         formatDate(item.paymentDate).includes(trimmedSearchInput)
       );
     });
-  
+
     if (results.length > 0) {
       setSearchResults(results);
       setOpenJobDoneAlert(false);
@@ -126,14 +126,14 @@ useEffect(()=>{
       setSearchResults([]);
       setShowDetails(false);
       setJobDoneMessage("Not Payment Found !!");
-      setOpenJobDoneAlert(true); 
+      setOpenJobDoneAlert(true);
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false);
       }, 3000);
     }
   };
-  
+
   const displaySearchResult = searchResults.filter((result, idx) => idx === displaySearch)
 
   const nextSearchResult = () => {
@@ -185,7 +185,7 @@ useEffect(()=>{
     else if (e.key === "Enter" && !searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
-            setJobDoneMessage("Enter Some Input !")
+      setJobDoneMessage("Enter Some Input !")
 
       // removing result not found alert automatically
       setTimeout(() => {
@@ -195,22 +195,22 @@ useEffect(()=>{
   }
 
   const handleSeachIconClick = () => {
-    if (searchInput !== "" && searchResults.length >=1) {
+    if (searchInput !== "" && searchResults.length >= 1) {
       handleSearch();
       setShowDetails(true);
     }
     else if (!searchResults?.length) {
       setShowDetails(false);
       setOpenJobDoneAlert(true)
-            setJobDoneMessage("Enter Some Input !")
+      setJobDoneMessage("Enter Some Input !")
 
       // removing result not found alert automatically
       setTimeout(() => {
         setOpenJobDoneAlert(false)
       }, 3000);
-    
+
     }
-    
+
   }
 
   const handleShowDetail = (id) => {
@@ -226,20 +226,22 @@ useEffect(()=>{
     try {
       // const response = await axios.delete(`https://manipal-server.onrender.com/api/payment/${selectedPatientId}`);
       // setPayments(payments.filter((item) => item?.patient?._id !== selectedPatientId));
-await deletePayment(selectedPatientId).unwrap()
-refetch()
+      setOpenConfirm(false)
+      await deletePayment(selectedPatientId).unwrap()
+      refetch()
       setSearchResults([]);
       setShowDetails(false);
       console.log("patinet deleted")
     } catch (error) {
       console.error('Error deleting patient:', error);
     } finally {
-      setOpenConfirm(false)
+      // setOpenConfirm(false)
       setSelectedPatientId(null);
     }
   };
 
   const handleCancelDelete = () => {
+    setSelectedPatientId(null);
     setOpenConfirm(false)
   }
 
@@ -248,23 +250,23 @@ refetch()
     setCurrentPage(page);
   };
 
-  const handleGoToPageNumber =()=>{
-    if(goToPageNumber && goToPageNumber> 0 &&  goToPageNumber < ((payments?.length + 8)/8)){
+  const handleGoToPageNumber = () => {
+    if (goToPageNumber && goToPageNumber > 0 && goToPageNumber < ((payments?.length + 8) / 8)) {
       setCurrentPage(goToPageNumber)
-    }else{
-      console.log(goToPageNumber ," page number does not exist for this data");
+    } else {
+      console.log(goToPageNumber, " page number does not exist for this data");
 
     }
   }
 
-  const handleGoToPageOnPessingENTERkey = (e)=>{
-    if (e.key === "Enter"){
+  const handleGoToPageOnPessingENTERkey = (e) => {
+    if (e.key === "Enter") {
       handleGoToPageNumber()
     }
   }
 
   //filters
-     useEffect(() => {
+  useEffect(() => {
     const filterPaymentsByDateRange = () => {
       if (!startDate || !endDate) {
         return currentPatients; // Return all payments if no date range is specified
@@ -289,14 +291,14 @@ refetch()
 
     const filteredPayments = filterPaymentsByDateRange();
 
-    if (searchInput && searchResults.length>=1) {
+    if (searchInput && searchResults.length >= 1) {
       setPaymentsToRender(searchResults);
       setShowTodayPayments(false)
       setNotFound(false);
       setStartDate("")
       setEndDate("")
 
-    } 
+    }
     else if (showTodayPayments) {
       const todayPayments = filterPaymentsForToday();
       if (todayPayments.length >= 1) {
@@ -318,7 +320,7 @@ refetch()
         setNotFound(false);
         setShowTodayPayments(false)
         // setSearchInput("") 
-        
+
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
@@ -335,19 +337,19 @@ refetch()
       setActiveFilter("all");
     } else if (searchResults?.length >= 1) {
       setActiveFilter("");
-    } else if (startDate && endDate ) {
+    } else if (startDate && endDate) {
       setActiveFilter("dates");
     } else if (showTodayPayments) {
       setActiveFilter("today");
-    }else{
+    } else {
       setActiveFilter("all");
     }
   }, [paymentsToRender, currentPatients, searchResults, startDate, endDate, showTodayPayments]);
 
-const handleShowTodaysPayments=()=>{
-  setShowTodayPayments(true)
-  setActiveFilter("today")
-}
+  const handleShowTodaysPayments = () => {
+    setShowTodayPayments(true)
+    setActiveFilter("today")
+  }
 
   const downloadExcel = () => {
     const sheet = XLSX.utils.json_to_sheet(payments);
@@ -405,18 +407,18 @@ const handleShowTodaysPayments=()=>{
                 value={searchInput} type="search" placeholder='Search' className='rounded-lg h-10 w-72 bg-gray-100 px-2  pb-1 pr-7' />
               <i onClick={handleSeachIconClick} className="fa-solid fa-magnifying-glass absolute right-3 bottom-3 text-gray-500 cursor-pointer"></i>
               {showDetails && (
-                <motion.div 
-                initial={{opacity:0, y:200}}
-                animate={{opacity:1, y:0}}
-                drag
-                dragConstraints={{
-                  top: 0,
-                  left:0,
-                  right: 0,
-                  bottom: 0
-                }}
-                dragElastic={0.5}
-                className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] min-h-[500px] z-10 rounded-md ">
+                <motion.div
+                  initial={{ opacity: 0, y: 200 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  drag
+                  dragConstraints={{
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                  }}
+                  dragElastic={0.5}
+                  className=" bg-blue-100 opacity-95 p-4 mt-4 top-8 absolute left-48 w-[450px] min-h-[500px] z-10 rounded-md ">
                   {displaySearchResult?.map((item) => {
                     return (
                       <div key={item?.patient?._id} className='min-h-[500px] relative pb-12'>
@@ -461,10 +463,10 @@ const handleShowTodaysPayments=()=>{
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
             <div onClick={handleShowAllPayments} className={`animate center size-8 rounded-full cursor-pointer font-medium ${activeFilter === "all" ? "scale-105 bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>ALL</div>
             <div className="">
-        <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
-        <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`}  />
-      </div>
-      <div onClick={handleShowTodaysPayments} className={` animate center size-auto px-1 font-medium rounded-md cursor-pointer  ${activeFilter === "today" ? "bg-blue-500 text-white hover:bg-blue-600 scale-105" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>Today</div>
+              <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e) => setStartDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
+              <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e) => setEndDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
+            </div>
+            <div onClick={handleShowTodaysPayments} className={` animate center size-auto px-1 font-medium rounded-md cursor-pointer  ${activeFilter === "today" ? "bg-blue-500 text-white hover:bg-blue-600 scale-105" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>Today</div>
           </div>
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
@@ -481,129 +483,131 @@ const handleShowTodaysPayments=()=>{
 
           {/* all */}
           <div className='pt-5 h-[430px] overflow-y-auto overflow-x-hidden'>
-      {isLoading ? (
-        <div className="center flex-col gap-24 h-3/4 w-[90%]">
-          <div>Loading payments...</div>
-          <div>
-            <Player
-              autoplay
-              loop
-              src={LoadingAnimation} // Replace with actual LoadingAnimation source
-              style={{ height: '200px', width: '200px' }}
-            />
-          </div>
-        </div>
-      ) : error ? (
-        <div className="center flex-col gap-24 h-3/4 w-[90%]">
-          <div className='text-red'>Error</div>
-          <div className='flex flex-col gap-8 justify-center items-center ml-6'>
-            <div>
-              <Player
-                autoplay
-                loop
-                src={ErrorAnimation} // Replace with actual ErrorAnimation source
-                style={{ height: '200px', width: '200px' }}
-              />
-            </div>
-            <div className="retry">
-              <button onClick={refetch} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          {paymentsToRender?.length > 0 ? (
-            paymentsToRender.map((item, index) => (
-              <motion.div key={item?._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} className="font-medium patient-row flex border-b border-gray-100 justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
-                <div onClick={() => handleShowDetail(item?.patientId)} className='w-[86%] flex justify-between items-center'>
-                  <div className='w-[30%] flex gap-1 items-center'>
-                    <img src={item?.patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full' />
-                    <div className='w-full flex justify-between ml-4'>
-                      <div>{item?.patient?.name?.[0]?.toUpperCase() + item?.patient?.name?.slice(1)}</div>
+            {isLoading ? (
+              <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                <div>Loading payments...</div>
+                <div>
+                  <Player
+                    autoplay
+                    loop
+                    src={LoadingAnimation} // Replace with actual LoadingAnimation source
+                    style={{ height: '200px', width: '200px' }}
+                  />
+                </div>
+              </div>
+            ) : error ? (
+              <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                <div className='text-red'>Error</div>
+                <div className='flex flex-col gap-8 justify-center items-center ml-6'>
+                  <div>
+                    <Player
+                      autoplay
+                      loop
+                      src={ErrorAnimation} // Replace with actual ErrorAnimation source
+                      style={{ height: '200px', width: '200px' }}
+                    />
+                  </div>
+                  <div className="retry">
+                    <button onClick={refetch} className='text-xl bg-gray-300 hover:bg-gray-700 hover:text-white px-3 py-1 rounded'>Retry</button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                {paymentsToRender?.length > 0 ? (
+                  paymentsToRender.map((item, index) => (
+                    <span className={` ${selectedPatientId === item?._id && "opacity-20 cursor-not-allowed"} `}>
+                      <motion.div key={item?._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} className="font-medium patient-row flex border-b border-gray-100 justify-between items-center px-2 py-2 hover:scale-[1.001] hover:bg-gray-100 animate cursor-pointer rounded-md">
+                        <div onClick={() => handleShowDetail(item?.patientId)} className='w-[86%] flex justify-between items-center'>
+                          <div className='w-[30%] flex gap-1 items-center'>
+                            <img src={item?.patient?.image} alt="" className='bg-sky-400 min-w-8 size-8 rounded-full' />
+                            <div className='w-full flex justify-between ml-4'>
+                              <div>{item?.patient?.name?.[0]?.toUpperCase() + item?.patient?.name?.slice(1)}</div>
+                            </div>
+                          </div>
+                          <div className="w-[12%]">{item?.patient?.contact}</div>
+                          <div className="w-[12%]">{item?.amount}</div>
+                          <div className="w-1/6">{formatDate(item?.paymentDate)}</div>
+                          <div className="w-1/6 hidden sm:block">{item?.paymentType}</div>
+                          <div className="w-[12%] hidden sm:block">{item?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
+                        </div>
+                        <div className="w-[13%] flex justify-center items-center space-x-2">
+                          <div>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div onClick={() => { handleCopyPatientId(item?.patient?._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
+                                    <span><LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Copy Patient ID</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                          {loggedInUserType === "admin" &&
+                            <button disabled={selectedPatientId === item?._id}
+                              className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate"
+                              onClick={() => handleDelete(item?._id)}>
+                              <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
+                            </button>
+                          }
+                        </div>
+                      </motion.div>
+                    </span>
+                  ))
+                ) : (
+                  <></>
+                )}
+
+                {!currentPatients?.length || notFound ? (
+                  <div className="center flex-col gap-24 h-3/4 w-[90%]">
+                    <div>No payments found.</div>
+                    <div>
+                      <Player
+                        autoplay
+                        loop
+                        src={NotFoundAnimation} // Replace with actual NotFoundAnimation source
+                        style={{ height: '200px', width: '200px' }}
+                      />
                     </div>
                   </div>
-                  <div className="w-[12%]">{item?.patient?.contact}</div>
-                  <div className="w-[12%]">{item?.amount}</div>
-                  <div className="w-1/6">{formatDate(item?.paymentDate)}</div>
-                  <div className="w-1/6 hidden sm:block">{item?.paymentType}</div>
-                  <div className="w-[12%] hidden sm:block">{item?.active === false ? (<span>Inactive</span>) : (<span>Active</span>)}</div>
-                </div>
-                <div className="w-[13%] flex justify-center items-center space-x-2">
-                  <div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div onClick={() => { handleCopyPatientId(item?.patient?._id) }} className='px-2 py-1 hover:bg-gray-300 rounded-full min-w-8 size-8 animate flex items-center'>
-                            <span><LiaCopySolid className="text-blue-500 hover:text-blue-900" /></span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Copy Patient ID</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  {loggedInUserType === "admin" &&
-                    <button
-                      className="delete px-2 py-1 hover:bg-red-300 rounded-full min-w-8 size-8 animate"
-                      onClick={() => handleDelete(item?._id)}>
-                      <i className="fa-solid fa-trash-can text-red-600 hover:text-red-900"></i>
-                    </button>
-                  }
-                </div>
-              </motion.div>
-            ))
-          ) : (
-            <></>
-          )}
-
-          {!currentPatients?.length || notFound ? (
-            <div className="center flex-col gap-24 h-3/4 w-[90%]">
-              <div>No payments found.</div>
-              <div>
-                <Player
-                  autoplay
-                  loop
-                  src={NotFoundAnimation} // Replace with actual NotFoundAnimation source
-                  style={{ height: '200px', width: '200px' }}
-                />
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
-        </>
-      )}
-    </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </div>
 
           <div className='flex justify-between pr-6 py-2 mt-2 absolute w-full bottom-1'>
-{(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments ) ? (
-             <div className='w-fit p-2 rounded-md'>Showing {paymentsToRender?.length}</div>
-          ) : (
-          <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, payments?.length)} of {payments?.length}</div>
-        )}
-        
+            {(searchResults?.length >= 1 || (startDate && endDate) || showTodayPayments) ? (
+              <div className='w-fit p-2 rounded-md'>Showing {paymentsToRender?.length}</div>
+            ) : (
+              <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, payments?.length)} of {payments?.length}</div>
+            )}
+
             {/* <div className='w-fit p-2 rounded-md'>Showing {indexOfFirstPatient + 1} to {Math.min(indexOfLastPatient, paymentsToRender.length)} of {paymentsToRender.length}</div> */}
-{(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments ) ? ("") : (
-            <div className='flex gap-12 items-center'>
-            <div className='flex gap-6 items-center'>
-            <input type="number"
-            placeholder='Go to'
-            value={goToPageNumber}
-            onKeyDown={handleGoToPageOnPessingENTERkey}
-            onChange={(e)=>setGoToPageNumber(e.target.value)}
-              className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
-              />
-              <button onClick={handleGoToPageNumber} className='px-2 py-2 w-12 bg-gray-300 hover:bg-black hover:text-white rounded-md'>Go</button>
-              
-            </div>
-              <div className='flex gap-2 rounded-md bg-gray-200'>
-              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-              <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-              <button disabled={(indexOfLastPatient >= payments?.length) ||(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+            {(searchResults?.length >= 1 || (startDate && endDate) || showTodayPayments) ? ("") : (
+              <div className='flex gap-12 items-center'>
+                <div className='flex gap-6 items-center'>
+                  <input type="number"
+                    placeholder='Go to'
+                    value={goToPageNumber}
+                    onKeyDown={handleGoToPageOnPessingENTERkey}
+                    onChange={(e) => setGoToPageNumber(e.target.value)}
+                    className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
+                  />
+                  <button onClick={handleGoToPageNumber} className='px-2 py-2 w-12 bg-gray-300 hover:bg-black hover:text-white rounded-md'>Go</button>
+
+                </div>
+                <div className='flex gap-2 rounded-md bg-gray-200'>
+                  <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
+                  <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
+                  <button disabled={(indexOfLastPatient >= payments?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPayments)} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           </div>
         </div>
@@ -616,52 +620,52 @@ const handleShowTodaysPayments=()=>{
           />
 
         </div>
-     
+
         <div>
-        
-        <AlertWrapper isOpen={openJobDoneAlert}>
-        <motion.div
-        initial={{ opacity: 0 , y:50}}
-        animate={openJobDoneAlert ? {  opacity: 1 , y:0} : {}}
-        >
-          <JobDoneAlert
-            height="h-40"
-            width="w-52"
-            textColor="text-white"
-            bgColor="bg-gradient-to-r from-rose-400 to-red-500"
-            boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
-            message={jobDoneMessage}
-            isOpen={openJobDoneAlert}
-            OnCancel={handleCancelAlert}
-            isCancelButton="block"
-            icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
-          />
-        </motion.div>
-        </AlertWrapper>
-         
+
+          <AlertWrapper isOpen={openJobDoneAlert}>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
+            >
+              <JobDoneAlert
+                height="h-40"
+                width="w-52"
+                textColor="text-white"
+                bgColor="bg-gradient-to-r from-rose-400 to-red-500"
+                boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+                message={jobDoneMessage}
+                isOpen={openJobDoneAlert}
+                OnCancel={handleCancelAlert}
+                isCancelButton="block"
+                icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
+              />
+            </motion.div>
+          </AlertWrapper>
+
         </div>
         <div>
-        <AlertWrapper isOpen={openIdCopiedAlert}>
-        <motion.div
-        initial={{ opacity: 0 , y:15}}
-        animate={openIdCopiedAlert ? {  opacity: 1 , y:0} : {}}
-        >
-        <JobDoneAlert
-            height="h-12"
-            width="w-24"
-            textColor="text-black"
-            bgColor="bg-gray-300"
-            boxShadow={null}
-            message={idCopied}
-            isOpen={openIdCopiedAlert}
-            OnCancel={null}
-            isCancelButton="hidden"
-            icon={null}
-          />
-        </motion.div>
+          <AlertWrapper isOpen={openIdCopiedAlert}>
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={openIdCopiedAlert ? { opacity: 1, y: 0 } : {}}
+            >
+              <JobDoneAlert
+                height="h-12"
+                width="w-24"
+                textColor="text-black"
+                bgColor="bg-gray-300"
+                boxShadow={null}
+                message={idCopied}
+                isOpen={openIdCopiedAlert}
+                OnCancel={null}
+                isCancelButton="hidden"
+                icon={null}
+              />
+            </motion.div>
 
-        </AlertWrapper>
-         
+          </AlertWrapper>
+
         </div>
 
       </div>
