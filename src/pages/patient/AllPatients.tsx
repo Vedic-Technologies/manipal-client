@@ -46,6 +46,7 @@ const AllPatients = () => {
 
   const [showTodayPatients, setShowTodayPatients] = useState(false);
   const [activeFilter, setActiveFilter]= useState("all")
+  const [loggedInUserType,setloggedInUserType]=useState({})
 
 
   const handleCancelAlert = () => {
@@ -58,7 +59,14 @@ const AllPatients = () => {
   const [deletePatient] = useDeletePatientMutation();
   const [updateActiveStatus] = useUpdateActiveStatusMutation()
 
-
+  //get current user
+  useEffect(() => {
+    const currentUserString = localStorage.getItem('currentUser');
+    if (currentUserString) {
+      const currentUserData = JSON.parse(currentUserString);
+      setloggedInUserType(currentUserData.user.userType); // Access userType from nested user object
+    }
+  }, []);
   useEffect(() => {
     refetch()
   }, [patients])
@@ -459,7 +467,9 @@ const handleShowTodaysPatients=()=>{
                 </motion.div>
               )}
             </div>
+            {loggedInUserType === "staff" &&
             <Link to="/home/prescription"><div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
+            }
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
             <div onClick={handleShowAllPatients} className={`animate center size-8 rounded-full cursor-pointer font-medium ${activeFilter === "all" ? "scale-105 bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>ALL</div>
             <div className="">
