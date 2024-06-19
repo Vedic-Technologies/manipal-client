@@ -120,10 +120,11 @@ useEffect(()=>{
       setSearchResults(results);
       setOpenJobDoneAlert(false);
       setPaymentsToRender(results);
+      setJobDoneMessage("")
     } else {
       setSearchResults([]);
       setShowDetails(false);
-      setJobDoneMessage("Not Found !!");
+      setJobDoneMessage("Not Payment Found !!");
       setOpenJobDoneAlert(true); 
       // removing result not found alert automatically
       setTimeout(() => {

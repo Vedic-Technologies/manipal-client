@@ -27,14 +27,6 @@ const PaymentEntry = () => {
 }
 
 
-useEffect(() => {
-  if (idOfPatient) {
-    setPatientId(idOfPatient);
-    handleFindButtonClick(); // Call handleFindButtonClick here
-  }
-}, [idOfPatient]);
-
-
 const {data =[]} = useGetAllPatientsQuery("");
 
   const handleSelectChange = (e) => {
@@ -48,13 +40,14 @@ const {data =[]} = useGetAllPatientsQuery("");
 
   const handleFindButtonClick = () => {
     setSelectedPatient('');
-    const foundPatient = data.find(user => user._id === patientId ||user._id ===  idOfPatient);
+    const foundPatient = data.find(user => user?._id === patientId);
     if (foundPatient) {
       setSelectedPatient(foundPatient._id);
+      setPatientId("")
     } else {
       // Handle case where patient with entered ID is not found
       setSelectedPatient('');
-      setJobDoneMessage("Can not find Patient. Double-check ID !!")
+      setJobDoneMessage("Not Found !!")
       setOpenJobDoneAlert(true)
 
     // removing result not found alert automatically
@@ -64,6 +57,19 @@ const {data =[]} = useGetAllPatientsQuery("");
 
     }
   };
+
+  useEffect(() => {
+    if (idOfPatient) {
+      setPatientId(idOfPatient);
+    }
+  }, [idOfPatient]);
+  
+  useEffect(() => {
+    if (patientId === idOfPatient) {
+      handleFindButtonClick(); // Call handleFindButtonClick here
+    }
+  }, [patientId]);
+  
 
   const getUserDetails = () => {
     if (selectedPatient) {
@@ -135,13 +141,13 @@ const {data =[]} = useGetAllPatientsQuery("");
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
               <JobDoneAlert
-              icon={null}
-                height="h-24"
-                width="w-52"
-                textColor="text-white"
-                bgColor="bg-red-400"
-                boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
-                message={jobDoneMessage}
+                icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
+                height="h-40"
+              width="w-52"
+              textColor="text-white"
+              bgColor="bg-gradient-to-r from-rose-400 to-red-500"
+              boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+             message={jobDoneMessage}
                 isOpen={openJobDoneAlert}
                 OnCancel={handleCancelAlert}
                 isCancelButton="block"
