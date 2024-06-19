@@ -195,7 +195,7 @@ const DiscountPayment = ({ patientId }) => {
 
                 {selected === "discount" && (
                   <div className="mb-5">
-                    <div className={cn("grid gap-2", className)}>
+                    <div className={cn("grid gap-2" )}>
                       <label
                         className="block text-gray-700 text-sm font-bold mt-2"
                         htmlFor="amount"
