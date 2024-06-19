@@ -46,7 +46,7 @@ const [endDate, setEndDate]= useState("")
 const [notFound, setNotFound]= useState(false)
 
 const [showTodayPayments, setShowTodayPayments] = useState(false); 
-
+const [activeFilter, setActiveFilter]= useState("all")
   //from API
   const {data: payments = [], error, isLoading, refetch}= useGetAllPaymentsQuery("")
   const [deletePayment] = useDeletePaymentMutation()
@@ -71,6 +71,7 @@ const handleShowAllPayments=()=>{
   setCurrentPage(1)
   setGoToPageNumber(0)
   setSearchResults([])
+  setActiveFilter("all")
   }
 
 
@@ -280,7 +281,7 @@ refetch()
       const filteredTodayPayments = payments.filter(payment => {
         const paymentDate = new Date(payment.paymentDate);
         // Check if payment date is today's date
-        console.log("avika h", paymentDate.toDateString(), " ",today.toDateString() )
+        // console.log("avika h", paymentDate.toDateString(), " ",today.toDateString() )
         return paymentDate.toDateString() === today.toDateString();
       });
       return filteredTodayPayments;
@@ -308,15 +309,16 @@ refetch()
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
+        setStartDate("")
+        setEndDate("")
       }
     } else {
       if (filteredPayments?.length >= 1) {
         setPaymentsToRender(filteredPayments);
         setNotFound(false);
         setShowTodayPayments(false)
-        // setSearchInput("")
-      
-
+        // setSearchInput("") 
+        
       } else {
         setPaymentsToRender([]);
         setNotFound(true);
@@ -327,6 +329,25 @@ refetch()
   }, [startDate, endDate, currentPatients, searchInput, searchResults]);
 
 
+  // {(searchResults?.length >=1 || (startDate && endDate) ||showTodayPayments )
+  useEffect(() => {
+    if (paymentsToRender === currentPatients) {
+      setActiveFilter("all");
+    } else if (searchResults?.length >= 1) {
+      setActiveFilter("");
+    } else if (startDate && endDate ) {
+      setActiveFilter("dates");
+    } else if (showTodayPayments) {
+      setActiveFilter("today");
+    }else{
+      setActiveFilter("all");
+    }
+  }, [paymentsToRender, currentPatients, searchResults, startDate, endDate, showTodayPayments]);
+
+const handleShowTodaysPayments=()=>{
+  setShowTodayPayments(true)
+  setActiveFilter("today")
+}
 
   const downloadExcel = () => {
     const sheet = XLSX.utils.json_to_sheet(payments);
@@ -436,14 +457,16 @@ refetch()
                 </motion.div>
               )}
             </div>
-            <Link to="/home/payment_entry">  <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
+            {loggedInUserType === "staff" &&
+                <Link to="/home/payment_entry">  <div className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer'><i className="fa-solid fa-plus"></i></div></Link>
+            }
             <div onClick={handleRefresh} className="bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer"><i className="fa-solid fa-rotate"></i></div>
-            <div onClick={handleShowAllPayments} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-8 rounded-full cursor-pointer font-medium'>ALL</div>
+            <div onClick={handleShowAllPayments} className={`animate center size-8 rounded-full cursor-pointer font-medium ${activeFilter === "all" ? "scale-105 bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>ALL</div>
             <div className="">
-        <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className='ml-5 px-5' />
-        <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className='ml-5 px-5'  />
+        <input type="date" value={startDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setStartDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`} />
+        <input type="date" value={endDate} max={new Date().toISOString().split('T')[0]} onChange={(e)=> setEndDate(e.target.value)} className={`ml-5 px-5 border rounded-md focus:outline-none hover:border-blue-500 focus:border-blue-500`}  />
       </div>
-      <div onClick={()=>setShowTodayPayments(true)} className='bg-gray-100 hover:bg-gray-200 animate text-gray-800 center size-auto px-1 font-medium rounded-md cursor-pointer'>Today</div>
+      <div onClick={handleShowTodaysPayments} className={` animate center size-auto px-1 font-medium rounded-md cursor-pointer  ${activeFilter === "today" ? "bg-blue-500 text-white hover:bg-blue-600 scale-105" : "bg-gray-100 hover:bg-gray-200  text-gray-800"}`}>Today</div>
           </div>
           <div onClick={downloadExcel} className='text-green-600 cursor-pointer '>Download Excel  <i className="fa-regular fa-file-excel text-2xl text-green-500"></i></div>
         </div>
