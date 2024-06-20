@@ -12,7 +12,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import { useNavigate } from 'react-router-dom';
 import AlertWrapper from '../../custom_components/AlertWrapper';
-import JobDoneAlert from "../../custom_components/JobDoneAlert"
+// import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
 import { Player } from '@lottiefiles/react-lottie-player';
 import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
@@ -630,17 +630,12 @@ const AllPatients = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
             >
-              <JobDoneAlert
-                height="h-40"
-                width="w-52"
-                textColor="text-white"
-                bgColor="bg-gradient-to-r from-rose-400 to-red-500"
-                boxShadow=" shadow-[0px_0px_42px_2px_#c53030] "
+               <JobDoneAlertVarient
                 message={jobDoneMessage}
                 isOpen={openJobDoneAlert}
                 OnCancel={handleCancelAlert}
-                isCancelButton="block"
-                icon={<i className="fa-regular fa-face-frown-open fa-bounce text-white pt-4"></i>}
+                customIcon={<i className="fa-regular fa-face-frown-open  text-2xl  "></i>}
+                type="error"
               />
             </motion.div>
           </AlertWrapper>

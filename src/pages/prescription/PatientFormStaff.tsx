@@ -15,10 +15,9 @@ import { ChangeEvent } from "react";
 import { initialData } from "../../initial_values/InitialValues";
 import Webcam from "../webcam/Camera";
 import AlertWrapper from "../../custom_components/AlertWrapper";
-import JobDoneAlert from "../../custom_components/JobDoneAlert";
+// import JobDoneAlert from "../../custom_components/JobDoneAlert";
 import { motion } from "framer-motion";
 import { useSubmitStaffPrescriptionMutation } from "../../API/API";
-import patientLogo from "./user.png";
 import JobDoneAlertVarient from "../../custom_components/jobDoneVarient";
 
 const PresCriptionSadcn = () => {

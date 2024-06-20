@@ -17,7 +17,7 @@ import { Button } from "../../components/ui/button";
 import { useState } from "react";
 import { useStaffSignupMutation } from "../../API/API";
 import AlertWrapper from '../../custom_components/AlertWrapper';
-import JobDoneAlert from "../../custom_components/JobDoneAlert"
+import JobDoneAlert from "../../custom_components/JobDoneAlert" 
 import { motion } from "framer-motion"
 
 export default function StaffSignup() {

@@ -16,9 +16,10 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import PaymentCard from "./PaymentCard";
 import { useAddPaymentMutation, useGetPatientByIdQuery } from "../../API/API";
 import AlertWrapper from '../../custom_components/AlertWrapper';
-import JobDoneAlert from "../../custom_components/JobDoneAlert"
+// import JobDoneAlert from "../../custom_components/JobDoneAlert"
 import { motion } from "framer-motion"
 import { ThreeDots } from 'react-loader-spinner';
+import JobDoneAlertVarient from "../../custom_components/jobDoneVarient";
 
 const DiscountPayment = ({ patientId }) => {
   const [amount, setAmount] = useState("");
@@ -288,16 +289,17 @@ const DiscountPayment = ({ patientId }) => {
             initial={{ opacity: 0, y: 50 }}
             animate={openJobDoneAlert ? { opacity: 1, y: 0 } : {}}
           >
-            <JobDoneAlert
-              height="h-24"
-              width="w-52"
-              textColor="text-white"
-              bgColor={`${alertColor === "red" ? "bg-red-400" : "bg-green-400"}`}
-              boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" : "shadow-[0px_0px_42px_2px_#48BB78]"}`}
+            <JobDoneAlertVarient
+              // height="h-24"
+              // width="w-52"
+              // textColor="text-white"
+              // bgColor={`${alertColor === "red" ? "bg-red-400" : "bg-green-400"}`}
+              // boxShadow={`${alertColor === "red" ? "shadow-[0px_0px_42px_2px_#c53030]" : "shadow-[0px_0px_42px_2px_#48BB78]"}`}
               message={jobDoneMessage}
               isOpen={openJobDoneAlert}
               OnCancel={() => setOpenJobDoneAlert(false)}
-              isCancelButton="block"
+              type={alertColor === "red" ? "error" : "success"}
+              // isCancelButton="block"
             />
           </motion.div>
         </AlertWrapper>
