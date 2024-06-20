@@ -12,6 +12,7 @@ export default function JobDoneAlertVarient({
   message,
   description,
   OnCancel,
+  customIcon
 }) {
   if (!isOpen) return null;
   let icon;
@@ -23,9 +24,14 @@ export default function JobDoneAlertVarient({
     animate = "";
   }
   if (type === "error") {
-    icon = <TriangleAlertIcon className="h-6 w-6" />;
+    icon = customIcon ? customIcon : <TriangleAlertIcon className="h-6 w-6" />;
     color = "bg-red-500";
-    animate = "animate-pulse";
+    animate = customIcon ? "animate-bounce" : "animate-pulse" ;
+  }
+  if (!type) {
+    icon = customIcon
+    color = "bg-gray-100";
+
   }
 
   if (type === "notify") {
@@ -36,7 +42,7 @@ export default function JobDoneAlertVarient({
         className=" inset-0 flex items-center mb-60 justify-center z-10 "
         onClick={OnCancel}
       >
-        <div className=" border dark:bg-gray-800 rounded-lg shadow-md bg-green-50 w-full max-w-md mx-4 px-10 py-2 flex flex-col items-center">
+        <div className=" border dark:bg-gray-800  rounded-lg shadow-md bg-green-50 w-full max-w-md mx-4 px-10 py-2 flex flex-col items-center">
           <div className="text-sm center gap-5 font-medium text-gay-200 dark:text-gray-100">
             <span
               className={`size-8 flex items-center justify-center rounded-full bg-green-200 text-black `}

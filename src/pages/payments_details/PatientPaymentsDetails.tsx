@@ -20,6 +20,7 @@ import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 import { useNavigate } from 'react-router-dom';
+import JobDoneAlertVarient from '../../custom_components/jobDoneVarient';
 
 const PatientPaymentsDetails = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -374,7 +375,7 @@ const PatientPaymentsDetails = () => {
 
         setTimeout(() => {
           setOpenIdCopiedAlert(false)
-        }, 300);
+        }, 600);
 
 
       })
@@ -650,7 +651,7 @@ const PatientPaymentsDetails = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={openIdCopiedAlert ? { opacity: 1, y: 0 } : {}}
             >
-              <JobDoneAlert
+              {/* <JobDoneAlert
                 height="h-12"
                 width="w-24"
                 textColor="text-black"
@@ -661,6 +662,11 @@ const PatientPaymentsDetails = () => {
                 OnCancel={null}
                 isCancelButton="hidden"
                 icon={null}
+              /> */}
+               <JobDoneAlertVarient
+                message={idCopied}
+                isOpen={openIdCopiedAlert}
+                type="notify"
               />
             </motion.div>
 
