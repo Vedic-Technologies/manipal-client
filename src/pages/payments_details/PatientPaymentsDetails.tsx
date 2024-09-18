@@ -253,14 +253,14 @@ const PatientPaymentsDetails = () => {
 
   const handleGoToPageNumber = () => {
     if (goToPageNumber && goToPageNumber > 0 && goToPageNumber < ((payments?.length + 8) / 8)) {
-      setCurrentPage(goToPageNumber)
+      setCurrentPage(parseInt(goToPageNumber))
     } else {
       console.log(goToPageNumber, " page number does not exist for this data");
 
     }
   }
 
-  const handleGoToPageOnPessingENTERkey = (e) => {
+  const handleGoToPageOnPressingENTERkey = (e) => {
     if (e.key === "Enter") {
       handleGoToPageNumber()
     }
@@ -353,12 +353,21 @@ const PatientPaymentsDetails = () => {
   }
 
   const downloadExcel = () => {
-    const sheet = XLSX.utils.json_to_sheet(payments);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, sheet, "Sheet1");
-    XLSX.writeFile(wb, "data.xlsx");
+    const sheet = XLSX.utils.json_to_sheet(payments.map(payment => ({
+      paymentId: payment._id,
+      patientName: payment.patient?.name || "N/A",
+      patientContact: payment.patient?.contact || "N/A",
+      amount: payment.amount || 0,
+      paymentType: payment.paymentType || "N/A",
+      paymentDate: formatDate(payment.paymentDate),
+      patientActive: payment.patient?.active ? "Yes" : "No",
+    })));
+  
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, sheet, "Payments");
+    XLSX.writeFile(workbook, "Payments.xlsx");
   };
-
+  
 
 
 
@@ -398,7 +407,7 @@ const PatientPaymentsDetails = () => {
         <span className='text-gray-400 text-sm'>Payment Detail</span>
       </div>
 
-      <div className='h-[600px] mt-4  py-2 px-4 rounded-md bg-white relative'>
+      <div className='h-[600px] mt-4  py-2 px-4 rounded-md bg-white relative '>
         <div className='flex justify-between  px-2 py-1 pr-10'>
           <div className='flex gap-5 items-center'>
             <div className=' font-bold text-xl'>Payment Detail</div>
@@ -595,7 +604,7 @@ const PatientPaymentsDetails = () => {
                   <input type="number"
                     placeholder='Go to'
                     value={goToPageNumber}
-                    onKeyDown={handleGoToPageOnPessingENTERkey}
+                    onKeyDown={handleGoToPageOnPressingENTERkey}
                     onChange={(e) => setGoToPageNumber(e.target.value)}
                     className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
                   />
@@ -603,9 +612,9 @@ const PatientPaymentsDetails = () => {
 
                 </div>
                 <div className='flex gap-2 rounded-md bg-gray-200'>
-                  <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-                  <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-                  <button disabled={(indexOfLastPatient >= payments?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPayments)} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+                  <button disabled={currentPage <= 1} onClick={() => handlePageChange(currentPage - 1)} className={`px-2 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md  ${currentPage <= 1 ? " text-gray-400 cursor-not-allowed" : "hover:text-blue-400 text-gray-500"} `}>Previous</button>
+                  <button className='px-2 py-2 w-12 text-white bg-blue-500 cursor-default'>{currentPage}</button>
+                  <button disabled={(indexOfLastPatient >= payments?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPayments)} onClick={() => handlePageChange(currentPage + 1)} className={`px-2 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md ${(indexOfLastPatient >= payments?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPayments) ?  " text-gray-400 cursor-not-allowed" : "hover:text-blue-400 text-gray-500"}`}>Next</button>
                 </div>
               </div>
             )}

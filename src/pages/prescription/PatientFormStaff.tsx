@@ -61,6 +61,13 @@ const PresCriptionSadcn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    const phoneNumber = patientData.contact;
+    if (phoneNumber.length !== 10 || !/^\d+$/.test(phoneNumber)) {
+      alert("Phone number must be exactly 10 digits");
+      setIsLoading(false);
+      return; // Exit early to prevent submitting the form
+    }
+  
     // console.log(imageFile, "image file");
     const postData = {
       ...patientData,
@@ -102,6 +109,12 @@ const PresCriptionSadcn = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === 'contact') {
+      if (value.length > 10 || !/^\d*$/.test(value)) {
+        alert("Phone number must be exactly 10 digits");
+        return; // Exit early to prevent updating the state
+      }
+    }
     setPatientData({
       ...patientData,
       [name]: value,
@@ -223,7 +236,7 @@ const PresCriptionSadcn = () => {
             <Input
               id="contact"
               placeholder="Enter patient contact"
-              type="number"
+              type="tel"
               name="contact"
               onKeyDown={handleKeyDown}
               value={patientData.contact}

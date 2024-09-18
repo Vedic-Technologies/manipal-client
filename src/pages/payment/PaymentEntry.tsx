@@ -99,7 +99,7 @@ const PaymentEntry = () => {
                   className="border border-gray-300 rounded px-3 py-2 w-60 mt-1 "
                 >
                   <option value="">Select a patient</option>
-                  {data.map((user) => (
+                  {data?.slice()?.reverse()?.map((user) => (
                     <option key={user._id} value={user._id} className='bg-green-100 '>{user.patientName}</option>
                   ))}
                 </select>

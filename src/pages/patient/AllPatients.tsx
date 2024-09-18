@@ -19,6 +19,7 @@ import LoadingAnimation from "../../assets/animations/HospitalAnimation.json"
 import NotFoundAnimation from '../../assets/animations/EmptStretcherAnimation.json';
 import ErrorAnimation from "../../assets/animations/ErrorCatAnimation.json"
 import JobDoneAlertVarient from '../../custom_components/jobDoneVarient';
+import formatDate from '../../util/TimeFormate'
 
 const AllPatients = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -324,25 +325,33 @@ const AllPatients = () => {
   };
 
 
+
   const downloadExcel = () => {
-    const headers = ['Patient Name', 'Gender', 'Age', 'Contact', 'Email'];
-    const data = currentPatients.map(patient => {
-      return [patient.patientName, patient.gender, patient.age, patient.contact, patient.email];
-    });
-    data.unshift(headers);
+    const sheet = XLSX.utils.json_to_sheet(patients.map(patient => ({
+      patientId: patient._id,
+      patientName: patient.patientName || "N/A",
+      age: patient.age || "N/A",
+      gender: patient.gender || "N/A",
+      contact: patient.contact || "N/A",
+      email: patient.email || "N/A",
+      occupation: patient.occupation || "N/A",
+      bloodGroup: patient.bloodGroup || "N/A",
+      height: patient.height || "N/A",
+      weight: patient.weight || "N/A",
+      active: patient.active ? "Yes" : "No",
+      checkUpStatus: patient.checkUp_status ? "Completed" : "Pending",
+      complaint: patient.complaint || "N/A",
+      referredTo: patient.referredTo || "N/A",
+      createdAt: formatDate(patient.createdAt), // Assuming a date formatting function
+      updatedAt: formatDate(patient.updatedAt), // Assuming a date formatting function
+      address: `${patient.address?.village}, ${patient.address?.state}, ${patient.address?.country} - ${patient.address?.pin_code}`,
+    })));
+  
     const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(data);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Patients');
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const excelBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(excelBlob);
-    downloadLink.download = 'patients.xlsx';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    URL.revokeObjectURL(downloadLink.href);
+    XLSX.utils.book_append_sheet(workbook, sheet, "Patients");
+    XLSX.writeFile(workbook, "Patients.xlsx");
   };
+  
 
   const handleRefresh = () => {
     window.location.reload();
@@ -393,14 +402,14 @@ const AllPatients = () => {
   }
   const handleGoToPageNumber = () => {
     if (goToPageNumber && goToPageNumber > 0 && goToPageNumber < ((patients?.length + pageSize) / pageSize)) {
-      setCurrentPage(goToPageNumber)
+      setCurrentPage(parseInt(goToPageNumber))
     } else {
       console.log(goToPageNumber, " page number does not exist for this data");
 
     }
   }
 
-  const handleGoToPageOnPessingENTERkey = (e) => {
+  const handleGoToPageOnPressingENTERkey = (e) => {
     if (e.key === "Enter") {
       handleGoToPageNumber()
     }
@@ -600,7 +609,7 @@ const AllPatients = () => {
                   <input type="number"
                     placeholder='Go to'
                     value={goToPageNumber}
-                    onKeyDown={handleGoToPageOnPessingENTERkey}
+                    onKeyDown={handleGoToPageOnPressingENTERkey}
                     onChange={(e) => setGoToPageNumber(e.target.value)}
                     className='border-2 border-black rounded-md w-20 focus:outline-none hover:border-blue-500 focus:border-blue-500 px-2 py-1'
                   />
@@ -608,9 +617,9 @@ const AllPatients = () => {
 
                 </div>
                 <div className='flex gap-2 rounded-md bg-gray-200'>
-                  <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Previous</button>
-                  <button className='px-2 py-2 w-12 text-white bg-blue-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:rounded-md'>{currentPage}</button>
-                  <button disabled={(indexOfLastPatient >= patients?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients)} onClick={() => handlePageChange(currentPage + 1)} className='px-2 py-2 text-gray-500 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md'>Next</button>
+                  <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className={`px-2 py-2  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md  ${currentPage <= 1 ? " text-gray-400 cursor-not-allowed" : "hover:text-blue-400 text-gray-500"}`}>Previous</button>
+                  <button className='px-2 py-2 w-12 text-white bg-blue-500 cursor-default'>{currentPage}</button>
+                  <button disabled={(indexOfLastPatient >= patients?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients)} onClick={() => handlePageChange(currentPage + 1)} className={`px-2 py-2   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md ${(indexOfLastPatient >= patients?.length) || (searchResults?.length >= 1 || (startDate && endDate) || showTodayPatients) ? " text-gray-400 cursor-not-allowed" : "hover:text-blue-400 text-gray-500"}`}>Next</button>
                 </div>
               </div>
             )}
