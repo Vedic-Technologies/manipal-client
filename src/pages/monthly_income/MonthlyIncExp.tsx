@@ -37,7 +37,6 @@ return paymentDate >= startDate;
     acc[date].payments.push(pay);
     return acc;
   }, {});
-console.log(groupedPayments)
   // Convert groupedPayments to an array of objects for easier rendering
   const paymentSummary = Object.keys(groupedPayments).map(date => ({
     date,

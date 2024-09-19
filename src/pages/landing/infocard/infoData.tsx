@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import income_today from '../infocard/icons/money-today.png';
 import new_patient from '../infocard/icons/new_patient.png';
 import patient_today from '../infocard/icons/patient_today.png';
-import staff_available from '../infocard/icons/staff_available.png';
 import { useGetAllPatientsQuery, useGetAllUsersQuery, useGetAllPaymentsQuery } from '../../../API/API';
 import formatDate from '../../../util/TimeFormate';
 export type InfoData = {
@@ -52,30 +51,34 @@ const {data:incomeData}= useGetAllPaymentsQuery("")
 const today = formatDate(new Date());
 
     useEffect(() => {
+
+      // patients today. 
         if (patientData) {
             setData(prevData => prevData.map(info => {
                 if (info.title === "Patients Today") {
-                 
                   const patientToday = patientData?.filter(patient => formatDate(new Date(patient?.createdAt)) === today).length;
-                  console.log("patienttoday length:", patientToday)
-                   console.log("today from code",today)  
-                   console.log("today from data", formatDate(new Date(patientData[patientData.length - 1]?.createdAt)));
                   return { ...info, count: patientToday };
 
                 }
                 return info;
             }));
         }
+
+        // new patients // aisa patient jiska av tak checkup ni hua h. Ekdum new patient.
         if (patientData) {
-            setData(prevData => prevData.map(info => {
-                if (info.title === "New Patients") {
-                  const newPatient = patientData?.filter((patient) => patient?.checkUp_status === false)?.length;
-                    console.log("new patient length",newPatient)
+          setData(prevData => prevData.map(info => {
+              if (info.title === "New Patients") {
+                  const newPatient = patientData?.filter(patient => {
+                      const isNewPatient = patient?.
+                      checkUp_status === false;
+                      const isRegisteredToday = formatDate(new Date(patient?.createdAt)) === today;
+                      return isNewPatient && isRegisteredToday;
+                  }).length;
                   return { ...info, count: newPatient };
-                }
-                return info;
-            }));
-        }
+              }
+              return info;
+          }));
+      }
         if (userData) {
             setData(prevData => prevData?.map(info => {
                 if (info.title === "Staff Available") {
@@ -91,7 +94,6 @@ const today = formatDate(new Date());
                   const incomeToday = incomeData
                       .filter(income => formatDate(new Date(income?.paymentDate)) === today)
                       .reduce((total, income) => total + income?.amount, 0);
-                      console.log("income today", incomeToday)
                   return { ...info, count: incomeToday };
               }
               return info;

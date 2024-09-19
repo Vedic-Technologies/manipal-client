@@ -34,7 +34,6 @@ export default function PatientDetailCard({ patient }) {
       return "p-16";
     }
   };
-  console.log(patientData);
 
   useEffect(() => {
     setFormData(patientData);

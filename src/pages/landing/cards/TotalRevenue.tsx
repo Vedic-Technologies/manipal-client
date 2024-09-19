@@ -28,7 +28,9 @@ const TotalRevenue = () => {
   // Calculate the revenue for the current month, previous month, current year, and previous year
   const currentDate = new Date();
   const currentMonth = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}`;
-  const previousMonth = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
+  const previousMonth = currentDate.getMonth() === 0 
+  ? `${currentDate.getFullYear() - 1}-12` 
+  : `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
   const currentYear = `${currentDate.getFullYear()}`;
   const previousYear = `${currentDate.getFullYear() - 1}`;
 

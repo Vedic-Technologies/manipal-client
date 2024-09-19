@@ -69,8 +69,6 @@ const DailyIncomeCard = () => {
            paymentDay <= currentDay;
   });
 
-  console.log('Filtered Payments:', filteredPayments); // Debug statement
-
   const dailyIncome = labels.map(day => {
     const dayIncome = filteredPayments
       .filter(payment => {
@@ -79,13 +77,8 @@ const DailyIncomeCard = () => {
       })
       .reduce((acc, payment) => acc + payment.amount, 0);
 
-    const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    console.log(`Income for date ${formattedDate}: ${dayIncome}`); // Log the income for each date
-
     return dayIncome;
   });
-
-  console.log('Daily Income:', dailyIncome); // Debug statement
 
   const chartData = {
     labels,

@@ -10,7 +10,6 @@ const TotalPatient = () => {
     const [yearlyPercentageChange, setYearlyPercentageChange] = useState(0);
 
     useEffect(() => {
-        console.log('Fetched patients:', patients); // Debugging log
         if (patients.length > 0) {
             // Calculate total patients
             const total = patients.length;
@@ -32,11 +31,14 @@ const TotalPatient = () => {
             setMonthlyPatients(monthlyPatientsCount);
 
             // Calculate percentage change from last month to current month
+            const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+            const lastMonthYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+            
             const lastMonthPatientsCount = patients.filter(patient => {
                 const patientDate = new Date(patient.createdAt);
-                return patientDate.getFullYear() === currentYear && (patientDate.getMonth() + 1) === currentMonth - 1;
+                return patientDate.getFullYear() === lastMonthYear && (patientDate.getMonth() + 1) === lastMonth;
             }).length;
-
+            
             if (lastMonthPatientsCount > 0) {
                 const monthlyChange = ((monthlyPatientsCount - lastMonthPatientsCount) / lastMonthPatientsCount) * 100;
                 setMonthlyPercentageChange(monthlyChange.toFixed(2));
