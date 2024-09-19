@@ -25,7 +25,7 @@ const LandingPage = () => {
     <div className=" mb-10 w-[100%]  flex flex-col bg-gradient-to-r from-purple-50 to-purple-100  font-roboto px-10">
      
 
-      <div className=" flex  mt-10 w-full gap-5 lg- ">
+      <div className=" flex justify-between  mt-10 w-full gap-5 lg- ">
         {data.map((item: InfoData) => {
           return <InfoCard item={item}/>;
         })}

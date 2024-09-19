@@ -316,7 +316,7 @@ const AllPatients = () => {
   const handleCancelDelete = () => {
     setOpenConfirm(false)
     setSelectedPatientId("")
-    console.log("no clicked")
+    ("no clicked")
   }
 
   //pagination
